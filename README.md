@@ -25,3 +25,9 @@ r20150528_082632_wa-gb-auv-13b
 r20150529_013035_wa-gb-auv-12c  
 r20150529_031600_wa-gb-auv-14c  
 r20150529_042328_wa-gb-auv-15c  
+
+_Old repos_  
+https://github.com/UWA-Marine-Ecology-Group-projects/GB_Habitat_Classification  
+https://github.com/UWA-Marine-Ecology-Group-projects/MBH-GeoBay  
+https://github.com/UWA-Marine-Ecology-Group-projects/GB_Survey_Maps  
+
