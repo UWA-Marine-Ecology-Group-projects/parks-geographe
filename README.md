@@ -8,7 +8,8 @@ STEREO-VIDEO
 2014-12_Geographe_Bay_stereoBRUVs  
 
 TOWED VIDEO  
-???  
+202005_Geographe_Downwards-towed-video
+2014_TowedVideo
 
 AUV  
 r20150526_024446_wa-gb-auv-01  
@@ -29,5 +30,6 @@ r20150529_042328_wa-gb-auv-15c
 _Old repos_  
 https://github.com/UWA-Marine-Ecology-Group-projects/GB_Habitat_Classification  
 https://github.com/UWA-Marine-Ecology-Group-projects/MBH-GeoBay  
-https://github.com/UWA-Marine-Ecology-Group-projects/GB_Survey_Maps  
+https://github.com/UWA-Marine-Ecology-Group-projects/GB_Survey_Maps
+https://github.com/UWAMEGFisheries/south-west-habitat
 
