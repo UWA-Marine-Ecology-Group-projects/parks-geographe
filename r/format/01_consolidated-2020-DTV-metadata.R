@@ -1,4 +1,4 @@
-### 2020 downwards towed video metadata consolidation
+### 2020 downwards towed video metadata consolidation ----
 
 library(dplyr)
 library(janitor)
@@ -35,5 +35,5 @@ compare_df_cols(day1,day2,day3,day4)
 metadata <- bind_rows(day1, day2, day3, day4) %>%
   glimpse()
 
-write.csv(metadata, file = "data/raw/reefcloud export/Towed Video/2020/202005_Geographe_Downwards-towed-video.csv",
+write.csv(metadata, file = "data/staging/202005_Geographe_Downwards-towed-video.csv",
           row.names = F)
