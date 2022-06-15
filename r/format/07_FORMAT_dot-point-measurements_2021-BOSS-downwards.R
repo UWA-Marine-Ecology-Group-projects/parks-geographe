@@ -24,7 +24,7 @@ working.dir <- getwd() # this only works through github projects
 ## Save these directory names to use later----
 data.dir <- paste(working.dir,"data",sep="/") 
 raw.dir <- paste(data.dir,"raw",sep="/") 
-tidy.dir <- paste(data.dir,"Tidy",sep="/")
+tidy.dir <- paste(data.dir,"tidy",sep="/")
 tm.export.dir <- paste(raw.dir,"TM Export",sep="/") 
 em.export.dir <- paste(raw.dir, "EM Export", sep = "/")
 error.dir <- paste(raw.dir,"errors to check",sep="/") 
@@ -45,29 +45,26 @@ setwd(tm.export.dir)
 dir()
 
 # read in the points annotations ----
-points <- read.delim("2021-03_Geographe_BOSS_Habitat_Dot Point Measurements.txt",header=T,skip=4,stringsAsFactors=FALSE) %>% # read in the file
+points <- read.delim("2021-03_Geographe_BOSS_Downwards_Habitat_Dot Point Measurements.txt",header=T,skip=4,stringsAsFactors=FALSE) %>% # read in the file
   ga.clean.names() %>% # tidy the column names using GlobalArchive function
   mutate(sample=str_replace_all(.$filename,c(".png"="",".jpg"="",".JPG"=""))) %>%
   mutate(sample=as.character(sample)) %>% 
   select(sample,image.row,image.col,broad,morphology,type,fieldofview) %>% # select only these columns to keep
   glimpse() # preview
 
-length(unique(points$sample)) # 198 samples
+length(unique(points$sample)) # 197 samples
 
 no.annotations <- points%>%
   dplyr::group_by(sample)%>%
-  dplyr::summarise(points.annotated=n()) # some have extra points, but none missing points
+  dplyr::summarise(points.annotated=n()) # 1 with extra points but none missing points
 
+habitat <- points                                                               # Relief hasn't been done for this
 
-habitat <- points  %>%                                                          # Relief hasn't been done for this
-  dplyr::mutate(type = ifelse(morphology %in% c("Pebble / gravel (biogenic)"), "gravel (biogenic)", type),
-                morphology = ifelse(morphology %in% c("Pebble / gravel (biogenic)"), "Pebble", morphology)) # The same class entered 2 different ways
-  
 # Check that the image names match the metadata samples -----
 missing.metadata <- anti_join(habitat,metadata, by = c("sample")) # samples in habitat that don't have a match in the metadata
 missing.habitat <- anti_join(metadata,habitat, by = c("sample")) # samples in the metadata that don't have a match in habitat
 
-# We aren't missing anything here, woohoo
+# 1 downwards habitat image is missing but noted in metadata
 
 # Create %fov----
 fov.points <- habitat%>%
@@ -156,11 +153,11 @@ habitat.detailed.percent <- metadata%>%
   left_join(fov.percent.cover, by = "sample")%>%
   left_join(detailed.percent.cover, by = "sample")
 
-write.csv(habitat.broad.points,file=paste(study,"broad.habitat.csv",sep = "_"), row.names=FALSE)
-write.csv(habitat.detailed.points,file=paste(study,"detailed.habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.broad.points,file=paste(study,"broad.downwards-habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.detailed.points,file=paste(study,"detailed.downwards-habitat.csv",sep = "_"), row.names=FALSE)
 
 
-write.csv(habitat.broad.percent,file=paste(study,"percent-cover_broad.habitat.csv",sep = "_"), row.names=FALSE)
-write.csv(habitat.detailed.percent,file=paste(study,"percent-cover_detailed.habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.broad.percent,file=paste(study,"percent-cover_broad.downwards-habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.detailed.percent,file=paste(study,"percent-cover_detailed.downwards-habitat.csv",sep = "_"), row.names=FALSE)
 
 setwd(working.dir)
