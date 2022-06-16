@@ -65,10 +65,10 @@ broad.points <- habitat %>%
 detailed.points <- habitat %>%
   dplyr::filter(!morphology%in%c("",NA,"Unknown")) %>%
   dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
+  mutate_at("type", str_replace, " \\s*\\([^\\)]+\\)", "") %>%
   dplyr::mutate(morphology=paste("detailed",broad,morphology,type, fine,sep = "."))%>%
   mutate_at("morphology", str_replace, ".NA", "") %>%
   mutate_at("morphology", str_replace, ".NA", "") %>%                           # Some have double NAs
-  mutate_at("morphology", str_replace, " \\s*\\([^\\)]+\\)", "") %>%
   # dplyr::mutate(morphology=str_replace_all(.$morphology, c(".NA"="","[^[:alnum:] ]"="."," "="","10mm.."="10mm.")))%>%
   dplyr::select(-c(broad,type, fine))%>%
   dplyr::mutate(count=1)%>%
