@@ -90,7 +90,7 @@ fov.percent.cover<-fov.points %>%
 # CREATE catami_broad------
 broad.points <- habitat%>%
   dplyr::select(-c(fieldofview,morphology,type))%>%
-  filter(!broad%in%c("",NA,"Unknown","Open.Water","Open Water"))%>%
+  filter(!broad%in%c("",NA,"Unknown","Open.Water","Open Water", "Unscorable"))%>%
   dplyr::mutate(broad=paste("broad",broad,sep = "."))%>%
   dplyr::mutate(count=1)%>%
   dplyr::group_by(sample)%>%
@@ -113,7 +113,7 @@ broad.percent.cover<-broad.points %>%
 detailed.points <- habitat%>%
   dplyr::select(-c(fieldofview))%>%
   dplyr::filter(!morphology%in%c("",NA,"Unknown"))%>%
-  dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water"))%>%
+  dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
   dplyr::mutate(morphology=paste("detailed",broad,morphology,type,sep = "."))%>%
   dplyr::mutate(morphology=str_replace_all(.$morphology, c(".NA"="","[^[:alnum:] ]"="."," "="","10mm.."="10mm.")))%>%
   dplyr::select(-c(broad,type))%>%

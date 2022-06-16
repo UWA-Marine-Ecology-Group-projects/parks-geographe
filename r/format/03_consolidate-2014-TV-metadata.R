@@ -4,4 +4,5 @@ metadata <- read.csv("data/raw/reefcloud export/Towed Video/2014/2014_GB_Towed_V
   filter(!is.na(latitude)) %>%                                                  # Removes blank rows
   glimpse()
 
-write.csv(metadata, file = "data/staging/2014_TowedVideo_Metadata.csv")
+write.csv(metadata, file = "data/staging/2014_TowedVideo_Metadata.csv",
+          row.names = F)

@@ -1,0 +1,732 @@
+CODE,DESCRIPTION,FUNCTIONAL GROUP
+U,Unscorable,1_1
+SP,Sponges,10000000_1
+SPC,Sponges: Crusts,10000901_1
+SPCE,Sponges: Crusts: Encrusting,10000902_1
+SPCEBRYSPMAT,Sponges: Crusts: Encrusting: Bryozoa / Sponge Matrix,10000902_2
+SCEEO1,Sponges: Crusts: Encrusting: Encrusting Orange,10000902_3
+SCEELO2,Sponges: Crusts: Encrusting: Encrusting Light Orange,10000902_4
+SCEEY3,Sponges: Crusts: Encrusting: Encrusting Yellow 3,10000902_5
+SCEEB4,Sponges: Crusts: Encrusting: Encrusting Blue,10000902_6
+SCEEB5,Sponges: Crusts: Encrusting: Encrusting Brown 5,10000902_7
+SCEEW6,Sponges: Crusts: Encrusting: Encrusting White,10000902_8
+SCEEG7,Sponges: Crusts: Encrusting: Encrusting Green,10000902_9
+SCEEBO,Sponges: Crusts: Encrusting: Encrusting Beige Oscula,10000902_10
+SCEEBS,Sponges: Crusts: Encrusting: Encrusting Beige Smooth,10000902_11
+SCEEBlk,Sponges: Crusts: Encrusting: Encrusting Black,10000902_12
+SCEEBL,Sponges: Crusts: Encrusting: Encrusting Black Lumpy,10000902_13
+SCEEBP,Sponges: Crusts: Encrusting: Encrusting Black Papillate,10000902_14
+SCEEBT,Sponges: Crusts: Encrusting: Encrusting Black Thick,10000902_15
+SCEEBrn,Sponges: Crusts: Encrusting: Encrusting Brown,10000902_16
+SCEEOB,Sponges: Crusts: Encrusting: Encrusting Orange Beige,10000902_17
+SCEEOF,Sponges: Crusts: Encrusting: Encrusting Orange Fluffy,10000902_18
+SCEEOL,Sponges: Crusts: Encrusting: Encrusting Orange Lumpy,10000902_19
+SCEEON,Sponges: Crusts: Encrusting: Encrusting Orange Nodular,10000902_20
+SCEEOP,Sponges: Crusts: Encrusting: Encrusting Orange Papillate,10000902_21
+SCEEPPW,Sponges: Crusts: Encrusting: Encrusting Papillate Pink White,10000902_22
+SCEEPL,Sponges: Crusts: Encrusting: Encrusting Purple Lumpy,10000902_23
+SCEEPO,Sponges: Crusts: Encrusting: Encrusting Purple Oscula,10000902_24
+SCEEWG,Sponges: Crusts: Encrusting: Encrusting White Granular,10000902_25
+SCEEWL,Sponges: Crusts: Encrusting: Encrusting White Lumpy,10000902_26
+SCEEY2,Sponges: Crusts: Encrusting: Encrusting Yellow 2,10000902_27
+SCEEYOT,Sponges: Crusts: Encrusting: Encrusting Yellow Orange Thick,10000902_28
+SCEEYR,Sponges: Crusts: Encrusting: Encrusting Yellow Rough,10000902_29
+SCEPS1,Sponges: Crusts: Encrusting: Papillate Suberites Like,10000902_30
+SCEPY2,Sponges: Crusts: Encrusting: Papillate Yellow,10000902_31
+SCEPB3,Sponges: Crusts: Encrusting: Papillate Black,10000902_32
+SCETWC3,Sponges: Crusts: Encrusting: Tubular White Colony,10000902_33
+SPM,Sponges: Massive Forms,10000903_1
+SPMSI,Sponges: Massive Forms: Simple,10000904_1
+SPMSIISSY,Sponges: Massive Forms: Simple: Irregular Sand Sponge Yellow,10000904_2
+SPMSILO2,Sponges: Massive Forms: Simple: Lumpy Orange,10000904_3
+SPMSILW3,Sponges: Massive Forms: Simple: Lumpy White,10000904_4
+SPMSILP4,Sponges: Massive Forms: Simple: Lumpy Pink,10000904_5
+SPMSILY5,Sponges: Massive Forms: Simple: Lumpy Yellow,10000904_6
+SPMSILOY6,Sponges: Massive Forms: Simple: Lumpy Opaque Yellow,10000904_7
+SPMSIM1,Sponges: Massive Forms: Simple: Massive,10000904_8
+SPMSIMB10,Sponges: Massive Forms: Simple: Massive Brown,10000904_9
+SPMSIMWH11,Sponges: Massive Forms: Simple: Massive White Holey,10000904_10
+SPMSIMYP12,Sponges: Massive Forms: Simple: Massive Yellow Papillate,10000904_11
+SPMSIMWP13,Sponges: Massive Forms: Simple: Massive White Papillate,10000904_12
+SPMSIMS15,Sponges: Massive Forms: Simple: Massive Shapeless,10000904_13
+SPMSIMP16,Sponges: Massive Forms: Simple: Massive Purple,10000904_14
+SPMSIMWL17,Sponges: Massive Forms: Simple: Massive White Lumpy,10000904_15
+SPMSIMOH18,Sponges: Massive Forms: Simple: Massive Orange Holey,10000904_16
+SPMSIMYS19,Sponges: Massive Forms: Simple: Massive Yellow Shapeless,10000904_17
+SPMSIM2,Sponges: Massive Forms: Simple: Massive 2,10000904_18
+SPMSIMP20,Sponges: Massive Forms: Simple: Massive Pink,10000904_19
+SPMSIM21,Sponges: Massive Forms: Simple: Massive 21,10000904_20
+SPMSIMYH22,Sponges: Massive Forms: Simple: Massive Yellow Holey,10000904_21
+SPMSIMOR23,Sponges: Massive Forms: Simple: Massive Orange Ribbon,10000904_22
+SPMSIMBL24,Sponges: Massive Forms: Simple: Massive Blue Lumpy,10000904_23
+SPMSIMO3,Sponges: Massive Forms: Simple: Massive Orange,10000904_24
+SPMSIMV6,Sponges: Massive Forms: Simple: Massive Velet,10000904_25
+SPMSIMB7,Sponges: Massive Forms: Simple: Massive Blue,10000904_26
+SPMSIM8,Sponges: Massive Forms: Simple: Massive 8,10000904_27
+SPMSIMW9,Sponges: Massive Forms: Simple: Massive White,10000904_28
+SPMSIMBN,Sponges: Massive Forms: Simple: Massive Beige Nodular,10000904_29
+SPMSIMBS,Sponges: Massive Forms: Simple: Massive Beige Shapeless,10000904_30
+SPMSIMBTC,Sponges: Massive Forms: Simple: Massive Beige Thick Crust,10000904_31
+SPMSIMBluS,Sponges: Massive Forms: Simple: Massive Blue Shapeless,10000904_32
+SPMSIMBluTC,Sponges: Massive Forms: Simple: Massive Blue Thick Crust,10000904_33
+SPMSIMCP,Sponges: Massive Forms: Simple: Massive Cream Papillate,10000904_34
+SPMSIMGLL,Sponges: Massive Forms: Simple: Massive Grey Laminar Like,10000904_35
+SPMSIMPSO,Sponges: Massive Forms: Simple: Massive Peach Shapeless Oscula,10000904_36
+SPMSIMPC,Sponges: Massive Forms: Simple: Massive Purple Chunks,10000904_37
+SPMSIMR,Sponges: Massive Forms: Simple: Massive Red,10000904_38
+SPMSIMRWS,Sponges: Massive Forms: Simple: Massive Red White Shapeless,10000904_39
+SPMSIMWS,Sponges: Massive Forms: Simple: Massive White Shapeless,10000904_40
+SPMSIMYIB,Sponges: Massive Forms: Simple: Massive Yellow Irregular Ball,10000904_41
+SPMSIOMB1,Sponges: Massive Forms: Simple: Orange Massive Ball,10000904_42
+SPMSIPM,Sponges: Massive Forms: Simple: Purple Massive,10000904_43
+SPMSISBH,Sponges: Massive Forms: Simple: Simple Beige Honeycomb,10000904_44
+SPMSISBIO,Sponges: Massive Forms: Simple: Simple Beige Irregular Oscula,10000904_45
+SPMSISBLAB,Sponges: Massive Forms: Simple: Simple Beige Labyrinth,10000904_46
+SPMSISBLL,Sponges: Massive Forms: Simple: Simple Beige Laminar Like,10000904_47
+SPMSISBL,Sponges: Massive Forms: Simple: Simple Beige Lumpy,10000904_48
+SPMSISBLS,Sponges: Massive Forms: Simple: Simple Beige Lumpy Shapeless,10000904_49
+SPMSISBS,Sponges: Massive Forms: Simple: Simple Beige Shapeless,10000904_50
+SPMSISBSm,Sponges: Massive Forms: Simple: Simple Beige Small,10000904_51
+SPMSISBSmO,Sponges: Massive Forms: Simple: Simple Beige Small Oscula,10000904_52
+SPMSISBSmoo,Sponges: Massive Forms: Simple: Simple Beige Smooth,10000904_53
+SPMSISBTL,Sponges: Massive Forms: Simple: Simple Beige Tube Like,10000904_54
+SPMSISBSh,Sponges: Massive Forms: Simple: Simple Blue Shapeless,10000904_55
+SPMSISBSO,Sponges: Massive Forms: Simple: Simple Blue Shapeless Oscula,10000904_56
+SPMSISGB,Sponges: Massive Forms: Simple: Simple Grey Brain,10000904_57
+SPMSISGC,Sponges: Massive Forms: Simple: Simple Grey Creep,10000904_58
+SPMSISGD,Sponges: Massive Forms: Simple: Simple Grey Doughnut,10000904_59
+SPMSISOC,Sponges: Massive Forms: Simple: Simple Orange Confused,10000904_60
+SPMSISOG,Sponges: Massive Forms: Simple: Simple Orange Globes,10000904_61
+SPMSISOR,Sponges: Massive Forms: Simple: Simple Orange Rough,10000904_62
+SPMSISOS,Sponges: Massive Forms: Simple: Simple Orange Smooth,10000904_63
+SPMSISPI,Sponges: Massive Forms: Simple: Simple Pink Irregular,10000904_64
+SPMSISPO,Sponges: Massive Forms: Simple: Simple Pink Oscula,10000904_65
+SPMSISPF,Sponges: Massive Forms: Simple: Simple Purple Furrowed,10000904_66
+SPMSISPS,Sponges: Massive Forms: Simple: Simple Purple Shapeless,10000904_67
+SPMSISRBL,Sponges: Massive Forms: Simple: Simple Red Ball Like,10000904_68
+SPMSISRG,Sponges: Massive Forms: Simple: Simple Red Globes,10000904_69
+SPMSISWR,Sponges: Massive Forms: Simple: Simple White Rough,10000904_70
+SPMSISYL,Sponges: Massive Forms: Simple: Simple Yellow Lumpy,10000904_71
+SPMSISYR,Sponges: Massive Forms: Simple: Simple Yellow Rough,10000904_72
+SPMSIYSS1,Sponges: Massive Forms: Simple: Yellow Shapeless Smooth,10000904_73
+SPMSIMDP,Sponges: Massive Forms: Simple: Massive Dark Purple,10000904_74
+SPMSIMSGG,Sponges: Massive Forms: Simple: Smooth Grey Globes,10000904_75
+SPMSIMBOP,Sponges: Massive Forms: Simple: Massive Black Oscula Papillate,10000904_76
+SPMSIMYOL,Sponges: Massive Forms: Simple: Yellow Oscula Lamiar like,10000904_77
+SPMSIMMYK,Sponges: Massive Forms: Simple: Massive Yellow Knobby,10000904_78
+SPMSIMMRB,Sponges: Massive Forms: Simple: Massive Royal Blue,10000904_79
+SPMR,Sponges: Massive Forms: Balls,10000905_1
+SPMRBPO,Sponges: Massive Forms: Balls: Ball Pink Oscula,10000905_2
+SPMRBYPI,Sponges: Massive Forms: Balls: Ball Yellow Papillate Irregular,10000905_3
+SPMRGOT1,Sponges: Massive Forms: Balls: Globular Orange Tethya Like,10000905_4
+SPMRGWT2,Sponges: Massive Forms: Balls: Globular White Tethya Like,10000905_5
+SPMRGB3,Sponges: Massive Forms: Balls: Globular Blue,10000905_6
+SPMRGO4,Sponges: Massive Forms: Balls: Globular Orange,10000905_7
+SPMRGG5,Sponges: Massive Forms: Balls: Globular Grey,10000905_8
+SPMRPLO4,Sponges: Massive Forms: Balls: Papillate Light Orange,10000905_9
+SPMRPBB5,Sponges: Massive Forms: Balls: Papillate Black Ball,10000905_10
+SPMRPOB,Sponges: Massive Forms: Balls: Papillate Orange Ball,10000905_11
+SPMRSOB,Sponges: Massive Forms: Balls: Smooth Orange Ball,10000905_12
+SPMRKYB,Sponges: Massive Forms: Balls: Knobby Yellow Ball,10000905_13
+SPMST,Sponges: Erect Forms: Stalked,10000906_1
+SEFSSWL,Sponges: Erect Forms: Stalked: Stalked White Lumpy,10000906_2
+SEFSSWPC,Sponges: Erect Forms: Stalked: Stalked White-pink Club,10000906_3
+SEFSSROS,Sponges: Erect Forms: Stalked: Stalked Red-Orange Sausage,10000906_4
+SPCLB,Sponges: Cup-Likes: Barrels,10000907_1
+SPCLBBBT,Sponges: Cup-Likes: Barrels: Barrel Blue Thick,10000907_2
+SPCLBBOO,Sponges: Cup-Likes: Barrels: Barrel Orange Oscula,10000907_3
+SPCLBBOR,Sponges: Cup-Likes: Barrels: Barrel Orange Rotund,10000907_4
+SPCLBBPL,Sponges: Cup-Likes: Barrels: Barrel Pink Lumpy,10000907_5
+SPCLBBPM,Sponges: Cup-Likes: Barrels: Barrel Pink Mouth,10000907_6
+SPCLBBRTW,Sponges: Cup-Likes: Barrels: Barrel Red Thick Wall,10000907_7
+SPCLBCPT6,Sponges: Cup-Likes: Barrels: Cup Pink Thick,10000907_8
+SPCLBMD4,Sponges: Cup-Likes: Barrels: Massive Donut,10000907_9
+SPCLBTPO12,Sponges: Cup-Likes: Barrels: Tubular Pale Orange,10000907_10
+SPCLBTTS5,Sponges: Cup-Likes: Barrels: Tubular Tan Singular,10000907_11
+SPCLBPWSM,Sponges: Cup-Likes: Barrels: Pink-White Smooth Mouth,10000907_12
+SPMC,Sponges: Massive Forms: Cryptic,10000908_1
+SPMCCR1,Sponges: Massive Forms: Cryptic: Cryptic Red,10000908_2
+SPMCCBW,Sponges: Massive Forms: Cryptic: Cryptic Black Wrinkly,10000908_3
+SPMCCPB,Sponges: Massive Forms: Cryptic: Cryptic Purple Brain,10000908_4
+SPMCCSWM,Sponges: Massive Forms: Cryptic: Cryptic Spiky White Massive,10000908_5
+SPMCCLT,Sponges: Massive Forms: Cryptic: Cryptic Lavender Tubes,10000908_6
+SPMCCOT,Sponges: Massive Forms: Cryptic: Cryptic Orange Tubes,10000908_7
+SPCL,Sponges: Cup-Likes,10000909_1
+SPCLC,Sponges: Cup-Likes: Cups,10000910_1
+SPCLTC,Sponges: Cup-Likes: Tubes And Chimneys,10000911_1
+SPCLTCCGR,Sponges: Cup-Likes: Tubes And Chimneys: Chimmey Grey Rough Small Oscule,10000911_2
+SPCLTCCGS,Sponges: Cup-Likes: Tubes And Chimneys: Chimney Grey Single,10000911_3
+SPCLTCCWR,Sponges: Cup-Likes: Tubes And Chimneys: Chimney White Round,10000911_4
+SPCLTCCWT,Sponges: Cup-Likes: Tubes And Chimneys: Chimney White Tall,10000911_5
+SPCLTCCYL,Sponges: Cup-Likes: Tubes And Chimneys: Chimney Yellow Large,10000911_6
+SPCLTCTBI,Sponges: Cup-Likes: Tubes And Chimneys: Tube Beige Irregular,10000911_7
+SPCLTCTWL,Sponges: Cup-Likes: Tubes And Chimneys: Tube White Lumpy,10000911_8
+SPCLTCTBP,Sponges: Cup-Likes: Tubes And Chimneys: Tubes Beige Prostrate,10000911_9
+SPCLTCTO,Sponges: Cup-Likes: Tubes And Chimneys: Tubes Orange Irrigular,10000911_10
+SPCLTCTOWT,Sponges: Cup-Likes: Tubes And Chimneys: Tubes Orange White Tips,10000911_11
+SPCLTCTP,Sponges: Cup-Likes: Tubes And Chimneys: Tubes Pink Cluster,10000911_12
+SPCLTCTWF,Sponges: Cup-Likes: Tubes And Chimneys: Tubes White Fan,10000911_13
+SPCLTCTWLO,Sponges: Cup-Likes: Tubes And Chimneys: Tubes White Large Osculum,10000911_14
+SPCLTCT7,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Pink Thorny,10000911_15
+SPCLTCT1,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Pink,10000911_16
+SPCLTCT11,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Blue,10000911_17
+SPCLTCT13,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Sycon,10000911_18
+SPCLTCT14,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Solitary,10000911_19
+SPCLTCT15,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Fuzzy,10000911_20
+SPCLTCT2,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Apricot,10000911_21
+SPCLTCT4,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Tan,10000911_22
+SPCLTCT6,Sponges: Cup-Likes: Tubes And Chimneys: Tubular White Thorny,10000911_23
+SPCLTCT8,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Orange,10000911_24
+SPCLTCTA,Sponges: Cup-Likes: Tubes And Chimneys: Tubular Apricot Community,10000911_25
+SPE,Sponges: Erect Forms,10000912_1
+SPEL,Sponges: Erect Forms: Laminar,10000913_1
+SPELFO1,Sponges: Erect Forms: Laminar: Fan Orange,10000913_2
+SPELFTLO10,Sponges: Erect Forms: Laminar: Fan Thick Large Oscules,10000913_3
+SPELFTP11,Sponges: Erect Forms: Laminar: Fan Thick Pink,10000913_4
+SPELFBT12,Sponges: Erect Forms: Laminar: Fan Brown Thin,10000913_5
+SPELFOT15,Sponges: Erect Forms: Laminar: Fan Orange Thorny,10000913_6
+SPELFOF3,Sponges: Erect Forms: Laminar: Fan Orange Flat,10000913_7
+SPELFP5,Sponges: Erect Forms: Laminar: Fan Peach,10000913_8
+SPELFY6,Sponges: Erect Forms: Laminar: Fan Yellow,10000913_9
+SPELFOT7,Sponges: Erect Forms: Laminar: Fan Orange Thin Blade,10000913_10
+SPELFBT8,Sponges: Erect Forms: Laminar: Fan Blue Thick,10000913_11
+SPELFOT9,Sponges: Erect Forms: Laminar: Fan Orange Thick,10000913_12
+SPELFLPL,Sponges: Erect Forms: Laminar: Fan Light Pink Lumpy,10000913_13
+SPELFPT,Sponges: Erect Forms: Laminar: Fan Peach Thick,10000913_14
+SPELFWF,Sponges: Erect Forms: Laminar: Fan White Frilly,10000913_15
+SPELFWT,Sponges: Erect Forms: Laminar: Fan White Thick,10000913_16
+SPELFWTh,Sponges: Erect Forms: Laminar: Fan White Thin,10000913_17
+SPELLAS,Sponges: Erect Forms: Laminar: Laminar Apricot Stalked,10000913_18
+SPELLGF,Sponges: Erect Forms: Laminar: Laminar Grey Fungi,10000913_19
+SPELLGR,Sponges: Erect Forms: Laminar: Laminar Grey Rough,10000913_20
+SPELLGRS,Sponges: Erect Forms: Laminar: Laminar Grey Round Stalk,10000913_21
+SPELLOI,Sponges: Erect Forms: Laminar: Laminar Orange Irregular,10000913_22
+SPELLOSP,Sponges: Erect Forms: Laminar: Laminar Orange Surface Pores,10000913_23
+SPELLWI,Sponges: Erect Forms: Laminar: Laminar White Irregular,10000913_24
+SPELLWS,Sponges: Erect Forms: Laminar: Laminar White Small,10000913_25
+SPELLYF,Sponges: Erect Forms: Laminar: Laminar Yellow Fine,10000913_26
+SPELLTFT,Sponges: Erect Forms: Laminar: Laminar Terracotta Fan Thick,10000913_27
+SPELLBR,Sponges: Erect Forms: Laminar: Laminar Brown Ruffle,10000913_28
+SPEP,Sponges: Erect Forms: Palmate,10000914_1
+SPEPAWF1,Sponges: Erect Forms: Palmate: Arborescent White Flat,10000914_2
+SPEPAOT11,Sponges: Erect Forms: Palmate: Arborescent Orange Fan,10000914_3
+SPEPABT16,Sponges: Erect Forms: Palmate: Arborescent Brown Thick,10000914_4
+SPEPAOF4,Sponges: Erect Forms: Palmate: Arborescent Orange Flat,10000914_5
+SPEPFWT14,Sponges: Erect Forms: Palmate: Fan White Thin,10000914_6
+SPEPPBF,Sponges: Erect Forms: Palmate: Palmate Beige Flat,10000914_7
+SPEPPG,Sponges: Erect Forms: Palmate: Palmate Grey,10000914_8
+SPEPPGF,Sponges: Erect Forms: Palmate: Palmate Grey Fingers,10000914_9
+SPEPPGSF,Sponges: Erect Forms: Palmate: Palmate Grey Stalked Fingers,10000914_10
+SPEPPOF,Sponges: Erect Forms: Palmate: Palmate Orange Flat,10000914_11
+SPEPPWT,Sponges: Erect Forms: Palmate: Palmate White Thorny,10000914_12
+SPEPOFP,Sponges: Erect Forms: Palmate:Orange Flat Pronghorn,10000914_13
+SPEPAYF,Sponges: Erect Forms: Palmate: Arborescent Yellow Flat,10000914_14
+SPEB,Sponges: Erect Forms: Branching,10000915_1
+SPEBAOBF10,Sponges: Erect Forms: Branching: Arborescent Orange / Brown Fingers,10000915_2
+SPEBABT12,Sponges: Erect Forms: Branching: Arborescent Brown Thorny,10000915_3
+SPEBAO13,Sponges: Erect Forms: Branching: Arborescent Orange,10000915_4
+SPEBAB14,Sponges: Erect Forms: Branching: Arborescent Black,10000915_5
+SPEBAWS15,Sponges: Erect Forms: Branching: Arborescent White Short,10000915_6
+SPEBASG17,Sponges: Erect Forms: Branching: Arborescent Stumpy Grey,10000915_7
+SPEBAG2,Sponges: Erect Forms: Branching: Arborescent Grey,10000915_8
+SPEBAPT3,Sponges: Erect Forms: Branching: Arborescent Purple Thin,10000915_9
+SPEBAW5,Sponges: Erect Forms: Branching: Arborescent White,10000915_10
+SPEBAY6,Sponges: Erect Forms: Branching: Arborescent Yellow,10000915_11
+SPEBAP7,Sponges: Erect Forms: Branching: Arborescent Purple,10000915_12
+SPEBAT8,Sponges: Erect Forms: Branching: Arborescent Tan,10000915_13
+SPEBAOT9,Sponges: Erect Forms: Branching: Arborescent Orange Thin,10000915_14
+SPEBAPI,Sponges: Erect Forms: Branching: Arborescent Purple Irregular,10000915_15
+SPEBBO1,Sponges: Erect Forms: Branching: Branching Orange,10000915_16
+SPEBBB2,Sponges: Erect Forms: Branching: Branching Brown 2,10000915_17
+SPEBBP3,Sponges: Erect Forms: Branching: Branching Purple,10000915_18
+SPEBBB4,Sponges: Erect Forms: Branching: Branching Brown 4,10000915_19
+SPEBBBC,Sponges: Erect Forms: Branching: Branching Cream,10000915_20
+SPEBBBF,Sponges: Erect Forms: Branching: Branching Beige Fine,10000915_21
+SPEBBBFr,Sponges: Erect Forms: Branching: Branching Beige Frilly,10000915_22
+SPEBBBS,Sponges: Erect Forms: Branching: Branching Beige Spindles,10000915_23
+SPEBBBSt,Sponges: Erect Forms: Branching: Branching Beige Stumpy,10000915_24
+SPEBBBlkF,Sponges: Erect Forms: Branching: Branching Black Fingers,10000915_25
+SPEBBGFR,Sponges: Erect Forms: Branching: Branching Gray Fine Repent Like,10000915_26
+SPEBBGRL,Sponges: Erect Forms: Branching: Branching Grey Repent Like,10000915_27
+SPEBBGS,Sponges: Erect Forms: Branching: Branching Grey Stumpy,10000915_28
+SPEBBGT,Sponges: Erect Forms: Branching: Branching Grey Thorny,10000915_29
+SPEBBOF,Sponges: Erect Forms: Branching: Branching Orange Frilly,10000915_30
+SPEBBOLF,Sponges: Erect Forms: Branching: Branching Orange Long Fine,10000915_31
+SPEBBOL,Sponges: Erect Forms: Branching: Branching Orange Lumpy,10000915_32
+SPEBBOP,Sponges: Erect Forms: Branching: Branching Orange Prostrate,10000915_33
+SPEBBPRL,Sponges: Erect Forms: Branching: Branching Purple Remose Like,10000915_34
+SPEBBWP,Sponges: Erect Forms: Branching: Branching White Pointed,10000915_35
+SPEBBWS,Sponges: Erect Forms: Branching: Branching White Stubby,10000915_36
+SPEBBWTL,Sponges: Erect Forms: Branching: Branching White Thorny Lumps,10000915_37
+SPEBFB2,Sponges: Erect Forms: Branching: Fan Brown,10000915_38
+SPEBLPS1,Sponges: Erect Forms: Branching: Lumpy Purple Stumps,10000915_39
+SPEBTOT10,Sponges: Erect Forms: Branching: Tubular Orange Thorny,10000915_40
+SPEBTPSO9,Sponges: Erect Forms: Branching: Tubular Pink Small Oscules,10000915_41
+SPEBYFF1,Sponges: Erect Forms: Branching: Yellow French Fries,10000915_42
+SPEBOWP,Sponges: Erect Forms: Branching: Orange white patches,10000915_43
+SPEBYBC,Sponges: Erect Forms: Branching: Yellow branching column,10000915_44
+SPEBAYT,Sponges: Erect Forms: Branching: Arborescent yellow thin,10000915_45
+SPES,Sponges: Erect Forms: Simple,10000916_1
+SPESSEC1,Sponges: Erect Forms: Simple: Simple Erect Cream,10000916_2
+SPESSEP2,Sponges: Erect Forms: Simple: Simple Erect Pink,10000916_3
+SPESSEO,Sponges: Erect Forms: Simple: Simple Erect Orange,10000916_4
+SPESSEW,Sponges: Erect Forms: Simple: Simple Erect White,10000916_5
+SPCCR,Sponges: Crusts: Creeping / Ramose,10000917_1
+SPCCRBRYSPOMAT,Sponges: Crusts: Creeping / Ramose: Bryozoa / Sponge Matrix,10000917_2
+SPCCRCFW,Sponges: Crusts: Creeping / Ramose: Creeping Fat White,10000917_3
+SPCCRLSG,Sponges: Crusts: Creeping / Ramose: Lumpy Shapeless Grey,10000917_4
+SPCCRRSC,Sponges: Crusts: Creeping / Ramose: Remose Single Cream,10000917_5
+SPCCRRB1,Sponges: Crusts: Creeping / Ramose: Repent 1 Brown,10000917_6
+SPCCRRB2,Sponges: Crusts: Creeping / Ramose: Repent 2 Brown,10000917_7
+SPCCRRO,Sponges: Crusts: Creeping / Ramose: Repent Orange,10000917_8
+SPCCRRP,Sponges: Crusts: Creeping / Ramose: Repent Purple,10000917_9
+SPCCRRY,Sponges: Crusts: Creeping / Ramose: Repent Yellow,10000917_10
+SPCCRWT,Sponges: Crusts: Creeping / Ramose: White Tempura,10000917_11
+SPCLCI,Sponges: Cup-Likes: Cups: Incomplete Cup / Curled Fan,10000918_1
+SPCLCIFOF13,Sponges: Cup-Likes: Cups: Incomplete Cup / Curled Fan: Fan Orange Frilly,10000918_2
+SPCLCIFF4,Sponges: Cup-Likes: Cups: Incomplete Cup / Curled Fan: Fan Pink,10000918_3
+SPCLCG,Sponges: Cup-Likes: Cups: Cup / Goblet,10000919_1
+SPCLCGCW1,Sponges: Cup-Likes: Cups: Cup White,10000919_2
+SPCLCGCWF2,Sponges: Cup-Likes: Cups: Cup White Frilly,10000919_3
+SPCLCGCB3,Sponges: Cup-Likes: Cups: Cup Blue,10000919_4
+SPCLCGCBT4,Sponges: Cup-Likes: Cups: Cup Blue Thick,10000919_5
+SPCLCGCR5,Sponges: Cup-Likes: Cups: Cup Red,10000919_6
+SPCLCGCLPFT7,Sponges: Cup-Likes: Cups: Cup Light Pink Flat Thick,10000919_7
+SPCLCGCY8,Sponges: Cup-Likes: Cups: Cup Yellow,10000919_8
+SPCLCGCBSI,Sponges: Cup-Likes: Cups: Cup Beige Shallow Irrigular,10000919_9
+SPCLCGCBT,Sponges: Cup-Likes: Cups: Cup Beige Thick,10000919_10
+SPCLCGCBlkSI,Sponges: Cup-Likes: Cups: Cup Black Smooth,10000919_11
+SPCLCGCBBI,Sponges: Cup-Likes: Cups: Cup Brown Irrigular,10000919_12
+SPCLCGCRS,Sponges: Cup-Likes: Cups: Cup Red Smooth,10000919_13
+SPCLCGCR,Sponges: Cup-Likes: Cups: Cup Red Thick,10000919_14
+SPCLCGCS,Sponges: Cup-Likes: Cups: Cup Stalked Purple,10000919_15
+SPCLCGPTS,Sponges: Cup-Likes: Cups: Cup Pink Thin Smooth,10000919_16
+SPCLCGLTS,Sponges: Cup-Likes: Cups: Cup Lavender Thin Smooth,10000919_17
+SPCLCT,Sponges: Cup-Likes: Cups: Tables / Discs,10000920_1
+SPCEB,Sponges: Crusts: Endolithic / Bioeroding,10000921_1
+JH,Jellies: Hydromedusae,11000901_1
+CNHYD,Cnidaria: Hydroids,11001000_1
+CNHYDBRYCNIHY1,Cnidaria: Hydroids: Bryozoa / Cnidaria: Hydroid Dark Grey,11001000_2
+CNHYDBRYCNIMAT,Cnidaria: Hydroids: Bryozoa / Cnidaria Matrix,11001000_3
+CNHYDHO2D,Cnidaria: Hydroids: Hydriod Orange 2D,11001000_4
+CNHYDH1,Cnidaria: Hydroids: Hydroid 1,11001000_5
+CNHYDH2,Cnidaria: Hydroids: Hydroid 2,11001000_6
+CNHYDHBF,Cnidaria: Hydroids: Hydroid Brown Feathers,11001000_7
+CNHYDHW,Cnidaria: Hydroids: Hydroid White,11001000_8
+CNHYDHY,Cnidaria: Hydroids: Hydroid Yellowish,11001000_9
+CNHYDHRBM,Cnidaria: Hydroids: Hydroid Red-Brown Mossy,11001000_10
+CNHYDHBTF,Cnidaria: Hydroids: Hydroid Blond Tip Feathers,11001000_11
+CNHYDHDRF,Cnidaria: Hydroids: Hydroid Dark Red Feathers,11001000_12
+CNHYDHBBkF,Cnidaria: Hydroids: Hydroid Branching Black Feathers,11001000_13
+CNHYDHBBF,Cnidaria: Hydroids: Hydroid Branching Brown Feathers,11001000_14
+CNHYDHBGF,Cnidaria: Hydroids: Hydroid Branching Golden Feathers,11001000_15
+CNHYC,Cnidaria: Hydrocorals,11077000_1
+CNHYCB,Cnidaria: Hydrocorals: Branching,11077906_1
+CNHYCS,Cnidaria: Hydrocorals: Submassive / Encrusting,11077907_1
+JSI,Jellies: Siphonophores,11090000_1
+JSC,Jellies: Scyphozoa,11120000_1
+JCU,Jellies: Cubozoa,11150000_1
+CNTU,Cnidaria: Tube Anemones,11164000_1
+C,Cnidaria: Corals,11168000_1
+CB,Cnidaria: Corals: Black & Octocorals,11168901_1
+CBOC7,Cnidaria: Corals: Black & Octocorals: Coral 7 Soft Coral,11168901_2
+CBB,Cnidaria: Corals: Black & Octocorals: Branching (3D),11168902_1
+CBBN,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy,11168903_1
+CBBNA,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Arborescent,11168904_1
+CBBNAAcasp,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Arborescent: Bramble Acabaria Sp,11168904_2
+CBBNAAspkar,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Arborescent: Bramble Asperaxis Kareni,11168904_3
+CBBNAPR,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Arborescent: Paragorgia like Red,11168904_4
+CBNB,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Bottle-Brush,11168905_1
+CBNBS,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Bottle-Brush: Simple,11168906_1
+CBNBC,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Bottle-Brush: Complex,11168907_1
+CBNBCO,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Bottle-Brush: Complex: Branching Grey Octocoral,11168907_2
+CBNBU,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-Fleshy: Bushy,11168908_1
+CBBF,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy,11168909_1
+CBBFM,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Mushroom,11168910_1
+CBBFMA,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Mushroom: Anthomastus Like Coral,11168910_2
+CBBFA,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent,11168911_1
+CBBFAC2,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent: Coral 2 Soft Capnella Like,11168911_2
+CBBFAC6,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent: Coral 6 Soft Blue,11168911_3
+CBBFAC3,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent: Soft Coral 3 Dark Red,11168911_4
+CBBFASP,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent: Soft Purple,11168911_5
+CBF,Cnidaria: Corals: Black & Octocorals: Fan (2D),11168912_1
+CBFF,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond,11168913_1
+CBFFS,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Simple,11168914_1
+CBFFSBRB,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Simple: Arborescent: Blackish Fern Branch,11168914_2
+CBFFC,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex,11168915_1
+CBFFGP1,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex: Gorgonian Pink,11168915_2
+CBFFGR2,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex: Gorgonian Red,11168915_3
+CBFFDP,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex: Dark purple octocoral,11168915_4
+CBFFML,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex: Gorganian Red Mopsella like,11168915_5
+CBFFBRC,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-Frond: Complex: Blackish Red Complex Fern,11168915_6
+CBFR,Cnidaria: Corals: Black & Octocorals: Fan (2D): Rigid,11168916_1
+CBW,Cnidaria: Corals: Black & Octocorals: Whip,11168917_1
+CBWS1,Cnidaria: Corals: Black & Octocorals: Whip: Sea Whip,11168917_2
+CBQ,Cnidaria: Corals: Black & Octocorals: Quill (Seapen),11168918_1
+CBE,Cnidaria: Corals: Black & Octocorals: Encrusting,11168919_1
+CBM,Cnidaria: Corals: Black & Octocorals: Massive Soft Corals,11168920_1
+CBBH,Cnidaria: Corals: Black & Octocorals: Blue Coral (Heliopora),11171000_1
+CBOT,Cnidaria: Corals: Black & Octocorals: Organ Pipe Coral (Tubipora),11201901_1
+CNTR,Cnidaria: True Anemones,11229000_1
+CNTRGSEL,Cnidaria: True Anemones: Grey Striated Edwardsia Like,11229000_2
+CNTFT,Cnidaria: True Anemones: Flytrap,11229901_1
+CNTFL,Cnidaria: True Anemones: Fourlobed,11229902_1
+CNTRO,Cnidaria: True Anemones: Other Anemones,11229903_1
+CNTROAnesp1,Cnidaria: True Anemones: Other Anemones: Anemone Sp1,11229903_2
+CNCAC,Cnidaria: Colonial Anemones: Corallimorphs,11280000_1
+CNCAZ,Cnidaria: Colonial Anemones: Zoanthids,11284000_1
+CNCAZParsp1,Cnidaria: Colonial Anemones: Zoanthids: Parazoanthus 1,11284000_2
+CNCAZZ1Epi,Cnidaria: Colonial Anemones: Zoanthids: Zooanthid 1 Cf Epizooanthus,11284000_3
+CS,Cnidaria: Corals: Stony Corals,11290000_1
+CSB,Cnidaria: Corals: Stony Corals: Bleached,11290000_2
+CSSO,Cnidaria: Corals: Stony Corals: Solitary,11290901_1
+CSSOB,Cnidaria: Corals: Stony Corals: Solitary: Bleached,11290901_2
+CSSOF,Cnidaria: Corals: Stony Corals: Solitary: Free-Living,11290902_1
+CSSOFB,Cnidaria: Corals: Stony Corals: Solitary: Free-Living: Bleached,11290902_2
+CSSOA,Cnidaria: Corals: Stony Corals: Solitary: Attached,11290903_1
+CSSOAB,Cnidaria: Corals: Stony Corals: Solitary: Attached: Bleached,11290903_2
+CSBO,Cnidaria: Corals: Stony Corals: Bottlebrush,11290904_1
+CSBOB,Cnidaria: Corals: Stony Corals: Bottlebrush: Bleached,11290904_2
+CSSU,Cnidaria: Corals: Stony Corals: Sub-Massive,11290905_1
+CSSUB,Cnidaria: Corals: Stony Corals: Sub-Massive: Bleached,11290905_2
+CSM,Cnidaria: Corals: Stony Corals: Massive,11290906_1
+CSMB,Cnidaria: Corals: Stony Corals: Massive: Bleached,11290906_2
+CSF,Cnidaria: Corals: Stony Corals: Foliose / Plate,11290907_1
+CSFB,Cnidaria: Corals: Stony Corals: Foliose / Plate: Bleached,11290907_2
+CSE,Cnidaria: Corals: Stony Corals: Encrusting,11290908_1
+CSEB,Cnidaria: Corals: Stony Corals: Encrusting: Bleached,11290908_2
+CSD,Cnidaria: Corals: Stony Corals: Digitate,11290909_1
+CSDB,Cnidaria: Corals: Stony Corals: Digitate: Bleached,11290909_2
+CSCOR,Cnidaria: Corals: Stony Corals: Corymbose,11290910_1
+CSCORB,Cnidaria: Corals: Stony Corals: Corymbose: Bleached,11290910_2
+CST,Cnidaria: Corals: Stony Corals: Tabulate,11290911_1
+CSTB,Cnidaria: Corals: Stony Corals: Tabulate: Bleached,11290911_2
+CSBR,Cnidaria: Corals: Stony Corals: Branching,11290912_1
+CSBRB,Cnidaria: Corals: Stony Corals: Branching: Bleached,11290912_2
+CSST,Cnidaria: Corals: Stony Corals: Staghorn,11290913_1
+CSSTB,Cnidaria: Corals: Stony Corals: Staghorn: Bleached,11290913_2
+CSCOL,Cnidaria: Corals: Stony Corals: Columnar,11290915_1
+CSCOLB,Cnidaria: Corals: Stony Corals: Columnar: Bleached,11290915_2
+CSSOM,Cnidaria: Corals: Stony Corals: Solitary: Mushroom (Fungiidae),11298000_1
+CSSOMOS,Cnidaria: Corals: Stony Corals: Solitary: Mushroom (Fungiidae): Coral Orange Solitary,11298000_2
+CN,Cnidaria,11500000_1
+CN/BRY/HYDH1,Cnidaria: Bryozoa / Cnidaria / Hydroid: Hydroid Dark Grey,11500000_2
+CNCA,Cnidaria: Colonial Anemones,11500901_1
+JCT,Jellies: Ctenophores,12000000_1
+WF,Worms: Flatworms,13000000_1
+WFFWsp1,Worms: Flatworms: Flatworm White Sp1,13000000_2
+WPE,Worms: Penisworms,15400000_1
+WES,Worms: Sipuncula,17000000_1
+WEE,Worms: Echiura,17020000_1
+BRA,Brachiopods,19100000_1
+BRY,Bryozoa,20000000_1
+BRYCNIHYDH1,Bryozoa: Bryozoa / Cnidaria: Hydroid: Hydroid Dark Grey,20000000_2
+BRYSPOMAT,Bryozoa: Bryozoa / Sponge Matrix,20000000_3
+BRYH,Bryozoa: Hard,20000901_1
+BRYHE,Bryozoa: Hard: Encrusting,20000902_1
+BRYHF,Bryozoa: Hard: Fenestrate,20000903_1
+BRYHFBHS,Bryozoa: Hard: Fenestrate: Bryozoa Hard Sparce,20000903_2
+BRYHFBSL1,Bryozoa: Hard: Fenestrate: Bryozoan Steginoprella Like,20000903_3
+BRYHFBHCL4,Bryozoa: Hard: Fenestrate: Bryozoan Hard Celleporaria Like,20000903_4
+BRYHFBL5,Bryozoa: Hard: Fenestrate: Bryozoan Lace,20000903_5
+BRYHFBH7,Bryozoa: Hard: Fenestrate: Bryozoan Hard,20000903_6
+BRYHFBAdegri,Bryozoa: Hard: Fenestrate: Bryozoan Adeona Grisea,20000903_7
+BRYHFBWLF,Bryozoa: Hard: Fenestrate: Bryozoan White Lace Fan,20000903_8
+BRYHFBPL,Bryozoa: Hard: Fenestrate: Bryozoan Purple Lettuce,20000903_9
+BRYHM,Bryozoa: Hard: Massive,20000904_1
+BRYS,Bryozoa: Soft,20000905_1
+BRYSD,Bryozoa: Soft: Dendroid,20000906_1
+BRYSDSRBD,Bryozoa: Soft: Dendroid: Soft Red-Brown Dendroid,20000906_2
+BRYSF,Bryozoa: Soft: Foliaceous,20000907_1
+BRYSFBSOL5,Bryozoa: Soft: Foliaceous: Bryozoan Soft Orthoscuticella Like,20000907_2
+BRYSFBSAL,Bryozoa: Soft: Foliaceous: Bryozoan Soft Amathia Like,20000907_3
+BRYSFBSBF,Bryozoa: Soft: Foliaceous: Bryozoan Soft Beige Fluffy,20000907_4
+BRYSFBSDR,Bryozoa: Soft: Foliaceous: Bryozoan Soft Dark Red,20000907_5
+BRYSFBSO,Bryozoa: Soft: Foliaceous: Bryozoan Soft Orange,20000907_6
+BRYSFBSPW,Bryozoa: Soft: Foliaceous: Bryozoan Soft Pinky White,20000907_7
+BRYSFBUS,Bryozoa: Soft: Foliaceous: Bryozoan Unknown Soft,20000907_8
+BRYSFBSGP,Bryozoa: Soft: Foliaceous: Bryozoan Soft Grey Pink,20000907_9
+BRYHB,Bryozoa: Hard: Branching,20000908_1
+WPO,Worms: Polychaetes,22000000_1
+WPOTWFSeb,Worms: Polychaetes: Tube Worms: Fanworm Sabella Like.,22000000_2
+WPOTWTWsp1,Worms: Polychaetes: Tube Worms: Tube Worm Sp1,22000000_3
+WPOT,Worms: Polychaetes: Tube Worms,22000901_1
+WPOO,Worms: Polychaetes: Other Polychaetes,22000902_1
+MO,Molluscs,23000000_1
+MOCH,Molluscs: Chitons,23100000_1
+MOB,Molluscs: Bivalves,23199000_1
+MOBS,Molluscs: Bivalves: Scallop,23199000_2
+MOCE,Molluscs: Cephalopods,23590000_1
+MOCEC,Molluscs: Cephalopods: Cuttlefish,23607000_1
+MOCES,Molluscs: Cephalopods: Squid,23615000_1
+MOCEO,Molluscs: Cephalopods: Octopods,23650000_1
+MOG,Molluscs: Gastropods,24000000_1
+MOGAb,Molluscs: Gastropods: Abalone,24000000_2
+MOGNZ,Molluscs: Gastropods: Nz Screw Shell,24000000_3
+MOGSS,Molluscs: Gastropods: Spindle Shell,24000000_4
+MOGV,Molluscs: Gastropods: Volute,24000000_5
+MOGC,Molluscs: Gastropods: Cowries Zoila like,24000000_6
+E,Echinoderms,25000000_1
+EF,Echinoderms: Feather Stars,25001000_1
+EFS,Echinoderms: Feather Stars: Stalked Crinoids,25001901_1
+EFU,Echinoderms: Feather Stars: Unstalked Crinoids,25001902_1
+EFUCenspp,Echinoderms: Feather Stars: Unstalked Crinoids: Cenolia Spp,25001902_2
+ESS,Echinoderms: Sea Stars,25102000_1
+EO,Echinoderms: Ophiuroids,25160000_1
+EOBSS,Echinoderms: Ophiuroids: Brittle / Snake Stars,25160901_1
+EOBS,Echinoderms: Ophiuroids: Basket Stars,25160902_1
+ESU,Echinoderms: Sea Urchins,25200000_1
+ESUR,Echinoderms: Sea Urchins: Regular Urchins,25200901_1
+ESUI,Echinoderms: Sea Urchins: Irregular Urchins,25200902_1
+ESC,Echinoderms: Sea Cucumbers,25400000_1
+ESCB,Echinoderms: Sea Cucumbers: Benthic,25400901_1
+ESCP,Echinoderms: Sea Cucumbers: Pelagic / Swimming,25400902_1
+CR,Crustacea,27000000_1
+CRB,Crustacea: Barnacles,27500000_1
+CRBS,Crustacea: Barnacles: Stalked,27500901_1
+CRBA,Crustacea: Barnacles: Acorn,27500902_1
+CRP,Crustacea: Prawns / Shrimps / Mysids,28000901_1
+CRL,Crustacea: Lobsters,28000902_1
+CRC,Crustacea: Crabs,28000903_1
+CRLT,Crustacea: Lobsters: True Lobsters,28786000_1
+CRLR,Crustacea: Lobsters: Rock Lobsters,28820000_1
+CRLRJasedw,Crustacea: Lobsters: Rock Lobsters: Jasus Edwardsii,28820000_2
+CRLSL,Crustacea: Lobsters: Slipper Lobsters / Bugs,28821000_1
+CRH,Crustacea: Hermit Crabs,28825901_1
+CRHGS,Crustacea: Hermit Crabs: With Shell Or Stone Home,28825902_1
+CRHWZ,Crustacea: Hermit Crabs: With Anemones,28825903_1
+CRLSQ,Crustacea: Lobsters: Squat Lobsters,28825904_1
+CRLSQE,Crustacea: Lobsters: Squat Lobsters: Squat Lobster Eumundia like,28825904_2
+CRCK,Crustacea: Crabs: King Crabs,28836000_1
+CRCP,Crustacea: Crabs: Porcelain Crabs,28843000_1
+CRCT,Crustacea: Crabs: True Crabs,28850000_1
+SS,Sea Spiders,33000000_1
+A,Ascidians,35000000_1
+AU,Ascidians: Unstalked,35000901_1
+AUS,Ascidians: Unstalked: Solitary,35000902_1
+AUSAS5,Ascidians: Unstalked: Solitary: Ascidian Solitary 5,35000902_2
+AUSART6,Ascidians: Unstalked: Solitary: Ascidian Red Throated 6,35000902_3
+AUSAS7,Ascidians: Unstalked: Solitary: Ascidian Solitary 7,35000902_4
+AUSART,Ascidians: Unstalked: Solitary: Ascidian Red Throated,35000902_5
+AUSASG,Ascidians: Unstalked: Solitary: Ascidian Solitary Grey,35000902_6
+AUSAUS,Ascidians: Unstalked: Solitary: Ascidian Unknown Solitary,35000902_7
+AUSASY,Ascidians: Unstalked: Solitary: Ascidian Soliary Yellow,35000902_8
+AUSASOY,Ascidians: Unstalked: Solitary: Ascidian Soliary Orange-Yellow,35000902_9
+AUC,Ascidians: Unstalked: Colonial,35000903_1
+AUCACL1,Ascidians: Unstalked: Colonial: Ascidian Clavelina Like 1,35000903_2
+AUCACP10,Ascidians: Unstalked: Colonial: Ascidian Colonial Purple,35000903_3
+AUCACR12,Ascidians: Unstalked: Colonial: Ascidian Colonial Red,35000903_5
+AUCACL2,Ascidians: Unstalked: Colonial: Ascidian Clavelina Like 2,35000903_6
+AUCAO3,Ascidians: Unstalked: Colonial: Ascidian Orange,35000903_7
+AUCASL4,Ascidians: Unstalked: Colonial: Ascidian Sycozoa Like,35000903_8
+AUCAUCE,Ascidians: Unstalked: Colonial: Ascidian Unstalked Colonial Encrusting,35000903_11
+AUCAUCYF,Ascidians: Unstalked: Colonial: Ascidian Unstalked Colonial Yellow Fingers,35000903_12
+AS,Ascidians: Stalked,35000904_1
+ASS,Ascidians: Stalked: Solitary,35000905_1
+ASSASPPL,Ascidians: Stalked: Solitary: Ascidian Stalked Purple Pyura Like,35000905_2
+ASC,Ascidians: Stalked: Colonial,35000906_1
+JSA,Jellies: Salps,35100000_1
+JP,Jellies: Pyrosomes,35101000_1
+WA,Worms: Acorn Worms,36110000_1
+F,Fishes,37000000_1
+FELS,Fishes: Elasmobranchs: Sharks,37990016_1
+FELSHetpor,Fishes: Elasmobranchs: Sharks: Heterodontus Portusjacksoni (Caab 37007001),37990016_2
+FEE,Fishes: Eels,37990025_1
+FELC,Fishes: Elasmobranchs: Chimaeras,37990028_1
+FELR,Fishes: Elasmobranchs: Rays & Skates,37990030_1
+FELRUropau,Fishes: Elasmobranchs: Rays & Skates: Urolophus Paucimaculatus (Caab 37038004),37990030_2
+FELRUrocru,Fishes: Elasmobranchs: Rays & Skates: Urolophus Cruciatus (Caab 37038002),37990030_3
+FEL,Fishes: Elasmobranchs,37990082_1
+FB,Fishes: Bony Fishes,37990083_1
+FBCaelep,"Fishes: Bony Fishes: Caesioperca Lepidoptera (Butterfly Perch, Caab 37311002)",37990083_2
+FBHelper,"Fishes: Bony Fishes: Helicolenus Percoides (Red Gurnard Perch, Caab 37287001)",37990083_3
+FBNeosco,"Fishes: Bony Fishes: Neosebastes scorpaenoides (Smooth Gurnard Perch, Caab 37287005)",37990083_4
+FBUpevla,"Fishes: Bony Fishes: Upeneichthys vlamingii (Bluespot Goatfish, Caab 37355029)",37990083_5
+FBPtepol,"Fishes: Bony Fishes: Pterygotrigla polyommata (Latchet, Caab 37288006)",37990083_6
+FBParmel,"Fishes: Bony Fishes: Parequula melbournensis (Silverbelly, Caab 37349001)",37990083_7
+FBPsesspp,"Fishes: Bony Fishes: Pseudophycis spp (Rock cod, Caab 37224006)",37990083_8
+FBAraaur,"Fishes: Bony Fishes: Aracana aurita (Shaws cowfish, Caab 37466003)",37990083_9
+FBCaeras,"Fishes: Bony Fishes: Caesioperca rasor (Barber Perch, Caab 37311003)",37990083_10
+FBParmac,"Fishes: Bony Fishes: Paratrachichthys macleayi (Sandpaper fish, Caab 37255003)",37990083_11
+FBParall,"Fishes: Bony Fishes: Parapercis allporti (Barred Grubfish, Caab 37390001)",37990083_12
+FBLatpur,"Fishes: Bony Fishes: Latropiscis purpurissatus (Sergeant Baker, Caab 37117001)",37990083_13
+FBCapuni,"Fishes: Bony Fishes: Capropygia unistriata (Spiny Boxfish, Caab 37466011)",37990083_14
+FBTriSco,Fishes: Bony Fishes: Triglidae/Scorpaenidae unidentifiable (Unidentifiable gurnard form),37990083_15
+FBThyutu,"Fishes: Bony Fishes: Thyrisites atun (Couta, Caab 37439001)",37990083_16
+FBCytaus,"Fishes: Bony Fishes: Cyttus australis (Silver dory, Caab 37264002)",37990083_17
+FBDionic,"Fishes: Bony Fishes: Diodon nicthemerus (Globe fish, Caab 37469001)",37990083_18
+FBCaespp,"Fishes: Bony Fishes: Caesioperca spp (Perch, Caab 37311002/37311003)",37990083_19
+SEAG,Seagrasses,63600901_1
+SEAGE,Seagrasses: Elliptical Leaves,63600902_1
+SEAGEH,Seagrasses: Elliptical Leaves: Halophila sp. (Caab 63600902),63600902_2
+SEAGEHEA,Seagrasses: Elliptical Leaves: Halophila sp. (Caab 63600902): epiphytes: algae,63600902_3
+SEAGEHEO,Seagrasses: Elliptical Leaves: Halophila sp. (Caab 63600902): epiphytes: other,63600902_4
+SEAGS,Seagrasses: Strap-Like Leaves,63600903_1
+SEAGSEA,Seagrasses: Strap-Like Leaves: epiphytes: algae,63600903_2
+SEAGSEO,Seagrasses: Strap-Like Leaves: epiphytes: other,63600903_3
+SEAGSA,Seagrasses: Strap-Like Leaves: Amphibolis sp. (Caab 63600903),63600903_4
+SEAGSAEA,Seagrasses: Strap-Like Leaves: Amphibolis sp. (Caab 63600903): epiphytes: algae,63600903_5
+SEAGSAEO,Seagrasses: Strap-Like Leaves: Amphibolis sp. (Caab 63600903): epiphytes: other,63600903_6
+SEAGSP,Seagrasses: Strap-Like Leaves: Posidonia sp. (Caab 63600903),63600903_7
+SEAGSPEA,Seagrasses: Strap-Like Leaves: Posidonia sp. (Caab 63600903): epiphytes: algae,63600903_8
+SEAGSPEO,Seagrasses: Strap-Like Leaves: Posidonia sp. (Caab 63600903): epiphytes: other,63600903_9
+SEAGSZ,Seagrasses: Strap-Like Leaves: Zostera sp. (Caab 63600903),63600903_10
+SEAGSZEA,Seagrasses: Strap-Like Leaves: Zostera sp. (Caab 63600903): epiphytes: algae,63600903_11
+SEAGSZEO,Seagrasses: Strap-Like Leaves: Zostera sp. (Caab 63600903): epiphytes: other,63600903_12
+SEAGSR,Seagrasses: Strap-Like Leaves: Rupia sp. (Caab 63600903),63600903_13
+SEAGSREA,Seagrasses: Strap-Like Leaves: Rupia sp. (Caab 63600903): epiphytes: algae,63600903_14
+SEAGSREO,Seagrasses: Strap-Like Leaves: Rupia sp. (Caab 63600903): epiphytes: other,63600903_15
+BMC,Bacterial Mats: Cyanobacteria,70000901_1
+BM,Bacterial Mats,72000901_1
+BMO,Bacterial Mats: Other,72000902_1
+BIOTA,Biota,80000000_1
+BGUB,Biota: General Unknown Biology,80000000_2
+MA,Macroalgae,80300000_1
+MAD,Macroalgae: Drift Algae,80300000_2
+MALC,Macroalgae: Large Canopy-Forming,80300901_1
+MALCB,Macroalgae: Large Canopy-Forming: Brown,80300902_1
+MALCBOCF,Macroalgae: Large Canopy-Forming: Brown: Brown Other Canopy Forming Sp,80300902_2
+MALCBEckrad,Macroalgae: Large Canopy-Forming: Brown: Ecklonia Radiata,80300902_3
+MALCBPhyspp,Macroalgae: Large Canopy-Forming: Brown: Phyllospora Spp,80300902_4
+MAEC,Macroalgae: Erect Coarse Branching,80300903_1
+MAECB,Macroalgae: Erect Coarse Branching: Brown,80300904_1
+MAECBD,Macroalgae: Erect Coarse Branching: Brown: Drift,80300904_2
+MAECBSarspp,Macroalgae: Erect Coarse Branching: Brown: Sargassum Spp,80300904_3
+MAECG,Macroalgae: Erect Coarse Branching: Green,80300905_1
+MAECGCodspp,Macroalgae: Erect Coarse Branching: Green: Codium Spp,80300905_2
+MAECGCauspp,Macroalgae: Erect Coarse Branching: Green: Caulerpa Spp,80300905_3
+MAECR,Macroalgae: Erect Coarse Branching: Red,80300906_1
+MAECRF,Macroalgae: Erect Coarse Branching: Red: Foliose,80300906_2
+MAEF,Macroalgae: Erect Fine Branching,80300907_1
+MAEFB,Macroalgae: Erect Fine Branching: Brown,80300908_1
+MAEFBU,Macroalgae: Erect Fine Branching: Brown: Brown Understory Algae,80300908_2
+MAEFG,Macroalgae: Erect Fine Branching: Green,80300909_1
+MAEFGCauspp,Macroalgae: Erect Fine Branching: Green: Caulerpa Spp,80300909_2
+MAEFR,Macroalgae: Erect Fine Branching: Red,80300910_1
+MAEFRF,Macroalgae: Erect Fine Branching: Red: Foliose,80300910_2
+MAA,Macroalgae: Articulated Calcareous,80300911_1
+MAAG,Macroalgae: Articulated Calcareous: Green,80300912_1
+MAAGAcg,Macroalgae: Articulated Calcareous: Green: Articulated Calcareous Green,80300912_2
+MAAR,Macroalgae: Articulated Calcareous: Red,80300913_1
+MAARAcr,Macroalgae: Articulated Calcareous: Red: Articulated Calcareous Red,80300913_2
+MAG,Macroalgae: Globose / Saccate,80300914_1
+MAGB,Macroalgae: Globose / Saccate: Brown,80300915_1
+MAGG,Macroalgae: Globose / Saccate: Green,80300916_1
+MAGGC,Macroalgae: Globose / Saccate: Green: Codium Spp,80300916_2
+MAGR,Macroalgae: Globose / Saccate: Red,80300917_1
+MALA,Macroalgae: Laminate,80300918_1
+MALAB,Macroalgae: Laminate: Brown,80300919_1
+MALAG,Macroalgae: Laminate: Green,80300920_1
+MALAR,Macroalgae: Laminate: Red,80300921_1
+MALARSon/Peyspp,Macroalgae: Laminate: Red: Sonderopelta Spp. And Peyssionnelia Spp.,80300921_2
+MAS,Macroalgae: Sheet-Like / Membraneous,80300922_1
+MASB,Macroalgae: Sheet-Like / Membraneous: Brown,80300923_1
+MASG,Macroalgae: Sheet-Like / Membraneous: Green,80300924_1
+MASR,Macroalgae: Sheet-Like / Membraneous: Red,80300925_1
+MASRF,Macroalgae: Sheet-Like / Membraneous: Red: Foliose,80300925_2
+MAEN,Macroalgae: Encrusting,80300926_1
+MAENB,Macroalgae: Encrusting: Brown,80300927_1
+MAENG,Macroalgae: Encrusting: Green,80300928_1
+MAENGCodspp,Macroalgae: Encrusting: Green: Codium Spp,80300928_2
+MAENR,Macroalgae: Encrusting: Red,80300929_1
+MAF,Macroalgae: Filamentous / Filiform,80300930_1
+MAFT,Macroalgae: Filamentous / Filiform: Turfing Algae,80300930_2
+MAFB,Macroalgae: Filamentous / Filiform: Brown,80300931_1
+MAFG,Macroalgae: Filamentous / Filiform: Green,80300932_1
+MAFR,Macroalgae: Filamentous / Filiform: Red,80300933_1
+MAFRDR,Macroalgae: Filamentous / Filiform: Red: Dark Red,80300933_2
+MAENRC,Macroalgae: Encrusting: Red: Calcareous,80300934_1
+MEANRNC,Macroalgae: Encrusting: Red: Non-Calcareous,80300935_1
+W,Worms,80600901_1
+J,Jellies,80600903_1
+BI,Bioturbation,81000000_1
+BID,Bioturbation: Dwelling Traces,81001000_1
+BIDE,Bioturbation: Dwelling Traces: Elongate Depression,81001001_1
+BIDL,Bioturbation: Dwelling Traces: Large Mound,81001002_1
+BIDSM,Bioturbation: Dwelling Traces: Small Mound,81001003_1
+BIDB,Bioturbation: Dwelling Traces: Burrow Cluster,81001004_1
+BIDO,Bioturbation: Dwelling Traces: Oblique Burrow,81001005_1
+BIDSB,Bioturbation: Dwelling Traces: Single Burrow,81001006_1
+BIDP,Bioturbation: Dwelling Traces: Paired Burrow,81001007_1
+BIDV,Bioturbation: Dwelling Traces: Vertical Burrow,81001008_1
+BIDT,Bioturbation: Dwelling Traces: Trapdoor Burrow,81001009_1
+BIDR,Bioturbation: Dwelling Traces: Rounded Crater Ring,81001010_1
+BIDSC,Bioturbation: Dwelling Traces: Spiked Crater Ring,81001011_1
+BIDC,Bioturbation: Dwelling Traces: Crater Cone,81001012_1
+BIDF,Bioturbation: Dwelling Traces: Fractured Mound,81001013_1
+BIDSP,Bioturbation: Dwelling Traces: Spotted Mound,81001014_1
+BIW,Bioturbation: Waste Casts,81002000_1
+BIWCO,Bioturbation: Waste Casts: Coiled Casts,81002001_1
+BIWW,Bioturbation: Waste Casts: Wavy Casts,81002002_1
+BIWR,Bioturbation: Waste Casts: Round Casts,81002003_1
+BIWM,Bioturbation: Waste Casts: Mounded Casts,81002004_1
+BIWCU,Bioturbation: Waste Casts: Curly Casts,81002005_1
+BIWN,Bioturbation: Waste Casts: Nest Casts,81002006_1
+BIWSP,Bioturbation: Waste Casts: Spirals,81002007_1
+BIWSW,Bioturbation: Waste Casts: Switchbacks,81002008_1
+BIR,Bioturbation: Resting Traces,81003000_1
+BIRU,Bioturbation: Resting Traces: Urchin Trace,81003001_1
+BIRS,Bioturbation: Resting Traces: Star Impression,81003002_1
+BIRL,Bioturbation: Resting Traces: Large Depression,81003003_1
+BIF,Bioturbation: Feeding Traces,81004000_1
+BIFL,Bioturbation: Feeding Traces: Large Rosette,81004001_1
+BIFS,Bioturbation: Feeding Traces: Small Rosette,81004002_1
+BIFPE,Bioturbation: Feeding Traces: Petal Rosette,81004003_1
+BIFR,Bioturbation: Feeding Traces: Rayed Mound,81004004_1
+BIFPI,Bioturbation: Feeding Traces: Pincushion Rosette,81004005_1
+BIC,Bioturbation: Crawling Traces,81005000_1
+BICTN,Bioturbation: Crawling Traces: Thin Trail,81005001_1
+BICTK,Bioturbation: Crawling Traces: Thick Trail,81005002_1
+BICCT,Bioturbation: Crawling Traces: Complex Trail,81005003_1
+BICM,Bioturbation: Crawling Traces: Mounded Trail,81005004_1
+BICP,Bioturbation: Crawling Traces: Perforated Trail,81005005_1
+BICCR,Bioturbation: Crawling Traces: Crater Row,81005006_1
+BICD,Bioturbation: Crawling Traces: Disturbed Trace,81005007_1
+BIO,Bioturbation: Organism Tests,81006000_1
+BIOL,Bioturbation: Organism Tests: Lumpy Xenophyophore,81006001_1
+BIOG,Bioturbation: Organism Tests: Globule Xenophyophore,81006002_1
+BIU,Bioturbation: Unknown Origin,81007000_1
+BIUO,Bioturbation: Unknown Origin: Ovoid Pinnate,81007001_1
+BIUR,Bioturbation: Unknown Origin: Round Pinnate,81007002_1
+BIUME,Bioturbation: Unknown Origin: Mesh,81007003_1
+BIUS,Bioturbation: Unknown Origin: Spider,81007004_1
+BIUMA,Bioturbation: Unknown Origin: Matchstick,81007005_1
+BIUF,Bioturbation: Unknown Origin: Fern,81007006_1
+BIUP,Bioturbation: Unknown Origin: Pogostick,81007007_1
+P,Physical,82000000_1
+S,Substrate,82001000_1
+SC,Substrate: Consolidated (Hard),82001001_1
+SCR,Substrate: Consolidated (Hard): Rock,82001002_1
+SCB,Substrate: Consolidated (Hard): Boulders,82001003_1
+SCC,Substrate: Consolidated (Hard): Cobbles,82001004_1
+SU,Substrate: Unconsolidated (Soft),82001005_1
+SUP,Substrate: Unconsolidated (Soft): Pebble / Gravel,82001006_1
+SUPB,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic,82001007_1
+SUPBC,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic: Coquina / Shellhash,82001008_1
+SUPBRub,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic: Coral Rubble,82001009_1
+SUPBB,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic: Barnacle Plates,82001010_1
+SUPG,Substrate: Unconsolidated (Soft): Pebble / Gravel: Gravel (2-10Mm),82001011_1
+SUPP,Substrate: Unconsolidated (Soft): Pebble / Gravel: Pebble (10-64Mm),82001012_1
+SUS,Substrate: Unconsolidated (Soft): Sand / Mud (<2Mm),82001013_1
+SUSC,Substrate: Unconsolidated (Soft): Sand / Mud (<2Mm): Coarse Sand (With Shell Fragments),82001014_1
+SUSF,Substrate: Unconsolidated (Soft): Sand / Mud (<2Mm): Fine Sand (No Shell Fragments),82001015_1
+SUSM,Substrate: Unconsolidated (Soft): Sand / Mud (<2Mm): Mud / Silt (<64Um),82001016_1
+SUPBS,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic: Screwshells,82001017_1
+SUPBRho,Substrate: Unconsolidated (Soft): Pebble / Gravel: Biologenic: Rhodoliths,82001018_1
+B,Bedforms,82002000_1
+BN,Bedforms: None,82002001_1
+B2,Bedforms: 2D,82002002_1
+B2R,Bedforms: 2D: Ripples (<10Cm Height),82002003_1
+B2W,Bedforms: 2D: Waves (>10Cm Height),82002004_1
+BB,Bedforms: Bioturbated,82002005_1
+B3,Bedforms: 3D,82002006_1
+B3R,Bedforms: 3D: Ripples (<10Cm Height),82002007_1
+B3W,Bedforms: 3D: Waves (>10Cm Height),82002008_1
+R,Relief,82003000_1
+RF,Relief: Flat,82003001_1
+RL,Relief: Low / Moderate,82003002_1
+RLL,Relief: Low / Moderate: Low (<1M),82003003_1
+RLM,Relief: Low / Moderate: Moderate (1-3M),82003004_1
+RH,Relief: High,82003005_1
+RHH,Relief: High: High (>3M),82003006_1
+RHR,Relief: High: Wall,82003007_1

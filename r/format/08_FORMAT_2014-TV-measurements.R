@@ -58,15 +58,11 @@ point.score <- habitat %>%
   ungroup()%>%
   dplyr::group_by(campaignid,sample) %>%
   dplyr::summarise_all(funs(sum)) %>%
-  ungroup()
+  ungroup() %>%
+  ga.clean.names()
 
 # Make broad categories -----
 # Minimize the number of habitat categories for plotting ----
-names(point.score)
-
-point.score <- ga.clean.names(point.score)
-
-names(point.score)
 
 # Posodonia
 # 0 = Posodonia sp.
