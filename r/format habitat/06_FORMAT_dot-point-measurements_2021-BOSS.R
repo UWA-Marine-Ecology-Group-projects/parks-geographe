@@ -50,6 +50,10 @@ points <- read.delim("2021-03_Geographe_BOSS_Habitat_Dot Point Measurements.txt"
   mutate(sample=str_replace_all(.$filename,c(".png"="",".jpg"="",".JPG"=""))) %>%
   mutate(sample=as.character(sample)) %>% 
   select(sample,image.row,image.col,broad,morphology,type,fieldofview) %>% # select only these columns to keep
+  dplyr::mutate(direction = ifelse(image.row < 1080 & image.col < 1920, "N", 
+                                   ifelse(image.row < 1080 & image.col >= 1920, "E", 
+                                          ifelse(image.row >= 1080 & image.col >= 1920, "S", "W")))) %>% # Add this in for Kingsley test
+  dplyr::select(sample, direction, everything()) %>%
   glimpse() # preview
 
 length(unique(points$sample)) # 198 samples
@@ -71,7 +75,7 @@ missing.habitat <- anti_join(metadata,habitat, by = c("sample")) # samples in th
 
 # Create %fov----
 fov.points <- habitat%>%
-  dplyr::select(-c(broad,morphology,type))%>%
+  dplyr::select(-c(broad,morphology,type, direction))%>%
   dplyr::filter(!fieldofview=="")%>%
   dplyr::filter(!is.na(fieldofview))%>%
   dplyr::mutate(fieldofview=paste("fov",fieldofview,sep = "."))%>%
@@ -99,9 +103,10 @@ broad.points <- habitat%>%
   dplyr::group_by(sample)%>%
   tidyr::spread(key=broad,value=count,fill=0)%>%
   dplyr::select(-c(image.row,image.col))%>%
-  dplyr::group_by(sample)%>%
+  dplyr::group_by(sample, direction)%>%
   dplyr::summarise_all(funs(sum))%>%
-  dplyr::mutate(broad.total.points.annotated=rowSums(.[,2:(ncol(.))],na.rm = TRUE ))%>%
+  ungroup() %>%
+  dplyr::mutate(broad.total.points.annotated=rowSums(.[,3:(ncol(.))],na.rm = TRUE ))%>%
   ga.clean.names()%>%
   glimpse
 
