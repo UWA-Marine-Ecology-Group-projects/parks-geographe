@@ -29,38 +29,50 @@ wampa <- st_read("data/spatial/shapefiles/test1.shp") # Should really stop using
 st_crs(wampa) <- wgscrs # WGS84
 
 # Load the LIDAR raster
-lidar <- raster("data/spatial/rasters/GBmultib_lidar_CMR.tif")
-# lidar <- aggregate(lidar, 4, fun = mean) # Aggregate it down, too slow to plot
-# lidar <- projectRaster(lidar, crs = wgscrs) # Do I need to match all the crs?
-plot(lidar)
-e <- extent(115.1, 115.4, -33.65, -33.58)
-lidar <- crop(lidar, e)
-plot(lidar)
+lidar1 <- raster("data/spatial/rasters/GBlidar1.tif")
+plot(lidar1) 
+lidar1 # This is the only one of the dataframes with auto crs
+
+lidar2 <- raster("data/spatial/rasters/GBlidar2.tif")
+plot(lidar2)
+crs(lidar2) <- crs(lidar1) # Set crs to match
+lidar2
+lidar3 <- raster("data/spatial/rasters/GBlidar3.tif")
+plot(lidar3)
+crs(lidar3) <- crs(lidar1) # Set crs to match
+lidar3
+lidar <- merge(lidar1, lidar2, lidar3)
+crs(lidar) <- sppcrs
+lidar <- raster::projectRaster(lidar, crs = wgscrs) 
+
+# lidar <- aggregate(lidar, 10, fun = mean) # Aggregate it down, too slow to plot
 
 # Hillshade the bathy
-# lidarf <- flip(lidar, direction = "y") # Flip the bathy
 slope <- terrain(lidar,opt='slope',unit='degrees') # Calculate slope
 aspect <- terrain(lidar,opt='aspect',unit='degrees') # calculate aspect
-hill <- hillShade(slope, aspect, 90, 90) # Hillshade derived from slope and aspect of bathy - change angle and direction
+hill <- hillShade(slope, aspect, angle = 65, direction = 270) # Hillshade derived from slope and aspect of bathy - change angle and direction
 
 # Convert both hillshade and lidar to dataframes
 hilldf <- as.data.frame(hill, xy = T, na.rm = T)
-lidardf <- as.data.frame(lidar, xy = T, na.rm = T) %>%
-  dplyr::rename(depth = GBmultib_lidar_CMR)
 
+
+lidardf <- as.data.frame(lidar, xy = T, na.rm = T) %>%
+  dplyr::rename(depth = layer)
 
 p1 <- ggplot() +
-  geom_tile(data = lidardf, aes(x = x, y = y, fill = depth), alpha = 1)+
-  scale_fill_viridis()+
-  new_scale_fill()+
-  geom_tile(data = hilldf, aes(x = x, y = y, fill = layer), alpha = 0.4)+
-  scale_fill_gradient(low = "white", high = "black", guide = "none")+
+  geom_tile(data = hilldf, aes(x = x, y = y, fill = layer), alpha = 1) +
+  scale_fill_gradient(low = "black", high = "white", guide = "none") +
+  new_scale_fill() +
+  geom_tile(data = lidardf, aes(x = x, y = y, fill = depth), alpha = 0.7) +
+  scale_fill_gradientn(colours = terrain.colors(10)) +
   geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
-  coord_sf(xlim = c(min(lidardf$x), max(lidardf$x)), ylim = c(min(lidardf$y), max(lidardf$y)))+
-  # coord_sf(xlim = c(115.1, 115.4), ylim = c(-33.58, -33.65)) + 
+  # coord_sf(xlim = c(min(lidardf$x), max(lidardf$x)), ylim = c(min(lidardf$y), max(lidardf$y)))+
+  coord_sf(xlim = c(115.1, 115.7), ylim = c(-33.2, -33.65)) +
   labs(y = "Latitude", x = "Longitude")+
   theme_minimal()
-p1
 
+png(filename = "plots/spatial/lidar-map.png", width = 5, height = 4, units = "in", res = 600)
+p1
+dev.off()
 
 
