@@ -55,7 +55,6 @@ hill <- hillShade(slope, aspect, angle = 65, direction = 270) # Hillshade derive
 # Convert both hillshade and lidar to dataframes
 hilldf <- as.data.frame(hill, xy = T, na.rm = T)
 
-
 lidardf <- as.data.frame(lidar, xy = T, na.rm = T) %>%
   dplyr::rename(depth = layer)
 
@@ -74,5 +73,35 @@ p1 <- ggplot() +
 png(filename = "plots/spatial/lidar-map.png", width = 5, height = 4, units = "in", res = 600)
 p1
 dev.off()
+
+# Inset on a cool bit of rivermouth ground
+#115.4 - 115.5 -33.5 -33.4
+
+e <- extent(115.4, 115.5, -33.5, -33.4)
+lidarc <- crop(lidar, e)
+plot(lidarc)
+lidardf_c <- as.data.frame(lidarc, xy = T, na.rm = T)
+
+slopec <- terrain(lidarc,opt='slope',unit='degrees') # Calculate slope
+aspectc <- terrain(lidarc,opt='aspect',unit='degrees') # calculate aspect
+hillc <- hillShade(slopec, aspectc, angle = 65, direction = 270) # Hillshade derived from slope and aspect of bathy - change angle and direction
+
+hilldf_c <- as.data.frame(hillc, xy = T, na.rm = T)
+
+p2 <- ggplot() +
+  geom_tile(data = hilldf_c, aes(x = x, y = y, fill = layer), alpha = 1) +
+  scale_fill_gradient(low = "black", high = "white", guide = "none") +
+  new_scale_fill() +
+  geom_tile(data = lidardf_c, aes(x = x, y = y, fill = layer), alpha = 0.7) +
+  scale_fill_gradientn(colours = terrain.colors(10)) +
+  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
+  coord_sf(xlim = c(115.4, 115.5), ylim = c(-33.5, -33.4)) +
+  labs(y = "Latitude", x = "Longitude", fill = "Depth")+
+  theme_minimal()
+
+png(filename = "plots/spatial/lidar-map-inset.png", width = 5, height = 4, units = "in", res = 600)
+p2
+dev.off()
+
 
 
