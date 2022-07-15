@@ -33,23 +33,23 @@ nb_npz <- nb_nmp[nb_nmp$ZoneName == "National Park Zone", ]
 wanew  <- st_read("data/spatial/shapefiles/test1.shp")                          # zones in ngari capes
 terrnp <- st_read(
   "data/spatial/shapefiles/Legislated_Lands_and_Waters_DBCA_011.shp")           # terrestrial reserves
-jacmap <- raster("data/spatial/rasters/ecosystem-types-19class-naland.tif")     # jac's aus habitat map
-cropex <- extent(112, 116, -35, -32)
-jacmap <- crop(jacmap, cropex)
+# jacmap <- raster("data/spatial/rasters/ecosystem-types-19class-naland.tif")     # jac's aus habitat map
+# cropex <- extent(112, 116, -35, -32)
+# jacmap <- crop(jacmap, cropex)
 # jacmap <- projectRaster(jacmap, crs = sppcrs, method = "ngb")
 cwatr  <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")       # coastal waters line
-cwatr <- st_crop(cwatr, c(xmin = 110, xmax = 123, ymin = -39, ymax = -30))      # crop down coastal waters line to general project area
-bath_r <- raster("data/spatial/rasters/archive/GB-SW_250mBathy.tif")            # bathymetry trimmed to project area
+cwatr <- st_crop(cwatr, c(xmin = 114.9, xmax = 115.7, ymin = -33.65, ymax = -33.3))      # crop down coastal waters line to general project area
+bath_r <- raster("data/spatial/rasters/GB_Bathy_250m.tif")            # bathymetry trimmed to project area
 bathdf <- as.data.frame(bath_r, na.rm = TRUE, xy = TRUE)
 colnames(bathdf)[3] <- "Depth"
 
-bath_new <- raster("data/spatial/rasters/swc-bathy-siteplots.tif")              #new bathy for broad spatial plot contour lines
-bath_newdf <- as.data.frame(bath_new, na.rm = T, xy = T)
-colnames(bath_newdf)[3] <- "Depth"
+# bath_new <- raster("data/spatial/rasters/swc-bathy-siteplots.tif")              #new bathy for broad spatial plot contour lines
+# bath_newdf <- as.data.frame(bath_new, na.rm = T, xy = T)
+# colnames(bath_newdf)[3] <- "Depth"
 
 kef <- st_read("data/spatial/shapefiles/AU_DOEE_KEF_2015.shp")
-sf_use_s2(FALSE)                                                                #errors otherwise, not sure what it does...
-kef <- st_crop(kef, c(xmin = 110, xmax = 122.1, ymin = -39, ymax = -33.3))  #coord_sf(xlim = c(110, 122.1), ylim = c(-39, -33.3)) +
+kef <- st_make_valid(kef)
+kef <- st_crop(kef, c(xmin = 110, xmax = 122.1, ymin = -39, ymax = -33.3))      # Cropped to wrong extent, fix      
 kef$NAME <- dplyr::recode(kef$NAME,"Perth Canyon and adjacent shelf break, and other west coast canyons" = "Perth Canyon",                 
                 "Commonwealth marine environment within and adjacent to the west coast inshore lagoons" = "West coast lagoons",
                 "Commonwealth marine environment within and adjacent to Geographe Bay" = "Geographe Bay",                 
@@ -65,9 +65,35 @@ kef$NAME <- dplyr::recode(kef$NAME,"Perth Canyon and adjacent shelf break, and o
 st_crs(aus)         <- st_crs(aumpa)
 st_crs(wanew)       <- st_crs(nb_mp)
 
-habitat <- readRDS('data/tidy/habitat_merged_allcols.rds')                              # get sampling data
-habitat$method <- dplyr::recode(habitat$method,
-                                "BOSS" = "Drop Camera")
+# Get sampling data locations
+bruv2014 <- read.csv('data/raw/em export/2014-12_Geographe.Bay_stereoBRUVs_Metadata.csv') %>%
+  ga.clean.names() %>%
+  dplyr::filter(successful.count %in% "Yes") %>%
+  dplyr::select(sample, latitude, longitude) %>%
+  dplyr::mutate(campaignid = "2014-12_Geographe.Bay_stereoBRUVs",
+                method = "BRUV",
+                sample = as.character(sample)) %>%
+  glimpse()
+
+bruv2007 <- read.csv("data/raw/em export/2007-03_Capes.MF_stereoBRUVs_Metadata.csv")%>%
+  ga.clean.names() %>%
+  dplyr::filter(successful.count %in% "Yes", site %in% "Geographe.Bay") %>%
+  dplyr::select(sample, latitude, longitude) %>%
+  dplyr::mutate(campaignid = "2007-03_Capes.MF_stereoBRUVs",
+                method = "BRUV",
+                sample = as.character(sample)) %>%
+  glimpse()
+
+boss2021 <- read.csv("data/raw/em export/2021-03_Geographe_BOSS_Metadata.csv")%>%
+  ga.clean.names() %>%
+  # dplyr::filter(successful.count %in% "Yes") %>% # Need to fill out with successful count
+  dplyr::select(sample, latitude, longitude) %>%
+  dplyr::mutate(campaignid = "2021-03_Geographe_BOSS",
+                method = "BOSS",
+                sample = as.character(sample)) %>%
+  glimpse()
+
+points <- bind_rows(bruv2014, boss2021) # TOok out BRUV 2007 for now - check if we wil use this
 
 # simplify zone names
 nb_nmp$ZoneName <- dplyr::recode(nb_nmp$ZoneName,
@@ -76,15 +102,15 @@ nb_nmp$ZoneName <- dplyr::recode(nb_nmp$ZoneName,
 
 nb_mp$waname <- gsub("( \\().+(\\))", "", nb_mp$ZONE_TYPE)
 nb_mp$waname <- gsub(" [1-4]", "", nb_mp$waname)
-# ab_mpa$waname[ab_mpa$ZONE_TYPE == unique(ab_mpa$ZONE_TYPE)[14]] <- 
-#   c("Special Purpose Zone\n(Habitat Protection)")
+# ab_mpa$waname[ab_mpa$ZONE_TYPE == unique(ab_mpa$ZONE_TYPE)[14]] <-
+  # c("Special Purpose Zone\n(Habitat Protection)")
 nb_mp$waname[nb_mp$NAME == "Ngari Capes"]     <- "General Use"
-nb_mp$waname <- dplyr::recode(nb_mp$waname, 
+nb_mp$waname <- dplyr::recode(nb_mp$waname,
                                "General Use" = "General Use Zone",
                                # "MMA" = "Marine Management Area",
                                # "Recreation Area" = "Recreation Zone",
                                # "Conservation Area" = "Sanctuary Zone",
-                               "Special Purpose Zone (Shore Based Activities)" = 
+                               "Special Purpose Zone (Shore Based Activities)" =
                                 "Special Purpose Zone\n(Shore Based Activities)")
 
 # fix up new zones within Ngari Capes
@@ -244,7 +270,9 @@ ggsave("plots/spatial/key-ecological-features.png", dpi = 200, width = 10, heigh
 # reduce zone levels for these plots
 # assign commonwealth zone colours
 s_nmpa_cols <- scale_fill_manual(values = c("National Park Zone" = "#7bbc63",
-                                            "Special Purpose Zone\n(Mining Exclusion)" = "#368ac1"))
+                                            "Special Purpose Zone\n(Mining Exclusion)" = "#368ac1",
+                                            "Multiple Use Zone" = "#b9e6fb",
+                                            "Habitat Protection Zone" = "#fff8a3"))
 
 # state colours
 s_wampa_cols <- scale_fill_manual(values = c("Sanctuary Zone" = "#bfd054",
@@ -253,14 +281,10 @@ s_wampa_cols <- scale_fill_manual(values = c("Sanctuary Zone" = "#bfd054",
 # make closer plot
 # trim down bathy for nicer contour labels
 sitebathy <- bathdf[bathdf$Depth > -500, ]                               # trim to reduce legend
-sitebathy <- sitebathy[sitebathy$x > 114.4 & sitebathy$x < 115, ]
-sitebathy <- sitebathy[sitebathy$y > -34.1 & sitebathy$y < -33.7, ]
+# sitebathy <- sitebathy[sitebathy$x > 114.4 & sitebathy$x < 115, ]
+# sitebathy <- sitebathy[sitebathy$y > -34.1 & sitebathy$y < -33.7, ]
 
 p3 <- ggplot() +
-  # # geom_raster(data = bathdf, aes(x, y, fill = Depth), alpha = 0.9) +
-  # geom_contour_filled(data = bathdf, aes(x = x, y = y, z = Depth), 
-  #              binwidth = 50, colour = "white", alpha = 4/5, size = 0.1) +
-  # scale_fill_gradient(low = "black", high = "grey70", guide = "none") +
   geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
   new_scale_fill() +
   geom_sf(data = nb_mp, aes(fill = waname), alpha = 3/5, colour = NA) +
@@ -268,29 +292,37 @@ p3 <- ggplot() +
   s_wampa_cols +
   labs(fill = "State Marine Parks") +
   new_scale_fill() +
-  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 3/5, colour = NA) +
-  waterr_cols +
-  labs(fill = "Terrestrial Managed Areas") +
-  new_scale_fill() +
+  # geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 3/5, colour = NA) +
+  # waterr_cols +
+  # labs(fill = "Terrestrial Managed Areas") +
+  # new_scale_fill() +
   geom_sf(data = nb_nmp, aes(fill = ZoneName), alpha = 3/5, colour = NA) +
   s_nmpa_cols + 
   geom_sf(data = cwatr, colour = "firebrick", alpha = 4/5, size = 0.2) +
-  geom_contour(data = bathdf, aes(x = x, y = y, z = Depth), 
-               binwidth = 50, colour = "white", alpha = 4/5, size = 0.1) +
-  geom_text_contour(data = sitebathy, aes(x = x, y = y, z = Depth), 
-                    binwidth = 50, size = 2.5, label.placer = label_placer_n(1)) +
-  geom_point(data = habitat, aes(longitude, latitude, colour = method), 
+  # geom_contour(data = sitebathy, aes(x = x, y = y, z = Depth),  # Turned off contours, looks a bit weird - maybe add in just 30m parks contour?
+  #              binwidth = 10, colour = "white", alpha = 1, size = 0.4) +
+  # geom_text_contour(data = sitebathy, aes(x = x, y = y, z = Depth), 
+  #                   binwidth = 10, size = 2.5, label.placer = label_placer_n(1)) +
+  geom_point(data = points, aes(longitude, latitude, colour = method), 
              alpha = 3/5, shape = 10) +
   scale_colour_manual(values = c("BRUV" = "indianred4",
                                  "Drop Camera" = "seagreen4")) +
   labs(x = NULL, y = NULL, fill = "Australian Marine Parks", colour = "Sample") +
   guides(fill = guide_legend(order = 1)) +
-  annotate("rect", xmin = 114.7, xmax = 114.95, ymin = -34.14, ymax = -34.01,
-           colour = "grey15", fill = "white", alpha = 0.1, size = 0.1) +
-  coord_sf(xlim = c(114.4, 115.1), ylim = c(-34.15, -33.65)) +
-  geom_segment(aes(x = 114.4, xend = 115.08, y = -34.127327939, yend = -34.127327939), linetype = 2, alpha = 0.3) +
-  theme_minimal()
+  # annotate("rect", xmin = 114.7, xmax = 114.95, ymin = -34.14, ymax = -34.01,
+  #          colour = "grey15", fill = "white", alpha = 0.1, size = 0.1) +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
+  # geom_segment(aes(x = 114.4, xend = 115.08, y = -34.127327939, yend = -34.127327939), linetype = 2, alpha = 0.3) +
+  theme_minimal() +
+  annotate("point", x = c(115.6409, 115.3473, 115.1074), y = c(-33.3270,-33.6516, -33.6177)) +
+  annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
+           label = c("Bunbury", "Busselton", "Dunsborough"), size = 3) +
+  theme(panel.background = element_rect(fill = 'grey73'),
+        panel.grid.major = element_line(colour = "grey49", size = 0.4))
+
+png(file = "plots/spatial/site_overview_map.png", width = 10, height = 6, units = "in", res = 300)
 p3
+dev.off()
 
 ggsave("plots/spatial/site_overview_map.png", dpi = 200, width = 10, height = 6)
 
