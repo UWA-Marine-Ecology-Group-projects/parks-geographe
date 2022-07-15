@@ -1,4 +1,10 @@
-### 2020 downwards towed video metadata consolidation ----
+###
+# Project: parks - geographe bay synthesis
+# Data:    2020 Downwards Towed Video
+# Task:    Consolidate metadata
+# Author:  Claude
+# Date:    June 2022
+##
 
 library(dplyr)
 library(janitor)

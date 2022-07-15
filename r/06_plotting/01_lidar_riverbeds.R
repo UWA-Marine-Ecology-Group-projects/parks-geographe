@@ -103,5 +103,34 @@ png(filename = "plots/spatial/lidar-map-inset.png", width = 5, height = 4, units
 p2
 dev.off()
 
+# Another inset
+#115.5 - 115.6 -33.4 -33.3
+
+e <- extent(115.5, 115.6, -33.4, -33.3)
+lidarc2 <- crop(lidar, e)
+plot(lidarc2)
+lidardf_c2 <- as.data.frame(lidarc2, xy = T, na.rm = T)
+
+slopec2 <- terrain(lidarc2,opt='slope',unit='degrees') # Calculate slope
+aspectc2 <- terrain(lidarc2,opt='aspect',unit='degrees') # calculate aspect
+hillc2 <- hillShade(slopec2, aspectc2, angle = 65, direction = 270) # Hillshade derived from slope and aspect of bathy - change angle and direction
+
+hilldf_c2 <- as.data.frame(hillc2, xy = T, na.rm = T)
+
+p3 <- ggplot() +
+  geom_tile(data = hilldf_c2, aes(x = x, y = y, fill = layer), alpha = 1) +
+  scale_fill_gradient(low = "black", high = "white", guide = "none") +
+  new_scale_fill() +
+  geom_tile(data = lidardf_c2, aes(x = x, y = y, fill = layer), alpha = 0.7) +
+  scale_fill_gradientn(colours = terrain.colors(10)) +
+  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
+  coord_sf(xlim = c(115.5, 115.6), ylim = c(-33.4, -33.3)) +
+  labs(y = "Latitude", x = "Longitude", fill = "Depth")+
+  theme_minimal()
+
+png(filename = "plots/spatial/lidar-map-inset2.png", width = 5, height = 4, units = "in", res = 600)
+p3
+dev.off()
+
 
 

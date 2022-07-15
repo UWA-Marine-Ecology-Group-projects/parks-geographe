@@ -1,3 +1,11 @@
+###
+# Project: parks - geographe bay synthesis
+# Data:    2021 BOSS Horizontal
+# Task:    Format habitat data
+# Author:  Claude
+# Date:    June 2022
+##
+
 # Clear memory ----
 rm(list=ls())
 
@@ -24,7 +32,7 @@ working.dir <- getwd() # this only works through github projects
 ## Save these directory names to use later----
 data.dir <- paste(working.dir,"data",sep="/") 
 raw.dir <- paste(data.dir,"raw",sep="/") 
-tidy.dir <- paste(data.dir,"tidy",sep="/")
+tidy.dir <- paste(data.dir,"Tidy",sep="/")
 tm.export.dir <- paste(raw.dir,"TM Export",sep="/") 
 em.export.dir <- paste(raw.dir, "EM Export", sep = "/")
 error.dir <- paste(raw.dir,"errors to check",sep="/") 
@@ -45,26 +53,29 @@ setwd(tm.export.dir)
 dir()
 
 # read in the points annotations ----
-points <- read.delim("2021-03_Geographe_BOSS_Downwards_Habitat_Dot Point Measurements.txt",header=T,skip=4,stringsAsFactors=FALSE) %>% # read in the file
+points <- read.delim("2021-03_Geographe_BOSS_Habitat_Dot Point Measurements.txt",header=T,skip=4,stringsAsFactors=FALSE) %>% # read in the file
   ga.clean.names() %>% # tidy the column names using GlobalArchive function
   mutate(sample=str_replace_all(.$filename,c(".png"="",".jpg"="",".JPG"=""))) %>%
   mutate(sample=as.character(sample)) %>% 
   select(sample,image.row,image.col,broad,morphology,type,fieldofview) %>% # select only these columns to keep
   glimpse() # preview
 
-length(unique(points$sample)) # 197 samples
+length(unique(points$sample)) # 198 samples
 
 no.annotations <- points%>%
   dplyr::group_by(sample)%>%
-  dplyr::summarise(points.annotated=n()) # 1 with extra points but none missing points
+  dplyr::summarise(points.annotated=n()) # some have extra points, but none missing points
 
-habitat <- points                                                               # Relief hasn't been done for this
 
+habitat <- points  %>%                                                          # Relief hasn't been done for this
+  dplyr::mutate(type = ifelse(morphology %in% c("Pebble / gravel (biogenic)"), "gravel (biogenic)", type),
+                morphology = ifelse(morphology %in% c("Pebble / gravel (biogenic)"), "Pebble", morphology)) # The same class entered 2 different ways
+  
 # Check that the image names match the metadata samples -----
 missing.metadata <- anti_join(habitat,metadata, by = c("sample")) # samples in habitat that don't have a match in the metadata
 missing.habitat <- anti_join(metadata,habitat, by = c("sample")) # samples in the metadata that don't have a match in habitat
 
-# 1 downwards habitat image is missing but noted in metadata
+# We aren't missing anything here, woohoo
 
 # Create %fov----
 fov.points <- habitat%>%
@@ -90,7 +101,7 @@ fov.percent.cover<-fov.points %>%
 # CREATE catami_broad------
 broad.points <- habitat%>%
   dplyr::select(-c(fieldofview,morphology,type))%>%
-  filter(!broad%in%c("",NA,"Unknown","Open.Water","Open Water", "Unscorable"))%>%
+  filter(!broad%in%c("",NA,"Unknown","Open.Water","Open Water"))%>%
   dplyr::mutate(broad=paste("broad",broad,sep = "."))%>%
   dplyr::mutate(count=1)%>%
   dplyr::group_by(sample)%>%
@@ -98,6 +109,7 @@ broad.points <- habitat%>%
   dplyr::select(-c(image.row,image.col))%>%
   dplyr::group_by(sample)%>%
   dplyr::summarise_all(funs(sum))%>%
+  ungroup() %>%
   dplyr::mutate(broad.total.points.annotated=rowSums(.[,2:(ncol(.))],na.rm = TRUE ))%>%
   ga.clean.names()%>%
   glimpse
@@ -113,7 +125,7 @@ broad.percent.cover<-broad.points %>%
 detailed.points <- habitat%>%
   dplyr::select(-c(fieldofview))%>%
   dplyr::filter(!morphology%in%c("",NA,"Unknown"))%>%
-  dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
+  dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water"))%>%
   dplyr::mutate(morphology=paste("detailed",broad,morphology,type,sep = "."))%>%
   dplyr::mutate(morphology=str_replace_all(.$morphology, c(".NA"="","[^[:alnum:] ]"="."," "="","10mm.."="10mm.")))%>%
   dplyr::select(-c(broad,type))%>%
@@ -153,11 +165,11 @@ habitat.detailed.percent <- metadata%>%
   left_join(fov.percent.cover, by = "sample")%>%
   left_join(detailed.percent.cover, by = "sample")
 
-write.csv(habitat.broad.points,file=paste(study,"broad.downwards-habitat.csv",sep = "_"), row.names=FALSE)
-write.csv(habitat.detailed.points,file=paste(study,"detailed.downwards-habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.broad.points,file=paste(study,"broad.habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.detailed.points,file=paste(study,"detailed.habitat.csv",sep = "_"), row.names=FALSE)
 
 
-write.csv(habitat.broad.percent,file=paste(study,"percent-cover_broad.downwards-habitat.csv",sep = "_"), row.names=FALSE)
-write.csv(habitat.detailed.percent,file=paste(study,"percent-cover_detailed.downwards-habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.broad.percent,file=paste(study,"percent-cover_broad.habitat.csv",sep = "_"), row.names=FALSE)
+write.csv(habitat.detailed.percent,file=paste(study,"percent-cover_detailed.habitat.csv",sep = "_"), row.names=FALSE)
 
 setwd(working.dir)

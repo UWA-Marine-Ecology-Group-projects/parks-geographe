@@ -1,3 +1,11 @@
+###
+# Project: parks - geographe bay synthesis
+# Data:    2014 Forwards Towed Video
+# Task:    Format habitat data
+# Author:  Claude
+# Date:    June 2022
+##
+
 library(tidyr)
 library(dplyr)
 library(readr)
