@@ -1,0 +1,350 @@
+ ,Sample,UWA.con.number,Latitude,Longitude,Date,Time,Site,Location,Status,Depth,Maxn.analyst,Maxn.complete.yyyymmdd,Maxn.checker,Curtin.Observer,Curtin.length.analyst,Observer,Successful.count,Successful.length,Left.cam,Right.cam,Video.notes,Con.hdd.number,Raw.hdd.number,Habitat.image.saved,Vis.in.metres,Habitat.classification ,Length.analyst,Length.complete.date.yyyymmdd,Notes,Old.dates
+2014-12_Geographe.Bay_stereoBRUVs,1,1,,,2014-12-10,13:20:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),40,Hayley,20200623,Brooke Gibbons,Lizzy,Laura,Hayley,Yes,,13,14,Y,1,,,,,,,,23.06.20
+2014-12_Geographe.Bay_stereoBRUVs,2,1,,,2014-12-10,06:29:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),40.5,Test video ,20220622,Brooke Gibbons,Lizzy,Laura,Test video ,,,15,16,y,1,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,3,1,,,2014-12-13,08:41:00,,Geographe Bay,Multiple Use Zone,24.8,Hayley ,20200625,Brooke Gibbons,Lizzy,Damo,Hayley ,Yes,,15,16,,3,,,,,,,Right out early,25.06.20
+2014-12_Geographe.Bay_stereoBRUVs,4,1,,,2014-12-10,14:13:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.4,Hayley ,20200625,Brooke Gibbons,Lizzy,Tamy,Hayley ,Yes,,11,12,Y,2,,,,,,,,25.06.20
+2014-12_Geographe.Bay_stereoBRUVs,5,1,,,2014-12-11,09:43:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),25.7,test video,20220622,Claude,Lizzy,Ronen,test video,,,23,24,Y,1,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,6,1,,,2014-12-10,07:55:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41.8,Hayley ,20200625,Brooke Gibbons,Lizzy,Laura,Hayley ,Yes,,25,26,Y,1,,,,,,,,25.06.20
+2014-12_Geographe.Bay_stereoBRUVs,7,3,,,2014-12-13,11:04:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),23.2,Logan,20200819,Brooke Gibbons,Lizzy,Damon,Logan,Yes,,11,12,,5,,,,,,,,19.08.20
+2014-12_Geographe.Bay_stereoBRUVs,8,,,,2014-12-11,06:15:00,,Geographe Bay,,30.6,,,,N/A,N/A,,No,No,11,12,Facing up,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,9,,,,2014-12-10,10:04:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41.8,,,,Lauren,N/A,,,No,25,26,R cam cut out on seabed,2,,,,,,,did not film sheet,
+2014-12_Geographe.Bay_stereoBRUVs,10,1,,,2014-12-12,10:48:00,,Geographe Bay,Multiple Use Zone,22.7,Hayley ,20200626,Brooke Gibbons,Lauren,Ronen,Hayley ,Yes,,21,22,,1,,,,,,,,26.06.20
+2014-12_Geographe.Bay_stereoBRUVs,11,1,,,2014-12-12,08:59:00,,Geographe Bay,Multiple Use Zone,21.7,Hayley ,20200629,Brooke Gibbons,Lauren,Tamy,Hayley ,Yes,,13,14,,2,,,,,,,,29.06.20
+2014-12_Geographe.Bay_stereoBRUVs,12,1,,,2014-12-10,14:00:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.7,Hayley ,20200629,Brooke Gibbons,Lauren,Ronen,Hayley ,Yes,,17,18,Y,2,,,,,,,,29.06.20
+2014-12_Geographe.Bay_stereoBRUVs,13,1,,,2014-12-09,13:41:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),42.4,Hayley ,20200629,Brooke Gibbons,Lauren,Ronen,Hayley ,Yes,,21,22,Y,1,,,,,,,"BLUE HOUSING, FACING UP A BIT, CHECK",29.06.20
+2014-12_Geographe.Bay_stereoBRUVs,14,2,,,2014-12-13,05:56:00,,Geographe Bay,Multiple Use Zone,13.2,Logan,20200708,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,21,22,,4,,,,,,,,08.07.20
+2014-12_Geographe.Bay_stereoBRUVs,15,2,,,2014-12-12,06:27:00,,Geographe Bay,Habitat Protection Zone,26.2,Logan,20200708,Brooke Gibbons,laura,Lauren,Logan,Yes,,23,24,,4,,,,,,,,08.07.20
+2014-12_Geographe.Bay_stereoBRUVs,16,1,,,2014-12-11,12:21:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),20,Hayley,20200629,Brooke Gibbons,Lauren,Laura,Hayley,Yes,,25,26,Y,1,,,,,,,,29.06.20
+2014-12_Geographe.Bay_stereoBRUVs,17,1,,,2014-12-10,13:27:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.8,Hayley,20200630,Brooke Gibbons,Laura,Tamy,Hayley,Yes,,21,22,Y,2,,,,,,,,30.06.20
+2014-12_Geographe.Bay_stereoBRUVs,18,1,,,2014-12-10,07:44:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),42.4,Hayley,20200630,Brooke Gibbons,Lizzy,Ronen,Hayley,Yes,,23,24,Y,1,,,,,,,,30.06.20
+2014-12_Geographe.Bay_stereoBRUVs,19,2,,,2014-12-13,10:33:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),26,Logan,20200709,Brooke Gibbons,Lauren,Lauren,Logan,Yes,,19,20,,4,,,,,,,Snapper present,9.7.20
+2014-12_Geographe.Bay_stereoBRUVs,20,1,,,2014-12-10,11:09:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),36,Hayley,20200701,Brooke Gibbons,Laura,Ronen,Hayley,Yes,,5,6,Y,2,,,,,,,,1.7.20
+2014-12_Geographe.Bay_stereoBRUVs,21,,,,2014-12-14,06:54:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.7,,,,Lauren,Laura,,,,23,24,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,22,1,,,2014-12-09,07:10:00,,Geographe Bay,Multiple Use Zone,22.6,test video,20220622,Claude - 1 unknown wrasse - NEED TO CHANGE TO HAACKEI,Lizzy,Ronen,test video,,,17,18,Y,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,23,,,,2014-12-13,06:13:00,,Geographe Bay,Multiple Use Zone,13.6,,,,N/A,N/A,,No,No,17,18,,,,,,,,,Facing up,
+2014-12_Geographe.Bay_stereoBRUVs,23,1,,,2014-12-16,11:29:00,,Geographe Bay,Multiple Use Zone,13.6,Hayley,20200701,Brooke Gibbons,Lauren,Laura,Hayley,Yes,,11,12,,3,,,,,,,,1.7.20
+2014-12_Geographe.Bay_stereoBRUVs,24,1,,,2014-12-09,06:05:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),29.2,Hayley,20200701,Brooke Gibbons,Lizzy,Laura,Hayley,Yes,,9,10,Y,1,,,,,,,,1.7.20
+2014-12_Geographe.Bay_stereoBRUVs,25,1,,,2014-12-10,07:10:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),42.5,Hayley,20200702,Brooke Gibbons,Lauren,Lizzy,Hayley,Yes,,19,20,Y,2,,,,,,,,2.7.20
+2014-12_Geographe.Bay_stereoBRUVs,26,1,,,2014-12-12,11:02:00,,Geographe Bay,Multiple Use Zone,20.5,Hayley,20200703,Brooke Gibbons,Laura,Damo,Hayley,Yes,,9,10,,3,,,,,,,,3.7.20
+2014-12_Geographe.Bay_stereoBRUVs,27,1,,,2014-12-09,07:00:00,,Geographe Bay,Multiple Use Zone,28.2,Hayley,20200703,Brooke Gibbons,Lauren,Ronen,Hayley,Yes,,23,24,Y,1,,,,,,,1B=BLUE HOUSING,3.7.20
+2014-12_Geographe.Bay_stereoBRUVs,28,1,,,2014-12-11,07:07:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),34,Hayley,20200703,Brooke Gibbons,Lizzy,Lizzy,Hayley,Yes,,15,16,Y,2,,,,,,,,3.7.20
+2014-12_Geographe.Bay_stereoBRUVs,29,1,,,2014-12-09,10:30:00,,Geographe Bay,Multiple Use Zone,34.3,Hayley,20200703,Logan Penman,Lauren,Lizzy,Hayley,Yes,,23,24,Y,2,,,,,,,,3.7.20
+2014-12_Geographe.Bay_stereoBRUVs,30,1,,,2014-12-11,06:37:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),31.8,Hayley,20200713,Logan Penman & Claude,Lizzy,Lauren,Hayley,Yes,,9,10,Y,2,,,,,,,,13.7.20
+2014-12_Geographe.Bay_stereoBRUVs,31,2,,,2014-12-12,05:55:00,,Geographe Bay,Multiple Use Zone,26.3,Logan,20200709,Brooke Gibbons,laura,Lauren,Logan,Yes,,15,16,,4,,,,,,,,9.7.20
+2014-12_Geographe.Bay_stereoBRUVs,32,1,,,2014-12-13,07:53:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.1,Hayley,20200713,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,11,12,,3,,,,,,,,13.7.20
+2014-12_Geographe.Bay_stereoBRUVs,33,,,,2014-12-11,08:54:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),34.1,,,,Lauren,N/A,,,No,13,14,R=FAIL,1L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,34,,,,2014-12-10,07:05:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),43,,,,Lizzy,N/A,,,No,5,6,Right=FAIL,2L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,35,3,,,2014-12-13,11:14:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),27.9,Logan,20200819,Brooke Gibbons,Lizzy,Lizzy,Logan,Yes,,25,26,,5,,,,,,,,19.08.20
+2014-12_Geographe.Bay_stereoBRUVs,36,1,,,2014-12-10,11:17:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.2,Hayley,20200713,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,13,14,Y,2,,,,,,,,13.7.20
+2014-12_Geographe.Bay_stereoBRUVs,37,1,,,2014-12-11,09:11:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),30.3,Hayley,20200714,Logan Penman & Claude,Lizzy,Laura,Hayley,Yes,,19,20,Y,1,,,,,,,,14.07.20
+2014-12_Geographe.Bay_stereoBRUVs,38,1,,,2014-12-09,12:45:00,,Geographe Bay,Multiple Use Zone,34.5,Hayley ,20200716,Logan Penman & Claude,Lizzy,Ronen,Hayley ,Yes,,11,12,Y,1,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,39,1,,,2014-12-11,13:20:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),19.8,Hayley,20200716,Logan Penman & Claude,Lizzy,Laura,Hayley,Yes,,15,16,Y,1,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,40,1,,,2014-12-09,09:57:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),33.7,Hayley,20200716,Logan Penman,Lauren,Laura,Hayley,Yes,,19,20,Y,1,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,41,1,,,2014-12-10,07:35:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),42.5,Hayley,20200716,Logan Penman & Claude,Laura,Damo,Hayley,Yes,,17,18,Y,1,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,42,2,,,2014-12-12,13:13:00,,Geographe Bay,National Park Zone,13,Logan,20200713,Brooke Gibbons,laura,Lauren,Logan,Yes,,23,24,,4,,,,,,,,13.07.20
+2014-12_Geographe.Bay_stereoBRUVs,43,,,,2014-12-12,06:44:00,,Geographe Bay,,26.3,,,,N/A,N/A,,No,No,25,26,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,44,1,,,2014-12-11,06:54:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),34.4,Hayley,20200717,Logan Penman,Lauren,Lauren,Hayley,Yes,,21,22,Y,2,,,,,,,,17.07.20
+2014-12_Geographe.Bay_stereoBRUVs,45,1,,,2014-12-09,13:28:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41.1,Hayley,20200717,Logan Penman,Lauren,Laura,Hayley,Yes,,5,6,Y,1,,,,,,,,17.07.20
+2014-12_Geographe.Bay_stereoBRUVs,46,,,,2014-12-14,06:35:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),18,,,,Lauren,Laura,,,,19,20,,BH,,,,,,,, 
+2014-12_Geographe.Bay_stereoBRUVs,47,1,,,2014-12-12,10:29:00,,Geographe Bay,Multiple Use Zone,24.3,Hayley ,20200717,Logan Penman,Lauren,Laura,Hayley ,Yes,,15,16,,3,,,,,,,,17.07.20
+2014-12_Geographe.Bay_stereoBRUVs,48,1,,,2014-12-11,12:31:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),17.2,Hayley,20200717,Logan Penman & Claude,Lizzy,Lauren,Hayley,Yes,,23,24,Y,2,,,,,,,Rear fail,17.07.20
+2014-12_Geographe.Bay_stereoBRUVs,49,1,,,2014-12-10,13:51:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),37.7,Hayley,20200717,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,9,10,Y,2,,,,,,,,17.07.20
+2014-12_Geographe.Bay_stereoBRUVs,50,,,,2014-12-10,10:29:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),40.5,,,,Lizzy,N/A,,,No,17,18,R=FAIL WHEN HIT SEABED,2L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,51,1,,,2014-12-13,10:52:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),25.4,,,,Damon,N/A,,,No,17,18,R=FAIL,,,,,,,,Snapper come in late,
+2014-12_Geographe.Bay_stereoBRUVs,52,,,,2014-12-09,06:14:00,,Geographe Bay,Multiple Use Zone,29.7,,,,Lizzy,N/A,,,No,19,20,L YES R FAIL,1 Left only,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,53,1,,,2014-12-11,09:04:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),31.4,Hayley,20200719,Logan Penman & Claude,Lizzy,Ronen,Hayley,Yes,,21,22,Y,1,,,,,,,,19.07.20
+2014-12_Geographe.Bay_stereoBRUVs,54,1,,,2014-12-09,10:47:00,,Geographe Bay,Multiple Use Zone,33.1,Hayley ,20200719,Logan Penman & Claude,Lizzy,Laura,Hayley ,Yes,,25,26,Y,1,,,,,,,,19.07.20
+2014-12_Geographe.Bay_stereoBRUVs,55,1,,,2014-12-12,09:05:00,,Geographe Bay,Multiple Use Zone,22.2,Hayley,20200719,Logan Penman & Claude,Lizzy,Ronen,Hayley,Yes,,15,16,,2,,,,,,,REAR FAIL,19.07.20
+2014-12_Geographe.Bay_stereoBRUVs,56,,,,2014-12-09,09:49:00,,Geographe Bay,Multiple Use Zone,32,,,,Lizzy,N/A,,,No,5,6,Right = Fail,1 Left only,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,58,1,,,2014-12-12,13:02:00,,Geographe Bay,National Park Zone,13.5,Hayley,20200719,Logan Penman,Lauren,Laura,Hayley,Yes,,25,26,,3,,,,,,,,19.07.20
+2014-12_Geographe.Bay_stereoBRUVs,60,1,,,2014-12-11,09:55:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),21.5,Hayley ,20200720,Logan Penman & Claude,Lizzy,Laura,Hayley ,Yes,,11,12,Y,1,,,,,,,,20.07.20
+2014-12_Geographe.Bay_stereoBRUVs,61,1,,,2014-12-09,12:50:00,,Geographe Bay,Multiple Use Zone,34.8,Hayley,20200720,Logan Penman,Lauren,Ronen,Hayley,Yes,,23,24,Y,1,,,,,,,,20.07.20
+2014-12_Geographe.Bay_stereoBRUVs,62,1,,,2014-12-11,06:24:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),29.3,Hayley,20200721,Logan Penman & Claude,Lizzy,Tamy,Hayley,Yes,,23,24,Y,2,,,,,,,,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,63,1,,,2014-12-09,06:29:00,,Geographe Bay,Multiple Use Zone,30,Hayley,20200721,Logan Penman,Lauren,Lauren,Hayley,Yes,,21,22,Y,2,,,,,,,BACK REC TO CAM|BLUE HOUSING,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,64,1,,,2014-12-11,12:54:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.2,Hayley,20200721,Logan Penman,Lauren,Laura,Hayley,Yes,,5,6,Y,1,,,,,,,,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,65,1,,,2014-12-10,13:15:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),39.4,Hayley,20200721,Logan Penman,Lauren,Ronen,Hayley,Yes,,15,16,Y,2,,,,,,,,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,66,,,,2014-12-10,06:42:00,,Geographe Bay,,43.7,,,,N/A,N/A,,No,No,13,14,Facing up,,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,67,1,,,2014-12-13,10:10:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),21.4,Hayley,20200722,Logan Penman,Lauren,Damo,Hayley,Yes,,13,14,,5,,,,,,,,22.07.20 
+2014-12_Geographe.Bay_stereoBRUVs,68,,,,41983,0.588194444,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.9,,,,Lauren,N/A,,,No,23,24,R=CUT OUT at 12min,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,69,1,,,2014-12-11,09:23:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),28.7,Hayley,20200723,Logan Penman & Claude,Lizzy,Lauren,Hayley,Yes,,9,10,Y,1,,,,,,,,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,70,1,,,2014-12-10,10:46:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41,Hayley,20200723,Logan Penman,Lauren,Lizzy,Hayley,Yes,,9,10,Y,2,,,,,,,,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,71,3,,,2014-12-13,10:58:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),24.4,Logan,20200819,Brooke Gibbons,Lizzy,Damo,Logan,Yes,,23,24,,5,,,,,,,,19.08.20
+2014-12_Geographe.Bay_stereoBRUVs,72,1,,,2014-12-11,06:07:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),29.4,Hayley ,20200723,Logan Penman & Claude,Lizzy,Ronen,Hayley ,Yes,,25,26,Y,2,,,,,,,,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,73,1,,,2014-12-10,10:10:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41.5,Hayley,20200723,Logan Penman,Lauren,Lizzy,Hayley,Yes,,11,12,Y,2,,,,,,,,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,74,,,,2014-12-12,13:19:00,,Geographe Bay,,15.9,,,,N/A,N/A,,No,No,17,18,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,75,1,,,2014-12-12,08:52:00,,Geographe Bay,Multiple Use Zone,16.6,Hayley,20200727,Logan Penman,Lauren,Lizzy,Hayley,Yes,,21,22,,2,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,76,1,,,2014-12-11,07:01:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),35.2,Hayley,20200727,Logan Penman & Claude,Lizzy,Lizzy,Hayley,Yes,,13,14,Y,2,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,77,1,,,2014-12-09,13:50:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),40.8,Hayley,20200727,Logan Penman,Lauren,Laura,Hayley,Yes,,13,14,Y,1,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,78,2,,,2014-12-13,06:18:00,,Geographe Bay,Multiple Use Zone,13.4,Logan,20200713,Brooke Gibbons,Lauren,Lauren,Logan,Yes,,23,24,,4,,,,,,,,13.07.20
+2014-12_Geographe.Bay_stereoBRUVs,79,1,,,2014-12-12,08:16:00,,Geographe Bay,Habitat Protection Zone,18.5,Hayley,20200727,Logan Penman,Lauren,Lizzy,Hayley,Yes,,9,10,,2,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,80,1,,,2014-12-11,10:01:00,,Geographe Bay, ,20.7,Hayley,20200728,need to finish off this video - only annotated 8 mins of it,Lauren,Laura,Hayley,No,,25,26,Y,1,,,,,,,"Left and right cams cut out in less than 10 mins, some fish present in this period. Finishes at 8 minutes",28.07.20 - Finishes at 8 minutes
+2014-12_Geographe.Bay_stereoBRUVs,81,1,,,2014-12-10,14:18:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38.9,Hayley,20200728,Logan Penman & Claude,Laura,Tamy,Hayley,Yes,,25,26,Y,2,,,,,,,,28.07.20
+2014-12_Geographe.Bay_stereoBRUVs,82,1,,,2014-12-10,07:49:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),42.6,Hayley,20200728,Logan Penman & Claude - fixed no period end from here onwards - check previous vids,laura,Lizzy,Hayley,Yes,,11,12,Y,1,,,,,,,,28.07.20
+2014-12_Geographe.Bay_stereoBRUVs,83,3,,,2014-12-13,10:26:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),24.6,Logan,20200829,Brooke Gibbons,Lauren,Damo,Logan,Yes,,5,6,,5,,,,,,,,29.08.20
+2014-12_Geographe.Bay_stereoBRUVs,84,1,,,2014-12-10,11:28:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),41,Hayley,20200728,Logan Penman & Claude,Lizzy,Ronen,Hayley,Yes,,15,16,Y,2,,,,,,,Rear fail,28.07.20
+2014-12_Geographe.Bay_stereoBRUVs,85,,,,2014-12-11,09:29:00,,Geographe Bay,,28.9,,,,N/A,N/A,,No,No,17,18,Facing up,1L,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,86,1,,,2014-12-09,07:24:00,,Geographe Bay,Multiple Use Zone,28.6,Hayley,20200729,Logan Penman & Claude,Lizzy,Ronen,Hayley,Yes,,15,16,Y,2,,,,,,,,29.07.20
+2014-12_Geographe.Bay_stereoBRUVs,87,1,,,2014-12-13,07:49:00,,Geographe Bay,Multiple Use Zone,13,Hayley,20200729,Logan Penman,Lauren,Damo,Hayley,Yes,,25,26,,3,,,,,,,,29.07.20
+2014-12_Geographe.Bay_stereoBRUVs,88,1,,,2014-12-09,09:45:00,,Geographe Bay,Multiple Use Zone,31.4,Hayley,20200729,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,21,22,Y,1,,,,,,,,29.07.20
+2014-12_Geographe.Bay_stereoBRUVs,89,1,,,2014-12-10,06:58:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),43.9,,,,Lauren,Lizzy,,,,21,22,Y,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,90,1,,,2014-12-12,10:53:00,,Geographe Bay,Multiple Use Zone,22,Hayley  ,20200731,Logan Penman & Claude,Laura,Damo,Hayley  ,Yes,,5,6,,3,,,,,,,,31.07.21
+2014-12_Geographe.Bay_stereoBRUVs,91,1,,,2014-12-09,06:54:00,,Geographe Bay,Habitat Protection Zone,29.8,Hayley  ,20200802,Logan Penman & Claude - check john dory,Laura,Lizzy,Hayley  ,Yes,,11,12,Y,1,,,,,,,"""SKIPPERS CHOICE""",2.8.20
+2014-12_Geographe.Bay_stereoBRUVs,92,1,,,2014-12-11,06:43:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),33,Hayley  ,20200803,Logan Penman,Lauren,Lauren,Hayley  ,Yes,,19,20,Y,2,,,,,,,,3.8.20
+2014-12_Geographe.Bay_stereoBRUVs,93,,,,2014-12-09,12:59:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),36,,,,Laura,N/A,,,No,17,18,Y,1,,,,,,,CAM 17 FLOODED,
+2014-12_Geographe.Bay_stereoBRUVs,94,,,,2014-12-11,06:30:00,,Geographe Bay,,30.1,,,,,N/A,,No,No,17,18,Facing up,,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,95,1,,,2014-12-12,10:42:00,,Geographe Bay,Multiple Use Zone,24.9,Hayley ,20200820,Logan Penman,Lauren,Laura,Hayley ,Yes,,13,14,,3,,,,,,,Leftcam cuts out after ~ 10 mins,2.8.20
+2014-12_Geographe.Bay_stereoBRUVs,96,1,,,2014-12-11,13:04:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.9,Hayley ,20200820,Logan Penman,Lauren,Lizzy,Hayley ,Yes,,21,22,Y,1,,,,,,,,2.8.20
+2014-12_Geographe.Bay_stereoBRUVs,97,1,,,2014-12-11,08:43:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),35.6,Hayley ,20200820,Logan Penman & Claude,Lizzy,Ronen,Hayley ,Yes,,15,16,Y,2,,,,,,,,2.8.20
+2014-12_Geographe.Bay_stereoBRUVs,98,,,,2014-12-10,10:56:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),38,,,,Lizzy,N/A,,,No,19,20,L=FAIL R=YES,2,,,,,,,Leftcam failed ~10s,
+2014-12_Geographe.Bay_stereoBRUVs,101,,,,2014-12-14,06:47:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.7,,,,Lizzy,Damo,,,,17,18,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,100,1,,,2014-12-10,11:14:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),36.7,,,,Lauren,N/A,,,No,21,22,Y,2,,,,,,,Cals bad,
+2014-12_Geographe.Bay_stereoBRUVs,102,1,,,2014-12-09,12:39:00,,Geographe Bay,Multiple Use Zone,34.4,Hayley,20200803,Logan Penman & Claude,Lizzy,Laura,Hayley,Yes,,25,26,Y,1,,,,,,,,3.8.20
+2014-12_Geographe.Bay_stereoBRUVs,103,1,,,2014-12-11,13:12:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),18.4,Hayley,20200803,Logan Penman,Lauren,Laura,Hayley,Yes,,13,14,Y,1,,,,,,,,3.8.20
+2014-12_Geographe.Bay_stereoBRUVs,104,1,,,2014-12-09,10:04:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),33.3,Hayley,20200804,Logan Penman,Lauren,Lizzy,Hayley,Yes,,9,10,Y,1,,,,,,,"Leftcam cuts out after ~ 20 mins, rightcam analysed instead",4.8.20 - Finishes at 20 mins
+2014-12_Geographe.Bay_stereoBRUVs,106,2,,,2014-12-12,11:27:00,,Geographe Bay,Multiple Use Zone,13.5,Logan,20200714,Brooke Gibbons,laura,Lauren,Logan,Yes,,25,26,,4,,,,,,,,14.07.20
+2014-12_Geographe.Bay_stereoBRUVs,105,,,,2014-12-10,07:25:00,,Geographe Bay,,41.7,,,,,N/A,,No,No,9,10,Y,,,,,,,,Files not on RAW (lost cards?),
+2014-12_Geographe.Bay_stereoBRUVs,107,2,,,2014-12-15,08:56:00,,Geographe Bay,Multiple Use Zone,20.9,Logan,20200715,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,15,16,,3,,,,,,,,15.07.20
+2014-12_Geographe.Bay_stereoBRUVs,107,,,,2014-12-09,09:25:00,,Geographe Bay,Multiple Use Zone,29.3,,,,Lauren,N/A,,,No,15,16,L=FAIL R=YES,1,,,,,,,Rightcam analysed,
+2014-12_Geographe.Bay_stereoBRUVs,108,2,,,2014-12-11,06:47:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),34,Logan,20200714,Brooke Gibbons,laura,Lauren,Logan,Yes,,5,6,Y,4,,,,,,,,14.07.20
+2014-12_Geographe.Bay_stereoBRUVs,111,1,,,2014-12-12,10:55:00,,Geographe Bay,Multiple Use Zone,21.9,Logan ,20200715,Brooke Gibbons,Laura,Damo,Logan ,Yes,,19,20,,3,,,,,,,,15.07.20
+2014-12_Geographe.Bay_stereoBRUVs,110,,,,2014-12-14,06:37:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),17,,,,Lauren,N/A,,,No,9,10,,BH,,,,,,,R FAIL ON ENTRY TO HOUSING,
+2014-12_Geographe.Bay_stereoBRUVs,112,1,,,2014-12-11,12:35:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.8,Hayley,20200804,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,17,18,Y,1,,,,,,,, 4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,113,3 (Left only),,,2014-12-10,13:45:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),36.6,,,,Laura,Laura,,,,19,20,Y,1L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,114,3 (Right only),,,2014-12-10,10:20:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),39.7,,,,Lizzy,Lizzy,,,,23,24,Y,1R,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,115,1,,,2014-12-13,10:46:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),25.2,Logan,20200716,Brooke Gibbons,Laura,Damo,Logan,Yes,,9,10,,3,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,116,1,,,2014-12-09,06:20:00,,Geographe Bay,Multiple Use Zone,29.7,Hayley ,20200804,Logan Penman & Claude,Laura,Laura,Hayley ,Yes,,5,6,Y,1,,,,,,,,4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,119,2,,,2014-12-14,11:25:00,,Geographe Bay,,5.2,,,,Lizzy,Laura,,,,17,18,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,122,2,,,2014-12-13,05:48:00,,Geographe Bay,Multiple Use Zone,13.3,Logan,20200804,Brooke Gibbons,Lauren,Lauren,Logan,Yes,,13,14,,4,,,,,,,,4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,135,2,,,2014-12-16,12:54:00,,Geographe Bay,Multiple Use Zone,15.8,Logan,20200804,Brooke Gibbons,Lauren,Laura,Logan,Yes,,11,12,,3,,,,,,,,4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,128,,,,2014-12-16,07:08:00,,Geographe Bay,,14.7,,,,N/A,N/A,,No,No,25,26,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,138,3,,,2014-12-15,06:50:00,,Geographe Bay,,15,,,,Lauren,Damo,,,,17,18,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,139,3,,,2014-12-17,08:29:00,,Geographe Bay,Multiple Use Zone,13.4,Daphne,20201005,Brooke Gibbons - check labridae,Lauren,Damo,Daphne,,,25,26,,5,,,,,,,,20201005
+2014-12_Geographe.Bay_stereoBRUVs,143,2,,,2014-12-15,13:24:00,,Geographe Bay,Multiple Use Zone,23.2,Logan,20200805,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,13,14,,3,,,,,,,,5.8.20
+2014-12_Geographe.Bay_stereoBRUVs,144,2,,,2014-12-16,15:37:00,,Geographe Bay,,12.3,,,,Lauren,Laura,,,,13,14,,3,,,,,,,, 
+2014-12_Geographe.Bay_stereoBRUVs,151,3,,,2014-12-16,09:12:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),17.2,Daphne,20201007,Brooke Gibbons - check ,Lizzy,Damo,Daphne,,,19,20,,5,,,,,,,,20201007
+2014-12_Geographe.Bay_stereoBRUVs,154,3,,,2014-12-15,10:58:00,,Geographe Bay,,13.6,,,,Lauren,Damo,,,,23,24,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,160,2,,,2014-12-16,15:24:00,,Geographe Bay,Multiple Use Zone,N/A,Logan,20200805,Brooke Gibbons,Lauren,Damo,Logan,Yes,,19,20,,3,,,,,,,,5.8.20
+2014-12_Geographe.Bay_stereoBRUVs,167,3,,,2014-12-16,09:25:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.4,Logan,20200829,Brooke Gibbons,Laura,Damo,Logan,Yes,,21,22,,5,,,,,,,,29.08.20
+2014-12_Geographe.Bay_stereoBRUVs,170,2,,,2014-12-16,13:39:00,,Geographe Bay,National Park Zone,15.8,Logan,20200810,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,21,22,,4,,,,,,,,10.8.20
+2014-12_Geographe.Bay_stereoBRUVs,175,2,,,2014-12-15,06:34:00,,Geographe Bay,,28.5,,,,Lizzy,Lauren,,,,19,20,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,176,2,,,2014-12-15,06:59:00,,Geographe Bay,,15.4,,,,Lizzy,Laura,,,,11,12,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,183,2,,,2014-12-15,13:29:00,,Geographe Bay,Multiple Use Zone,22.6,Logan,20200716,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,9,10,,3,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,192,2,,,2014-12-14,11:19:00,,Geographe Bay,,4.9,,,,Lizzy,Laura,,,,13,14,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,196,2,,,2014-12-16,12:49:00,,Geographe Bay,Multiple Use Zone,15.9,Logan,20200805,Brooke Gibbons,Lauren,Damo,Logan,Yes,,25,26,,3,,,,,,,,5.8.20
+2014-12_Geographe.Bay_stereoBRUVs,199,,,,2014-12-15,10:53:00,,Geographe Bay,,15.2,,,,Lizzy,Lizzy,,,,17,18,,5R,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,202,2,,,2014-12-17,06:04:00,,Geographe Bay,,9.8,,,,Lauren,Lauren,,,,9,10,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,207,1,,,2014-12-12,08:06:00,,Geographe Bay,Habitat Protection Zone,23.3,Hayley,20200804,Logan Penman & Claude,Lizzy,Tamy,Hayley,Yes,,11,12,,2,,,,,,,,4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,208,2,,,2014-12-14,11:03:00,,Geographe Bay,,7.2,,,,Lizzy,Laura,,,,19,20,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,215,,,,2014-12-15,10:45:00,,Geographe Bay,,14.1,,,,Lizzy,N/A,,,No,9,10,,4R,,,,,,,LEFT CAM FAIL,
+2014-12_Geographe.Bay_stereoBRUVs,218,3,,,2014-12-17,09:46:00,,Geographe Bay,,14.7,,,,Laura,Laura,,,,11,12,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,224,1,,,2014-12-16,06:59:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.5,Hayley,20200804,Logan Penman,Lauren,Lizzy,Hayley,Yes,,23,24,,2,,,,,,,,4.8.20
+2014-12_Geographe.Bay_stereoBRUVs,234,3,,,2014-12-17,10:03:00,,Geographe Bay,,9.3,,,,Laura,Damo,,,,13,14,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,231,,,,2014-12-14,13:44:00,,Geographe Bay,,10.8,,,,N/A,N/A,,No,No,9,10,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,236,3,,,2014-12-16,10:45:00,,Geographe Bay,,13.1,,,,Lauren,Lizzy,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,240,3,,,2014-12-16,08:56:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),18.9,Logan,20200824,Brooke Gibbons,Lizzy,Damo,Logan,Yes,,13,14,,5,,,,,,,"UPSIDE DOWN, GOOD",24.08.20
+2014-12_Geographe.Bay_stereoBRUVs,247,2,,,2014-12-15,06:30:00,,Geographe Bay,,26.4,,,,Lizzy,Lauren,,,,15,16,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,250,,,,2014-12-16,15:17:00,,Geographe Bay,,10,,,,Laura,N/A,,,No,5,6,,5R,,,,,,,LEFT FAIL,
+2014-12_Geographe.Bay_stereoBRUVs,256,3,,,2014-12-14,13:12:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),11.1,Logan,20200824,Brooke Gibbons,Lizzy,Damo,Logan,Yes,,11,12,,5,,,,,,,,24.08.20
+2014-12_Geographe.Bay_stereoBRUVs,267,2,,,2014-12-15,06:22:00,,Geographe Bay,,23.2,,,,Lizzy,Lauren,,,,5,6,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,270,2,,,2014-12-13,06:00:00,,Geographe Bay,Multiple Use Zone,13.7,Logan ,20200721,Brooke Gibbons,Laura,Lauren,Logan ,Yes,,5,6,,4,,,,,,,,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,271,2,,,2014-12-12,06:06:00,,Geographe Bay,Habitat Protection Zone,27.3,Logan ,20200721,Brooke Gibbons,Laura,Lauren,Logan ,Yes,,21,22,,4,,,,,,,,21.07.20
+2014-12_Geographe.Bay_stereoBRUVs,272,3,,,2014-12-14,08:37:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),11.7,Logan (ends 54:39),20200824,Brooke Gibbons,Lizzy,Damo,Logan (ends 54:39),Yes,,25,26,,5,,,,,,,,24.08.20
+2014-12_Geographe.Bay_stereoBRUVs,282,3,,,2014-12-17,08:02:00,,Geographe Bay,Multiple Use Zone,18.2,Logan,20200825,Brooke Gibbons,Laura,Damo,Logan,Yes,,15,16,,5,,,,,,,,25.08.20
+2014-12_Geographe.Bay_stereoBRUVs,279,,,,2014-12-16,11:32:00,,Geographe Bay,Multiple Use Zone,14.2,,,,Lizzy,N/A,,,No,25,26,,4,,,,,,,LEFT FAIL,
+2014-12_Geographe.Bay_stereoBRUVs,287,2,,,2014-12-15,10:50:00,,Geographe Bay,Habitat Protection Zone,16.4,Logan,20200727,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,13,14,,4,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,288,3,,,2014-12-16,09:29:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.3,Logan,20200831,Brooke Gibbons,Laura,Damo,Logan,Yes,,5,6,,5,,,,,,,,31.08.20
+2014-12_Geographe.Bay_stereoBRUVs,295,3,,,2014-12-16,15:50:00,,Geographe Bay,,2.5,,,,Lauren,Damo,,,,11,12,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,298,2,,,2014-12-15,06:56:00,,Geographe Bay,,18.1,,,,Lauren,Lauren,,,,23,24,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,304,2,,,2014-12-15,10:17:00,,Geographe Bay,,13.7,,,,Lizzy,Lauren,,,,5,6,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,314,2,,,2014-12-15,09:03:00,,Geographe Bay,,20,,,,Lizzy,Laura,,,,5,6,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,316,,,,2014-12-14,10:49:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),9.3,,,,Lauren,Lizzy,,,,15,16,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,320,3,,,2014-12-16,08:49:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.1,Logan,,,Lauren,Damo,Logan,,,17,18,,5,,,,,,,LANDS FACING UP THEN FALLS GOOD AT 15MINS,
+2014-12_Geographe.Bay_stereoBRUVs,327,2,,,2014-12-14,14:10:00,,Geographe Bay,Multiple Use Zone,11.8,Logan,20200806,Brooke Gibbons,Damon,Laura,Logan,Yes,,15,16,,3,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,330,,,,2014-12-15,06:44:00,,Geographe Bay,,17.7,,,,Damon,N/A,,,No,13,14,,4,,,,,,,Both files are rightcam,
+2014-12_Geographe.Bay_stereoBRUVs,331,2,,,2014-12-15,13:46:00,,Geographe Bay,Multiple Use Zone,14.3,Logan,20200722,Brooke Gibbons - check wrasse with Todd,Lizzy,Laura,Logan,Yes,,5,6,,3,,,,,,,,22.07.20
+2014-12_Geographe.Bay_stereoBRUVs,335,1,,,2014-12-12,08:09:00,,Geographe Bay,Habitat Protection Zone,21.6,Hayley ,20200806,Logan Penman,Lauren,Lizzy,Hayley ,Yes,,23,24,,2,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,346,2,,,2014-12-15,13:08:00,,Geographe Bay,,14,,,,Lizzy,Laura,,,,11,12,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,352,3,,,2014-12-16,08:45:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.2,Daphne,20201007,Brooke Gibbons ,Lizzy,Damo,Daphne,,,23,24,,5,,,,,,,,20201007
+2014-12_Geographe.Bay_stereoBRUVs,362,3,,,2014-12-17,10:23:00,,Geographe Bay,,9.4,,,,Laura,Damo,,,,19,20,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,368,3,,,2014-12-16,15:59:00,,Geographe Bay,,3.7,,,,Laura,Damo,,,,25,26,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,375,2,,,2014-12-12,06:14:00,,Geographe Bay,Habitat Protection Zone,26.9,Logan,20200818,Brooke Gibbons,Laura,Lauren,Logan,Yes,,19,20,,4,,,,,,,REAR FAIL,18.08.20
+2014-12_Geographe.Bay_stereoBRUVs,378,2,,,2014-12-12,13:08:00,,Geographe Bay,National Park Zone,13.3,Logan,20200726,Brooke Gibbons,Lauren,Damo,Logan,Yes,,11,12,,3 (L) R (4),,,,,,,,26.07.20
+2014-12_Geographe.Bay_stereoBRUVs,384,1,,,2014-12-16,06:54:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),13.5,Hayley,20200806,Logan Penman,Lauren,Ronen,Hayley,Yes,,17,18,,2,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,391,2,,,2014-12-13,08:23:00,,Geographe Bay,Multiple Use Zone,17,Logan,20200727,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,21,22,,3,,,,,,,Rear cam failed,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,394,2,,,2014-12-16,13:18:00,,Geographe Bay,Multiple Use Zone,19,Logan,20200806,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,9,10,,4,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,395,3,,,2014-12-17,10:08:00,,Geographe Bay,,9.2,,,,Laura,Damo,,,,9,10,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,399,3,,,2014-12-17,10:17:00,,Geographe Bay,,10.8,,,,Laura,Damo,,,,15,16,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,400,2,,,2014-12-14,08:58:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),9.8,Logan,20200723,Brooke Gibbons,Damon,Laura,Logan,Yes,,13,14,,3,,,,,,,,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,407,2,,,2014-12-13,08:13:00,,Geographe Bay,Multiple Use Zone,16.2,Logan,20200807,Brooke Gibbons,Lauren,Laura,Logan,Yes,,19,20,,3,,,,,,,,7.8.20
+2014-12_Geographe.Bay_stereoBRUVs,416,3,,,2014-12-17,10:34:00,,Geographe Bay,,12.3,,,,Laura,Damo,,,,5,6,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,426,3,,,2014-12-17,08:05:00,,Geographe Bay,,18,,,,Lauren,Damo,,,,9,10,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,428,1,,,2014-12-16,06:31:00,,Geographe Bay,,7.6,,,,Lauren,Lizzy,,,,15,16,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,432,,,,2014-12-14,13:19:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),10.7,,,,Lauren,Damo,,,,23,24,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,439,3,,,2014-12-17,10:29:00,,Geographe Bay,,8.4,,,,Laura,Damo,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,442,1,,,2014-12-12,13:28:00,,Geographe Bay,Multiple Use Zone,14.3,,,,Lizzy,Lauren,,,,19,20,,2,,,,,,,"UPSIDE DOWN, GOOD",
+2014-12_Geographe.Bay_stereoBRUVs,443,2,,,2014-12-12,06:34:00,,Geographe Bay,Habitat Protection Zone,27,Logan,20200727,Brooke Gibbons,Laura,Lauren,Logan,Yes,,11,12,,4,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,448,3,,,2014-12-14,13:05:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),10.6,Daphne,20201014,Claude,Lizzy,Damo,Daphne,,,25,26,,5,,,,,,,"renamed file, was called 488",20201014
+2014-12_Geographe.Bay_stereoBRUVs,451,3,,,2014-12-14,11:32:00,,Geographe Bay,,7.8,,,,Lauren,Damo,,,,23,24,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,455,2,,,2014-12-15,08:42:00,,Geographe Bay,Multiple Use Zone,24.9,Logan,20200727,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,13,14,,4,,,,,,,,27.07.20
+2014-12_Geographe.Bay_stereoBRUVs,458,,,,2014-12-16,10:58:00,,Geographe Bay,,6.2,,,,Lizzy,Damo,,,,19,20,,BH,,,,,,,Tiger,
+2014-12_Geographe.Bay_stereoBRUVs,463,1,,,2014-12-12,08:03:00,,Geographe Bay,,24.3,,,,Lizzy,Tamy,,,,25,26,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,474,1,,,2014-12-16,06:23:00,,Geographe Bay,,6.8,,,,Laura,Lizzy,,,,21,22,,2,,,,,,,Rear fail,
+2014-12_Geographe.Bay_stereoBRUVs,480,2 - only left,,,2014-12-14,09:06:00,,Geographe Bay,,7.4,,,,Laura,N/A,,,,9,10,,3L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,490,2,,,2014-12-17,06:20:00,,Geographe Bay,Multiple Use Zone,13.4,Logan,20200806,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,19,20,,4,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,492,3,,,2014-12-16,08:40:00,,Geographe Bay,,14.7,,,,Laura,Damo,,,,11,12,,5,,,,,,,"UPSIDE DOWN, GOOD",
+2014-12_Geographe.Bay_stereoBRUVs,496,,,,2014-12-16,10:42:00,,Geographe Bay,,15.3,,,,Lauren,Lizzy,,,,5,6,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,499,1,,,2014-12-16,06:36:00,,Geographe Bay,,9.9,,,,Lauren,Tamy,,,,19,20,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,503,3,,,2014-12-17,07:48:00,,Geographe Bay,Multiple Use Zone,16.3,Daphne (finishes at 55:48),20201019,Claude,Lizzy,Damo,Daphne (finishes at 55:48),,,5,6,,5,,,,,,,,20201019
+2014-12_Geographe.Bay_stereoBRUVs,506,2,,,2014-12-16,11:23:00,,Geographe Bay,Multiple Use Zone,14.1,Logan ,,Brooke Gibbons,Lizzy,Lauren,Logan ,Yes,,23,24,,4,,,,,,,,10.8.20
+2014-12_Geographe.Bay_stereoBRUVs,512,2,,,2014-12-16,11:03:00,,Geographe Bay,,10.6,,,,Lizzy,Laura,,,,9,10,,3R 4L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,523,2,,,2014-12-15,08:35:00,,Geographe Bay,Multiple Use Zone,26,Logan,20200729,Brooke Gibbons,Laura,Lauren,Logan,Yes,,17,18,,4,,,,,,,,29.07.20
+2014-12_Geographe.Bay_stereoBRUVs,527,2,,,2014-12-12,06:16:00,,Geographe Bay,Habitat Protection Zone,26.8,Logan,20200806,Brooke Gibbons,laura,Lauren,Logan,Yes,,9,10,,4,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,528,2,,,2014-12-16,08:34:00,,Geographe Bay,,14,,,,Lauren,Lauren,,,,25,26,,,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,538,2,,,2014-12-17,05:53:00,,Geographe Bay,,11.6,,,,Laura,Lauren,,,,17,18,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,543,???????,,,2014-12-15,13:13:00,,Geographe Bay,Multiple Use Zone,16.7,,,,Lauren,Laura,,,,23,24,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,544,3,,,2014-12-14,13:36:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),12.3,Daphne,20201028,Claude,Lauren,Damo,Daphne,,,13,14,,5,,,,,,,LANDED SIDE STILL GOOD,20201028
+2014-12_Geographe.Bay_stereoBRUVs,551,,,,2014-12-17,05:58:00,,Geographe Bay,,11.7,,,,Lizzy,N/A,,,No,13,14,,4,,,,,,,RIGHT CAM FAIL,
+2014-12_Geographe.Bay_stereoBRUVs,554,3,,,2014-12-17,06:13:00,,Geographe Bay,National Park Zone,12.3,Logan ,20200825,Brooke Gibbons - one to ask brooke chasing rubescens,Laura,Damo,Logan ,Yes,,15,16,,5,,,,,,,,25.08.20
+2014-12_Geographe.Bay_stereoBRUVs,560,1,,,2014-12-16,06:49:00,,Geographe Bay,,14.6,,,,Lauren,Lizzy,,,,13,14,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,567,3,,,2014-12-17,08:23:00,,Geographe Bay,Multiple Use Zone,17.4,,,,Lizzy,Damo,,,,11,12,,5,,,,,,,Left can short analyse right,
+2014-12_Geographe.Bay_stereoBRUVs,570,,,,2014-12-15,08:31:00,,Geographe Bay,Multiple Use Zone,24.6,,,,Lauren,Lizzy,,,,23,24,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,572,,,,2014-12-14,10:54:00,,Geographe Bay,,8.1,,,,Lauren,Lizzy,,,,21,22,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,579,3,,,2014-12-16,13:10:00,,Geographe Bay,Multiple Use Zone,22,Daphne,20201028,Claude,Laura,Damo,Daphne,,,17,18,,5,,,,,,,,20201028
+2014-12_Geographe.Bay_stereoBRUVs,576,,,,2014-12-15,07:04:00,,Geographe Bay,,9.1,,,,N/A,N/A,,No,No,25,26,,BH,,,,,,,facing up,
+2014-12_Geographe.Bay_stereoBRUVs,583,2,,,2014-12-14,13:55:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),12,Logan,20200723,Brooke Gibbons,Damon,Laura,Logan,Yes,,5,6,,3,,,,,,,BIG RAY NICE GROUND - R cam failed after 15min,23.07.20
+2014-12_Geographe.Bay_stereoBRUVs,587,3,,,2014-12-15,11:03:00,,Geographe Bay,,16.6,,,,Lizzy,Damo,,,,11,12,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,586,,,,2014-12-16,13:24:00,,Geographe Bay,National Park Zone,15.8,,,,Lizzy,N/A,,,No,19,20,Right = Fail,4L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,592,3 (right on 2),,,2014-12-16,11:15:00,,Geographe Bay,,12.3,,,,Laura,Laura,,,,17,18,,3R 5L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,599,2,,,2014-12-13,06:22:00,,Geographe Bay,Multiple Use Zone,13.9,Logan,20200807,Brooke Gibbons,Laura,Lauren,Logan,Yes,,11,12,,4,,,,,,,,7.8.20
+2014-12_Geographe.Bay_stereoBRUVs,602,,,,2014-12-15,12:57:00,,Geographe Bay,,11.2,,,,Lauren,Damo,,,,25,26,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,608,3,,,2014-12-16,09:01:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.7,Daphne,20201102,Claude,Lauren,Damo,Daphne,,,9,10,,5,,,,,,,,20201102
+2014-12_Geographe.Bay_stereoBRUVs,611,3,,,2014-12-16,15:45:00,,Geographe Bay,,8.2, ,,,Laura,Damo, ,,,23,24,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,615,2,,,2014-12-17,09:56:00,,Geographe Bay,,11.8,,,,Lauren,Lauren,,,,17,18,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,623,2,,,2014-12-15,10:24:00,,Geographe Bay,,7.8,,,,Lizzy,Lauren,,,,21,22,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,618,,,,2014-12-17,05:40:00,,Geographe Bay,Multiple Use Zone,14.5,,,,Lizzy,N/A,,,No,25,26,R CAM fail,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,624,1,,,2014-12-16,07:03:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),17.5,Hayley ,20200806,Logan Penman & Claude,Lizzy,Lauren,Hayley ,Yes,,11,12,,2,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,631,,,,2014-12-15,13:33:00,,Geographe Bay,Multiple Use Zone,21,,,,Lauren,Lizzy,,,,19,20,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,633,3,,,2014-12-16,09:18:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.2,Daphne,20201001,Brooke Gibbons,Lauren,Damo,Daphne,,,15,16,,5,,,,,,,,20201001
+2014-12_Geographe.Bay_stereoBRUVs,634,3,,,2014-12-16,15:30:00,,Geographe Bay,Multiple Use Zone,13,Logan,20200825,Brooke Gibbons,Laura,Damo,Logan,Yes,,15,16,,5,,,,,,,,25.08.20
+2014-12_Geographe.Bay_stereoBRUVs,635,??????,,,2014-12-15,08:52:00,,Geographe Bay,Multiple Use Zone,21.2,,,,Lauren,Damo,,,,19,20,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,640,2,,,2014-12-16,11:10:00,,Geographe Bay,,11.5,,,,Lizard,Lauren,,,,13,14,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,647,2,,,2014-12-13,08:17:00,,Geographe Bay,Multiple Use Zone,15.3,Logan,20200730,Brooke Gibbons,Lauren,Laura,Logan,Yes,,5,6,,3,,,,,,,,30.07.20
+2014-12_Geographe.Bay_stereoBRUVs,655,??????,,,2014-12-15,13:20:00,,Geographe Bay,Multiple Use Zone,20.5,,,,Lauren,Lizzy,,,,17,18,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,650,??????,,,2014-12-16,13:14:00,,Geographe Bay,Multiple Use Zone,21.1,,,,Lizzy,N/A,,,No,13,14,,4,,,,,,,RIGHT FAIL,
+2014-12_Geographe.Bay_stereoBRUVs,651,,,,2014-12-17,09:41:00,,Geographe Bay,,13,,,,N/A,N/A,,No,No,25,26,,,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,666,3,,,2014-12-17,06:25:00,,Geographe Bay,National Park Zone,15.6,Logan,20200826,Brooke Gibbons,Lizzy,Damo,#REF!,Yes,,21,22,,5,,,,,,,,26.08.20
+2014-12_Geographe.Bay_stereoBRUVs,656,2 (left only),,,2014-12-14,09:28:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),9,,,,Lauren,N/A,,,No,15,16,,3,,,,,,,R FAIL ON ENTRY TO HOUSING,
+2014-12_Geographe.Bay_stereoBRUVs,679,,,,2014-12-14,13:48:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),12,,,,Lauren,Damo,,,,19,20,,BH,,,,,,,R=ONLY 18MIN,
+2014-12_Geographe.Bay_stereoBRUVs,672,2 (right only),,,2014-12-14,11:45:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),8.4,,,,Lauren,N/A,,,No,25,26,,3,,,,,,,L CUTS OUT @ 7MIN,
+2014-12_Geographe.Bay_stereoBRUVs,682,3,,,2014-12-17,07:57:00,,Geographe Bay,Multiple Use Zone,15.2,Logan,20200825,Brooke Gibbons,Damon,Lizzy,Logan,Yes,,19,20,,5,,,,,,,,25.08.20
+2014-12_Geographe.Bay_stereoBRUVs,684,,,,2014-12-15,09:00:00,,Geographe Bay,Multiple Use Zone,20.6,,,,Lizzy,Damo,,,,21,22,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,688,2,,,2014-12-17,09:52:00,,Geographe Bay,,12.8,,,,Laura,Lauren,,,,23,24,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,694,2,,,2014-12-16,13:32:00,,Geographe Bay,Multiple Use Zone,21.3,Logan,20200807,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,15,16,,4,,,,,,,,7.8.20
+2014-12_Geographe.Bay_stereoBRUVs,695,,,,2014-12-17,08:15:00,,Geographe Bay,,18.4,,,,N/A,N/A,,,No,17,18,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,698,1,,,2014-12-12,13:25:00,,Geographe Bay,Multiple Use Zone,14,Hayley ,20200806,Logan Penman & Claude,Lizzy,Lauren,Hayley ,Yes,,9,10,,2L 4R,,,,,,,,6.8.20
+2014-12_Geographe.Bay_stereoBRUVs,704,1,,,2014-12-16,06:15:00,,Geographe Bay,,7.45,,,,Lizzy,Lauren,,,,5,6,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,711,2,,,2014-12-14,09:24:00,,Geographe Bay,,8.4,,,,Laura,Damo,,,,21,22,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,714,,,,2014-12-15,08:26:00,,Geographe Bay,,21.1,,,,Lauren,Lizzy,,,,11,12,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,719,2,,,2014-12-12,05:59:00,,Geographe Bay,Habitat Protection Zone,26.3,Logan,20200810,Brooke Gibbons,Laura,Lauren,Logan,Yes,,13,14,,4,,,,,,,,10.8.20
+2014-12_Geographe.Bay_stereoBRUVs,720,2,,,2014-12-14,09:11:00,,Geographe Bay,,8.2,,,,Laura,Laura,,,,19,20,,3,,,,,,,UPSIDE DOWN STILL GOOD,
+2014-12_Geographe.Bay_stereoBRUVs,735,3,,,2014-12-15,06:27:00,,Geographe Bay,,26.7,,,,Lauren,Damo,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,736,,,,2014-12-14,10:59:00,,Geographe Bay,,8.2,,,,Lauren,Lizzy,,,,5,6,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,746,3,,,2014-12-17,05:45:00,,Geographe Bay,Multiple Use Zone,13.2,Logan,20200825,Brooke Gibbons,Damon,Lizzy,Logan,Yes,,11,12,,5,,,,,,,,25.08.20
+2014-12_Geographe.Bay_stereoBRUVs,748,2,,,2014-12-14,08:46:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),11.1,Logan,20200730,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,23,24,,3,,,,,,,,30.07.20
+2014-12_Geographe.Bay_stereoBRUVs,752,2,,,2014-12-14,09:15:00,,Geographe Bay,,6.2,,,,Damon,Laura,,,,5,6,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,755,,,,2014-12-14,13:27:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),11.3,,,,Lauren,Lizzy,,,,17,18,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,759,3,,,2014-12-17,07:52:00,,Geographe Bay,Multiple Use Zone,17.3,Daphne (finishes at 59:18),20201102,Claude,Lauren,Damo,Daphne (finishes at 59:18),,,21,22,,5,,,,,,,,20201102
+2014-12_Geographe.Bay_stereoBRUVs,764,2,,,2014-12-14,08:43:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),11.6,Logan,20200728,Brooke Gibbons,Lauren,Laura,Logan,Yes,,11,12,,3,,,,,,,,28.07.20
+2014-12_Geographe.Bay_stereoBRUVs,762,,,,2014-12-12,13:44:00,,Geographe Bay,Multiple Use Zone,13,,,,laura,N/A,,,No,13,14,,4L,,,,,,,"UPSIDE DOWN, RIGHT CAM FAIL",
+2014-12_Geographe.Bay_stereoBRUVs,763,,,,2014-12-12,06:22:00,,Geographe Bay,,26.6,,,,N/A,N/A,,No,No,17,18,,,,,,,,,FACING UP,
+2014-12_Geographe.Bay_stereoBRUVs,782,2,,,2014-12-13,06:06:00,,Geographe Bay,Multiple Use Zone,13.7,Logan,20200728,Brooke Gibbons - check scomber with todd,Laura,Lauren,Logan,Yes,,19,20,,4,,,,,,,,28.07.20
+2014-12_Geographe.Bay_stereoBRUVs,779,,,,2014-12-17,08:11:00,,Geographe Bay,Habitat Protection Zone,19,,,,Lizzy,N/A,,,No,13,14,,5,,,,,,,"RIGHT CAM FAIL, CAM 14 SWAPPED OUT",
+2014-12_Geographe.Bay_stereoBRUVs,783,1,,,2014-12-12,08:12:00,,Geographe Bay,Habitat Protection Zone,21.5,Hayley,20200808,Logan Penman,Lauren,Ronen,Hayley,Yes,,17,18,,2,,,,,,,,8.8.20
+2014-12_Geographe.Bay_stereoBRUVs,784,3,,,2014-12-15,11:07:00,,Geographe Bay,,13.4,,,,Laura,Lizzy,,,,25,26,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,791,2,,,2014-12-13,08:03:00,,Geographe Bay,Multiple Use Zone,15,Logan,20200811,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,17,18,,"3R, 4L",,,,,,,,11.08.20
+2014-12_Geographe.Bay_stereoBRUVs,794,3,,,2014-12-15,10:38:00,,Geographe Bay,,7.4,,,,Lizzy,Damo,,,,19,20,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,800,3,,,2014-12-15,08:48:00,,Geographe Bay,Multiple Use Zone,22.9,Logan,20200826,Brooke Gibbons,Laura,Damo,Logan,Yes,,9,10,,5,,,,,,,,26.08.20
+2014-12_Geographe.Bay_stereoBRUVs,807,2,,,2014-12-16,10:50:00,,Geographe Bay,,14,,,,Lizzy,Laura,,,,15,16,,3R 4L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,810,2,,,2014-12-16,13:44:00,,Geographe Bay,National Park Zone,14.3,Logan,20200729,Brooke Gibbons - check scomber with todd,Lizzy,Lauren,Logan,Yes,,5,6,,4,,,,,,,Finishes at 55 minutes,29.07.20 - Finishes at 55 minutes
+2014-12_Geographe.Bay_stereoBRUVs,816,3,,,2014-12-14,11:09:00,,Geographe Bay,,7.9,,,,Lizzy,Damo,,,,9,10,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,823,3 (Left only),,,2014-12-17,08:19:00,,Geographe Bay,Multiple Use Zone,16.2,,,,Lizzy,Laura,,,,23,24,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,826,2,,,2014-12-13,05:45:00,,Geographe Bay,National Park Zone,12.8,Logan,20200807,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,15,16,,4,,,,,,,Rightcam fogs at ~20 mins and clears up again at ~50 mins,7.8.20
+2014-12_Geographe.Bay_stereoBRUVs,828,2,,,2014-12-14,11:38:00,,Geographe Bay,,7.6,,,,Lauren,Laura,,,,11,12,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,832,1,,,2014-12-16,06:43:00,,Geographe Bay,,12.6,,,,Lizzy,Lauren,,,,9,10,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,839,3,,,2014-12-16,13:00:00,,Geographe Bay,Multiple Use Zone,20,Daphne,20201102,Claude,Laura,Damo,Daphne,,,23,24,,5,,,,,,,,20201102
+2014-12_Geographe.Bay_stereoBRUVs,842,3,,,2014-12-15,06:40:00,,Geographe Bay,,22.3,,,,Lizzy,Damo,,,,9,10,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,843,???????,,,2014-12-15,13:43:00,,Geographe Bay,Multiple Use Zone,14.6,,,,Damon,Lizzy,,,,21,22,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,848,2,,,2014-12-14,08:53:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),10.4,Logan,20200729,Brooke Gibbons,Lauren,Lauren,Logan,Yes,,17,18,,4,,,,,,,,29.07.20
+2014-12_Geographe.Bay_stereoBRUVs,855,2,,,2014-12-13,08:09:00,,Geographe Bay,Multiple Use Zone,15.2,Logan,20200804,Brooke Gibbons,Lauren,Laura,Logan,Yes,,9,10,,3,,,,,,,,4.08.20
+2014-12_Geographe.Bay_stereoBRUVs,858,3,,,2014-12-17,06:29:00,,Geographe Bay,Multiple Use Zone,16.6,Logan,20200826,Brooke Gibbons,Damon,Damo,Logan,Yes,,5,6,,5,,,,,,,,26.08.20
+2014-12_Geographe.Bay_stereoBRUVs,864,3,,,2014-12-17,05:50:00,,Geographe Bay,,12.4,,,,Laura,Damo,,,,23,24,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,879,3,,,2014-12-15,10:31:00,,Geographe Bay,,8.1,,,,Laura,Done,,,,15,16,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,874,,,,2014-12-15,08:22:00,,Geographe Bay,,16.5,,,,N/A,N/A,,No,No,25,26,,,,,,,,,facing up,
+2014-12_Geographe.Bay_stereoBRUVs,880,3,,,2014-12-16,15:41:00,,Geographe Bay,,10.9,,,,Laura,Done,,,,17,18,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,1038,3,,,2014-12-16,15:33:00,,Geographe Bay,Multiple Use Zone,13.9,Daphne,20201104,Claude,Laura,Damo,Daphne,,,9,10,,5,,,,,,,,20201104
+2014-12_Geographe.Bay_stereoBRUVs,1108,3,,,2014-12-16,15:20:00,,Geographe Bay,,11.9,,,,Laura,Done,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,10000,,,,2014-12-14,06:27:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.4,,,,Lauren,Lizzy,,,,5,6,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,10001,2,,,2014-12-14,06:17:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.9,Logan,20200808,Brooke Gibbons,Lauren,Damo,Logan,Yes,,13,14,,4,,,,,,,,8.8.20
+2014-12_Geographe.Bay_stereoBRUVs,10002,,,,2014-12-14,06:13:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.4,,,,Lauren,Damo,,,,15,16,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,10004,,,,2014-12-14,07:03:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.3,,,,Lauren,Lizzy,,,,25,26,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,10003,,,,2014-12-14,06:23:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),16.5,,,,Lauren,N/A,,,No,21,22,,5,,,,,,,right fail,
+2014-12_Geographe.Bay_stereoBRUVs,10005,,,,2014-12-13,10:21:00,,Geographe Bay,  ,24.6,,,,Laura,Done,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,10005,3,,,2014-12-14,14:03:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),13.7,,,,Laura,Laura,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs, ,,,,2014-12-14,06:59:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),15.4,,,,Lauren,Lizzy,,,,11,12,,BH,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,108(2),,,,2014-12-09,13:09:00,,Geographe Bay,,35,,,,Laura,Lauren,,,,9,10,Y,1,,,,,,,H20 IN FACE PLATE,
+2014-12_Geographe.Bay_stereoBRUVs,11R1,,,,2014-12-11,09:09:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),30.4,,,,Lizzy,Lauren,,,,5,6,Y,1,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,11R2,1,,,2014-12-11,12:26:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),18.6,Brooke,20200827,Logan Penman & Claude,Lizzy,Lauren,Brooke,Yes,,11,12,Y,2,,,,,,,,20200827
+2014-12_Geographe.Bay_stereoBRUVs,11R3,1,,,2014-12-11,12:40:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.7,Brooke,20200827,Logan Penman,Lauren,Laura,Brooke,Yes,,9,10,Y,1,,,,,,,,20200827
+2014-12_Geographe.Bay_stereoBRUVs,11R4,1,,,2014-12-11,12:48:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),14.5,Brooke,20200828,Logan Penman,Lauren,Lizzy,Brooke,Yes,,19,20,Y,1,,,,,,,UPSIDE DOWN,20200828
+2014-12_Geographe.Bay_stereoBRUVs,12RC1,2,,,2014-12-12,06:09:00,,Geographe Bay,Habitat Protection Zone,26.5,Logan,20200808,Brooke Gibbons - check Pandus,Laura,Lauren,Logan,Yes,,5,6,,4,,,,,,,,8.8.20
+2014-12_Geographe.Bay_stereoBRUVs,12RC2,1,,,2014-12-12,08:23:00,,Geographe Bay,Multiple Use Zone,17.6,Daphne,20200910,Brooke Gibbons - check wobbegong,Lauren,Lauren,Daphne,,,19,20,,2,,,,,,,,20200910
+2014-12_Geographe.Bay_stereoBRUVs,12RC3,1,,,2014-12-12,08:32:00,,Geographe Bay,Multiple Use Zone,17.9,Daphne,20201111,Claude,Lauren,Lizzy,Daphne,,,5,6,,2,,,,,,,,20201111
+2014-12_Geographe.Bay_stereoBRUVs,12RC4,,,,2014-12-12,11:11:00,,Geographe Bay,,14.9,,,,N/A,N/A,,No,No,17,18,,,,,,,,,FACING UPSIDEDOWN NO DEAL,
+2014-12_Geographe.Bay_stereoBRUVs,12RC5,1,,,2014-12-12,11:16:00,,Geographe Bay,Multiple Use Zone,14.2,Daphne,20201001,Brooke Gibbons & Claude,Lizzy,Lauren,Daphne,,,23,24,,1,,,,,,,,20201001
+2014-12_Geographe.Bay_stereoBRUVs,12RC6,2,,,2014-12-12,11:22:00,,Geographe Bay,Multiple Use Zone,14.7,Logan,20200818,Brooke Gibbons,laura,Laura,Logan,Yes,,11,12,,4L,,,,,,,,18.08.20
+2014-12_Geographe.Bay_stereoBRUVs,12RC7,2,,,2014-12-12,13:38:00,,Geographe Bay,Multiple Use Zone,15.2,Logan,20200819,Brooke Gibbons,laura,Lauren,Logan,Yes,,5,6,,4,,,,,,,,19.08.20
+2014-12_Geographe.Bay_stereoBRUVs,12RC8,2,,,2014-12-12,13:41:00,,Geographe Bay,Multiple Use Zone,14.1,Logan,20200804,Brooke Gibbons - check valenciennesi,laura,Lauren,Logan,Yes,,21,22,,4,,,,,,,,4.08.20
+2014-12_Geographe.Bay_stereoBRUVs,12RC9,2,,,2014-12-12,13:48:00,,Geographe Bay,Multiple Use Zone,14.5,,,,Lauren,Laura,,,,15,16,,3R 4L,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,13RC1,2,,,2014-12-13,06:11:00,,Geographe Bay,Multiple Use Zone,13.8,Logan,20200817,Brooke Gibbons,Lauren,Damo,Logan,Yes,,9,10,,3,,,,,,,,17.08.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC10,,,,2014-12-13,13:21:00,,Geographe Bay,,30.6,,,,N/A,N/A,,No,No,9,10,,3,,,,,,,Facing up,
+2014-12_Geographe.Bay_stereoBRUVs,13RC11,2,,,2014-12-13,13:23:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),31,Logan,20200716,Brooke Gibbons,Laura,Damo,Logan,Yes,,19,20,,3,,,,,,,,16.07.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC12,2,,,2014-12-13,13:25:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),31.3,Logan,20200817,Brooke Gibbons,Laura,Laura,Logan,Yes,,5,6,,3,,,,,,,R vid cuts out at 8 min-could not measure all,17.08.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC13,3,,,2014-12-13,13:31:00,,Geographe Bay,,31.1,,,,Lizzy,Damo,,,,21,22,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,13RC14,,,,2014-12-13,13:33:00,,Geographe Bay,,32.2,,,,N/A,N/A,,No,No,13,14,,5L 3R,,,,,,,Facing up,
+2014-12_Geographe.Bay_stereoBRUVs,13RC15,2,,,2014-12-13,13:39:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),32.5,Logan,20200817,Brooke Gibbons - check decapterus,Laura,Lizzy,Logan,Yes,,15,16,,3,,,,,,,Cuts out at 47minutes,17.08.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC2,2,,,2014-12-13,06:27:00,,Geographe Bay,Multiple Use Zone,13.4,(opcode sheet says: 87),,,Lizzy,Damo,(opcode sheet says: 87),,,25,26,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,13RC3,2,,,2014-12-13,08:00:00,,Geographe Bay,Multiple Use Zone,13.6,(opcode sheet says: 791),,,Lauren,Laura,(opcode sheet says: 791),,,23,24,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,13RC4,2,,,2014-12-13,08:30:00,,Geographe Bay,Multiple Use Zone,19.5,Logan,20200818,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,13,14,,3,,,,,,,,18.08.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC5,3,,,2014-12-13,10:05:00,,Geographe Bay,Multiple Use Zone,26.8,Daphne,20201104,Claude,Lizzy,Damo,Daphne,,,15,16,,5,,,,,,,,20201104
+2014-12_Geographe.Bay_stereoBRUVs,13RC6,2,,,2014-12-13,13:07:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),29.7,Logan,20200826,Brooke Gibbons,Lauren,Laura,Logan,Yes,,15,16,,3L,,,,,,,,26.08.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC7,3,,,2014-12-13,13:10:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),29.5,Daphne,20201104,Claude,Lizzy,Damo,Daphne,,,11,12,,5,,,,,,,,20201104
+2014-12_Geographe.Bay_stereoBRUVs,13RC8,2,,,2014-12-13,13:14:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),30.4,Logan,20200813,Brooke Gibbons,Lizzy,Laura,Logan,Yes,,23,24,,3,,,,,,,,13.8.20
+2014-12_Geographe.Bay_stereoBRUVs,13RC9,2,,,2014-12-13,13:18:00,,Geographe Bay,Special Purpose Zone (Mining Exclusion),30.9,Logan,20200817,Brooke Gibbons,Lauren,Laura,Logan,Yes,,17,18,,3L,,,,,,,,17.08.20
+2014-12_Geographe.Bay_stereoBRUVs,375(2),,,,2014-12-15,13:39:00,,Geographe Bay,,17.7,,,,Lizzy,Laura,,,,15,16,,3,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,67(2),,,,2014-12-09,13:58,,Geographe Bay,,39.4,,,,Damo,Laura,,,,15,16,Y,1,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,69(2),,,,2014-12-09,06:37,,Geographe Bay,,28.5,,,,Lizzy,Lauren,,,,13,14,Y,1,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR-BOB,3,,,2014-12-17,12:23,,Geographe Bay,,16.7,,,,Lizzy,Lizzy,,,,25,26,,5,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR1-1,2,,,2014-12-17,12:02,,Geographe Bay,,17.3,,,,Laura,Lauren,,,,5,6,,4,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR1-2,2,,,2014-12-17,12:05,,Geographe Bay,Multiple Use Zone,16,Logan,20200811,Brooke Gibbons,Lizzy,Lauren,Logan,Yes,,21,22,,4,,,,,,,,11.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR1-3,2,,,2014-12-17,12:07,,Geographe Bay,Habitat Protection Zone,15.8,Logan ,20200811,Brooke Gibbons,Damon,Lauren,Logan ,Yes,,19,20,,4,,,,,,,,11.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR1-4,2,,,2014-12-17,12:09,,Geographe Bay,Habitat Protection Zone,16.8,Logan,20200812,Brooke Gibbons,Lauren,Lauren,Logan,Yes,,15,16,,4,,,,,,,,12.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR2-1,1,,,2014-12-17,13:40,,Geographe Bay,,17.7,,,,Laura,Lizzy,,,,11,12,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR2-2,1,,,2014-12-17,13:42,,Geographe Bay,,16.2,,,,Laura,Lauren,,,,23,24,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR2-3,1,,,2014-12-17,13:44,,Geographe Bay,,16.4,,,,Lauren,Ronen,,,,17,18,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR2-4,1,,,2014-12-17,13:38,,Geographe Bay,,16.2,,,,Lizzy,N/A,,,No,25,26,,2,,,,,,,Right cam didn't record?,
+2014-12_Geographe.Bay_stereoBRUVs,GBR3-1,1,,,2014-12-17,13:53,,Geographe Bay,,17.6,,,,Lauren,Lizzy,,,,19,20,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR3-2,,,,2014-12-17,13:30,,Geographe Bay,,17.9,,,,Lauren,N/A,,,No,15,16,,2,,,,,,,Rightcam cuts out 1 min,
+2014-12_Geographe.Bay_stereoBRUVs,GBR3-3,1,,,2014-12-17,13:47,,Geographe Bay,,17,,,,Lizzy,Lizzy,,,,9,10,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR3-4,1,,,2014-12-17,13:46,,Geographe Bay,,16.6,,,,Lauren,Lizzy,,,,13,14,,2,,,,,,,,
+2014-12_Geographe.Bay_stereoBRUVs,GBR4-1,2,,,2014-12-17,12:11,,Geographe Bay,Habitat Protection Zone,16.1,Logan,20200812,Brooke Gibbons,Damon,Lauren,Logan,Yes,,9,10,,4,,,,,,,,12.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR4-2,1,,,2014-12-17,12:13,,Geographe Bay,Habitat Protection Zone,16.3,Hayley,20200808,Logan Penman,Lauren,Lauren,Hayley,Yes,,13,14,,2,,,,,,,,8.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR5-1,1,,,2014-12-17,12:15,,Geographe Bay,Habitat Protection Zone,16.2,Hayley,20200811,Logan Penman & Claude,Laura,Ronen,Hayley,Yes,,17,18,,2,,,,,,,,11.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR5-2,1,,,2014-12-17,12:17,,Geographe Bay,Habitat Protection Zone,16.6,Hayley,20200808,Logan Penman & Claude,Laura,Lizzy,Hayley,Yes,,23,24,,2,,,,,,,,8.8.20
+2014-12_Geographe.Bay_stereoBRUVs,GBR5-3,2,,,2014-12-17,12:19,,Geographe Bay,Habitat Protection Zone,16.4,Logan ,20200813,Brooke Gibbons,Lizzy,Lauren,Logan ,Yes,,11,12,,4,,,,,,,Rightcam cuts out at 52 mins - M. australis not measured,13.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RB1,1,,,2014-12-09,06:49,,Geographe Bay,Multiple Use Zone,28,Hayley ,20200811,Logan Penman & Claude,Lizzy,Laura,Hayley ,Yes,,25,26,Y,1,,,,,,,BLACK HOUSING,11.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RB2,1,,,2014-12-09,09:39,,Geographe Bay,Multiple Use Zone,30,Hayley ,20200811,Logan Penman & Claude,Lizzy,Laura,Hayley ,Yes,,13,14,Y,1,,,,,,,L CARD 83 DODGY,11.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RC1,1,,,2014-12-09,10:09,,Geographe Bay,Special Purpose Zone (Mining Exclusion),34.2,Hayley ,20200812,Logan Penman & Claude,Laura,Lizzy,Hayley ,Yes,,17,18,Y,1,,,,,,,,12.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RC2,1,,,2014-12-09,10:34,,Geographe Bay,Multiple Use Zone,34.3,Hayley ,20200812,Logan Penman & Claude,Lizzy,Lauren,Hayley ,Yes,,11,12,Y,1,,,,,,,,12.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RC3,1,,,2014-12-09,13:11,,Geographe Bay,Special Purpose Zone (Mining Exclusion),35,Hayley ,20200812,Logan - check maculatus with brooke,Lauren,Lizzy,Hayley ,Yes,,19,20,Y,1,,,,,,,,12.8.20
+2014-12_Geographe.Bay_stereoBRUVs,RC3(2),1,,,2014-12-10,13:35,,Geographe Bay,,38.5,,,,Lauren,Lizzy,,,,5,6,Y,1,,,,,,,,
+,,,,,,,,,,,,,,,,,18,,,,,,,,,,,,,
