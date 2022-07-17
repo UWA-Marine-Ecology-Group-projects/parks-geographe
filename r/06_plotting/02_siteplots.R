@@ -318,7 +318,7 @@ p3 <- ggplot() +
   annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
            label = c("Bunbury", "Busselton", "Dunsborough"), size = 3) +
   theme(panel.background = element_rect(fill = 'grey73'),
-        panel.grid.major = element_line(colour = "grey49", size = 0.4))
+        panel.grid.major = element_line(colour = "grey49", size = 0.1))
 
 png(file = "plots/spatial/site_overview_map.png", width = 10, height = 6, units = "in", res = 300)
 p3
