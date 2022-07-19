@@ -9,20 +9,20 @@
 rm(list=ls())
 
 # libraries----
-detach("package:plyr", unload=TRUE)#will error - don't worry
+detach("package:plyr", unload=TRUE) # will error - don't worry
 library(tidyr)
 library(dplyr)
-options(dplyr.width = Inf) #enables head() to display all coloums
+options(dplyr.width = Inf) # enables head() to display all coloums
 library(mgcv)
 library(MuMIn)
 library(car)
 library(doBy)
 library(gplots)
 library(RColorBrewer)
-# library(doParallel) #this can removed?
+# library(doParallel) # this can removed?
 library(doSNOW)
 library(gamm4)
-library(RCurl) #needed to download data from GitHub
+library(RCurl) # needed to download data from GitHub
 library(FSSgam)
 library(GlobalArchive)
 library(ggplot2)
@@ -32,35 +32,33 @@ library(ggplot2)
 # use the 'files' tab to set wd in '~/parks-abrolhos' manually (your relative path) then run this line (if we need it?)
 working.dir <- getwd()
 setwd(working.dir)
-name <- "2021-05_Abrolhos_BOSS-BRUV"  # set study name
+
+name <- "2014-12_Geographe.Bay_stereoBRUVs"  # set study name
 
 # load and join datasets
 #MaxN
-boss.maxn   <- read.csv("data/Tidy/2021-05_Abrolhos_BOSS.complete.maxn.csv")%>%
-  dplyr::mutate(method = "BOSS")%>%
-  glimpse()
-bruv.maxn <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.maxn.csv")%>%
-  dplyr::mutate(method = "BRUV")%>%
-  glimpse()
-#join
-maxn <- bind_rows(boss.maxn,bruv.maxn)%>%
+
+maxn <- read.csv("data/tidy/2014-12_Geographe.Bay_stereoBRUVs_maxn.summary_2022-07-19.csv")%>%
   glimpse()
 
-#length
-boss.length <- read.csv("data/Tidy/2021-05_Abrolhos_BOSS.complete.length.csv")%>%
-  dplyr::mutate(method = "BOSS")%>%
-  glimpse()
-bruv.length <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.length.csv")%>%
-  dplyr::mutate(method = "BRUV")%>%
-  glimpse()
-#join
-length <- bind_rows(boss.length,bruv.length)%>%
-  dplyr::mutate(scientific = paste(family,genus,species, sep = " "))%>%
-  glimpse()
+### HASHED OUT THIS SECTION UNTIL LENGTHS HAVE BEEN FINISHED ----
+# length
+# boss.length <- read.csv("data/Tidy/2021-05_Abrolhos_BOSS.complete.length.csv")%>%
+#   dplyr::mutate(method = "BOSS")%>%
+#   glimpse()
+# 
+# bruv.length <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.length.csv")%>%
+#   dplyr::mutate(method = "BRUV")%>%
+#   glimpse()
+
+# join
+# length <- bind_rows(boss.length,bruv.length)%>%
+#   dplyr::mutate(scientific = paste(family,genus,species, sep = " "))%>%
+#   glimpse()
 
 #habitat
-allhab <- readRDS("data/Tidy/merged_habitat.rds")%>%
-  ga.clean.names()%>%
+allhab <- readRDS("data/Tidy/merged_habitat.rds") %>%
+  ga.clean.names() %>%
   glimpse()
 
 allhab <- allhab %>%

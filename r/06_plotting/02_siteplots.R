@@ -19,6 +19,8 @@ library(stringr)
 library(patchwork)
 library(raster)
 library(ggnewscale)
+library(dplyr)
+library(GlobalArchive)
 
 # get data and sort spatial boundaries
 aus    <- st_read("data/spatial/shapefiles/cstauscd_r.mif")                     # geodata 100k coastline available: https://data.gov.au/dataset/ds-ga-a05f7892-eae3-7506-e044-00144fdd4fa6/
@@ -38,8 +40,8 @@ terrnp <- st_read(
 # jacmap <- crop(jacmap, cropex)
 # jacmap <- projectRaster(jacmap, crs = sppcrs, method = "ngb")
 cwatr  <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")       # coastal waters line
-cwatr <- st_crop(cwatr, c(xmin = 114.9, xmax = 115.7, ymin = -33.65, ymax = -33.3))      # crop down coastal waters line to general project area
-bath_r <- raster("data/spatial/rasters/GB_Bathy_250m.tif")            # bathymetry trimmed to project area
+cwatr <- st_crop(cwatr, c(xmin = 114.9, xmax = 115.7, ymin = -33.65, ymax = -33.2))      # crop down coastal waters line to general project area
+bath_r <- raster("data/spatial/rasters/GB_Bathy_250m_larger.tif")               # bathymetry trimmed to project area
 bathdf <- as.data.frame(bath_r, na.rm = TRUE, xy = TRUE)
 colnames(bathdf)[3] <- "Depth"
 
@@ -49,17 +51,9 @@ colnames(bathdf)[3] <- "Depth"
 
 kef <- st_read("data/spatial/shapefiles/AU_DOEE_KEF_2015.shp")
 kef <- st_make_valid(kef)
-kef <- st_crop(kef, c(xmin = 110, xmax = 122.1, ymin = -39, ymax = -33.3))      # Cropped to wrong extent, fix      
-kef$NAME <- dplyr::recode(kef$NAME,"Perth Canyon and adjacent shelf break, and other west coast canyons" = "Perth Canyon",                 
-                "Commonwealth marine environment within and adjacent to the west coast inshore lagoons" = "West coast lagoons",
-                "Commonwealth marine environment within and adjacent to Geographe Bay" = "Geographe Bay",                 
-                "Cape Mentelle upwelling" = "Cape Mentelle",                                                              
-                "Naturaliste Plateau" = "Naturaliste Plateau",                                                                  
-                "Diamantina Fracture Zone" = "Diamantina Fracture Zone",                                                             
-                "Albany Canyons group and adjacent shelf break" = "Albany Canyons",                                        
-                "Commonwealth marine environment surrounding the Recherche Archipelago" = "Recherche Archipelago",                
-                "Ancient coastline at 90-120m depth" = "Ancient coastline",                                                   
-                "Western demersal slope and associated fish communities" = "Western demersal fish",                               
+kef <- st_crop(kef, c(xmin = 114, xmax = 116, ymin = -33, ymax = -33.7))      
+kef$NAME <- dplyr::recode(kef$NAME,
+                "Commonwealth marine environment within and adjacent to Geographe Bay" = "Geographe Bay",
                 "Western rock lobster" = "Western rock lobster")
 
 st_crs(aus)         <- st_crs(aumpa)
@@ -118,7 +112,7 @@ wanew$waname <- word(wanew$Name, start = -2, end = -1)
 
 # reduce terrestrial parks
 terrnp <- terrnp[terrnp$leg_catego %in% c("Nature Reserve", "National Park"), ] # exclude state forests etc
-terrnp <- st_crop(terrnp, xmin = 110, xmax = 123, ymin = -39, ymax = -33.3)       # just swc
+terrnp <- st_crop(terrnp, xmin = 114, xmax = 116, ymin = -34, ymax = -33)       # just swc
 # plot(terrnp["leg_catego"])
 
 # assign commonwealth zone colours
@@ -157,13 +151,7 @@ unique(kef$NAME)
 #                                          "Western demersal slope and associated fish communities" = "#006ddb",                               
 #                                          "Western rock lobster" = "#6db6ff"))
 
-kef_cols <- scale_fill_manual(values = c("Geographe Bay" = "#004949",                 
-                                         "Cape Mentelle" = "#920000",                                                              
-                                         "Naturaliste Plateau" = "#ffff6d",                                                                  
-                                         "Diamantina Fracture Zone" = "#490092",                                                             
-                                         "Albany Canyons" = "#004949",                                        
-                                         "Recherche Archipelago" = "#24ff24",                
-                                         "Ancient coastline" = "#ff6db6",                             
+kef_cols <- scale_fill_manual(values = c("Geographe Bay" = "#004949",                            
                                          "Western rock lobster" = "#6db6ff"))
 
 # build basic plot elements
@@ -228,43 +216,43 @@ ggsave("plots/spatial/overview_map.png", dpi = 200, width = 10, height = 4.5) #6
 
 #Key Ecological Features map
 # build basic plot elements
+kef$NAME <- factor(kef$NAME, levels = c("Western rock lobster", "Geographe Bay", 
+                                        "Cape Mentelle upwelling", "Ancient coastline at 90-120m depth"))
+
 p7 <- ggplot() +
-  # geom_contour_filled(data = bath_newdf, aes(x = x, y = y, z = Depth,
-  #                                            fill = after_stat(level)),
-  #                     breaks = c(0, -30, -70, -200, -700, -2000, -4000, -10000)) +
-  # scale_fill_grey(start = 1, end = 0.5, guide = "none") +
   geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
   new_scale_fill() +
-  geom_sf(data = nb_mp, aes(fill = waname), alpha = 2/5, colour = NA, show.legend = F) +
-  geom_sf(data = wanew, aes(fill = waname), alpha = 2/5, colour = NA, show.legend = F) +
-  wampa_cols +
-  labs(fill = "State Marine Parks") +
-  new_scale_fill() +
+  # geom_sf(data = nb_mp, aes(fill = waname), alpha = 2/5, colour = NA, show.legend = F) +
+  # geom_sf(data = wanew, aes(fill = waname), alpha = 2/5, colour = NA, show.legend = F) +
+  # wampa_cols +
+  # labs(fill = "State Marine Parks") +
+  # new_scale_fill() +
   geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA, show.legend = F) +
   labs(fill = "Terrestrial Managed Areas") +
   waterr_cols +
   new_scale_fill() +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 4/5, size = 0.2) +
-  # geom_contour(data = bath_newdf, aes(x, y, z = Depth),
-  #              breaks = c(0, -30, -70, -200, -700, -2000, -4000, -10000), colour = "white",
-  #              alpha = 1, size = 0.1) +
-  geom_sf(data = nb_nmp, aes(fill = ZoneName), alpha = 2/5, color = NA, show.legend = F) +
-  nmpa_cols + 
-  labs(fill = "Australian Marine Parks")+
-  new_scale_fill()+
+  # geom_sf(data = nb_nmp, aes(fill = ZoneName), alpha = 2/5, color = NA, show.legend = F) +
+  # nmpa_cols + 
+  # labs(fill = "Australian Marine Parks")+
+  # new_scale_fill()+
   geom_sf(data = kef, aes(fill = NAME), alpha = 0.7, color = NA) +
   kef_cols+
   labs(x = NULL, y = NULL,  fill = "Key Ecological Features") +
   guides(fill = guide_legend(order = 1)) +
-  # annotate("rect", xmin = 114.38, xmax = 115.1, ymin = -34.17, ymax = -33.65,
-  #          colour = "grey15", fill = "white", alpha = 0.2, size = 0.1) +
-  coord_sf(xlim = c(110, 122.1), ylim = c(-39, -33.3)) +
-  # coord_sf(xlim = c(114.3, 115.8), ylim = c(-34.5, -33.3)) +
+  geom_sf(data = nb_nmp, color = "black", fill = NA, show.legend = F, size = 0.2) +
+  # geom_sf(data = nb_mp, color = "black",  fill = NA, show.legend = F, size = 0.2) +
+  geom_sf(data = wanew, color = "black",  fill = NA, show.legend = F, size = 0.2) +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
   theme_minimal()+
+  annotate("point", x = c(115.6409, 115.3473, 115.1074), y = c(-33.3270,-33.6516, -33.6177)) +
+  annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
+           label = c("Bunbury", "Busselton", "Dunsborough"), size = 3) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-p7
 
-ggsave("plots/spatial/key-ecological-features.png", dpi = 200, width = 10, height = 4)
+png(file = "plots/spatial/key-ecological-features.png", width = 10, height = 6, units = "in", res = 300)
+p7
+dev.off()
 
 # site zoom plots
 # reduce zone levels for these plots
@@ -281,50 +269,47 @@ s_wampa_cols <- scale_fill_manual(values = c("Sanctuary Zone" = "#bfd054",
 # make closer plot
 # trim down bathy for nicer contour labels
 sitebathy <- bathdf[bathdf$Depth > -500, ]                               # trim to reduce legend
-# sitebathy <- sitebathy[sitebathy$x > 114.4 & sitebathy$x < 115, ]
-# sitebathy <- sitebathy[sitebathy$y > -34.1 & sitebathy$y < -33.7, ]
+# sitebathy <- sitebathy[sitebathy$x > 115.0 & sitebathy$x < 115.67, ]
+# sitebathy <- sitebathy[sitebathy$y > -33.3 & sitebathy$y < -33.65, ]
 
 p3 <- ggplot() +
-  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
+  geom_sf(data = aus, fill = "seashell2", colour = "grey43", size = 0.1) +
   new_scale_fill() +
-  geom_sf(data = nb_mp, aes(fill = waname), alpha = 3/5, colour = NA) +
-  geom_sf(data = wanew, aes(fill = waname), alpha = 3/5, colour = NA) +
+  geom_sf(data = nb_mp, aes(fill = waname), alpha = 4/5, colour = NA) +
+  geom_sf(data = wanew, aes(fill = waname), alpha = 4/5, colour = NA) +
   s_wampa_cols +
   labs(fill = "State Marine Parks") +
   new_scale_fill() +
-  # geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 3/5, colour = NA) +
-  # waterr_cols +
-  # labs(fill = "Terrestrial Managed Areas") +
-  # new_scale_fill() +
+  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 3/5, colour = NA) +
+  waterr_cols +
+  labs(fill = "Terrestrial Managed Areas") +
+  new_scale_fill() +
   geom_sf(data = nb_nmp, aes(fill = ZoneName), alpha = 3/5, colour = NA) +
   s_nmpa_cols + 
   geom_sf(data = cwatr, colour = "firebrick", alpha = 4/5, size = 0.2) +
-  # geom_contour(data = sitebathy, aes(x = x, y = y, z = Depth),  # Turned off contours, looks a bit weird - maybe add in just 30m parks contour?
-  #              binwidth = 10, colour = "white", alpha = 1, size = 0.4) +
-  # geom_text_contour(data = sitebathy, aes(x = x, y = y, z = Depth), 
-  #                   binwidth = 10, size = 2.5, label.placer = label_placer_n(1)) +
+  geom_contour(data = sitebathy, aes(x = x, y = y, z = Depth),  
+               breaks = c(-30, -70), colour = "white", alpha = 1, size = 0.2) +
   geom_point(data = points, aes(longitude, latitude, colour = method), 
              alpha = 3/5, shape = 10) +
   scale_colour_manual(values = c("BRUV" = "indianred4",
                                  "Drop Camera" = "seagreen4")) +
   labs(x = NULL, y = NULL, fill = "Australian Marine Parks", colour = "Sample") +
   guides(fill = guide_legend(order = 1)) +
-  # annotate("rect", xmin = 114.7, xmax = 114.95, ymin = -34.14, ymax = -34.01,
-  #          colour = "grey15", fill = "white", alpha = 0.1, size = 0.1) +
   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
-  # geom_segment(aes(x = 114.4, xend = 115.08, y = -34.127327939, yend = -34.127327939), linetype = 2, alpha = 0.3) +
   theme_minimal() +
   annotate("point", x = c(115.6409, 115.3473, 115.1074), y = c(-33.3270,-33.6516, -33.6177)) +
   annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
            label = c("Bunbury", "Busselton", "Dunsborough"), size = 3) +
-  theme(panel.background = element_rect(fill = 'grey73'),
-        panel.grid.major = element_line(colour = "grey49", size = 0.1))
+  annotate("text", x = c(115.02, 114.99, 115.393), y = c(-33.5, -33.319, -33.345), 
+           label = c("30m"), size = 1.75) +
+  theme(panel.background = element_rect(fill = 'grey88', color = NA),
+        panel.grid.major = element_line(colour = "grey67", size = 0.05))
 
 png(file = "plots/spatial/site_overview_map.png", width = 10, height = 6, units = "in", res = 300)
 p3
 dev.off()
 
-ggsave("plots/spatial/site_overview_map.png", dpi = 200, width = 10, height = 6)
+# ggsave("plots/spatial/site_overview_map.png", dpi = 200, width = 10, height = 6)
 
 # jac's map, eh
 # sort out the classes

@@ -1,6 +1,5 @@
 OpCode	ImagePtPair	FilenameLeft	FrameLeft	FilenameRight	FrameRight	Time	Period	PeriodTime	X	Y	Z	sX	sY	sZ	RMS	Range	Direction	Family	Genus	Species	Code	Number	Stage	Activity	Comment	Attribute9	Attribute10
-100	0	100_R22.avi	2723	100_L21.avi	2465	1.51429		-1.00000																			
-100	1	100_R22.avi	2723	100_L21.avi	2465	1.51429		-1.00000																	sync		
+100	0	100_R22.avi	2723	100_L21.avi	2465	1.51429		-1.00000																	sync		
 10003	0	10003_L21.avi	1780	10003_R22.avi	4141	0.98988		-1.00000																	sync		
 10005	4	100005_L21.avi	19597	100005_R22.avi	19358	10.89812	Time Seabed	9.46168	552.16745	-503.85486	-6062.03054	4.73452	4.38964	45.35721	7.10774	6107.94343	7.18579	Gerreidae	Parequula	melbournensis	37349001	1	AD	Passing			
 10005	9	100005_L21.avi	55258	100005_R22.avi	55019	30.72962	Time Seabed	29.29318	6.93642	-114.74615	-1808.87111	0.79150	0.81759	4.19004	0.91916	1812.52020	3.86472	Carangidae	Pseudocaranx	spp		2	AD	Passing			
