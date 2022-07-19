@@ -1,3 +1,11 @@
+###
+# Project: Parks - Geographe synthesis 
+# Data:    BRUV fish
+# Task:    Join 2 BRUV campaigns
+# author:  Claude
+# date:    July 2022
+##
+
 ### Merge EventMeasure database output tables into maxn and length files
 
 ### OBJECTIVES ###
@@ -29,7 +37,7 @@ library(sp)
 
 ## Set Study Name ----
 # Change this to suit your study name. This will also be the prefix on your final saved files.
-study<-"2020_south-west_stereo-BRUVs"  # BG changed this from 2020-06 on 27/01/21
+study <- "2007-2014-Geographe-stereo-BRUVs"  
 
 ## Folder Structure ----
 # This script uses one main folder ('working directory')
@@ -45,12 +53,12 @@ study<-"2020_south-west_stereo-BRUVs"  # BG changed this from 2020-06 on 27/01/2
 working.dir <- getwd() # to directory of current file - or type your own
 
 ## Save these directory names to use later----
-data.dir<-paste(working.dir,"data",sep="/")
+data.dir <- paste(working.dir,"data",sep="/")
 
-download.dir<-paste(data.dir,"raw/em export",sep="/")
+download.dir <- paste(data.dir,"raw/em export",sep="/")
 
-tidy.dir<-paste(data.dir,"tidy",sep="/")
-staging.dir<-paste(data.dir,"staging",sep="/") 
+tidy.dir <- paste(data.dir,"tidy",sep="/")
+staging.dir <- paste(data.dir,"staging",sep="/") 
 
 setwd(download.dir)
 ## Create Staging and Tidy data folders ----
@@ -62,7 +70,7 @@ setwd(download.dir)
 # Metadata ----
 metadata <- ga.list.files("_Metadata.csv") %>% # list all files ending in "_Metadata.csv"
   purrr::map_df(~ga.read.files_em.csv(.)) %>% # combine into dataframe
-  dplyr::select(campaignid, sample, dataset, planned.or.exploratory, latitude, longitude, date, time, location, status, site, depth, observer, successful.count, successful.length, commonwealth.zone, state.zone,raw.hdd.number,con.hdd.number)%>% 
+  dplyr::select(campaignid, sample, latitude, longitude, date, time, location, status, site, depth, observer, successful.count, successful.length, commonwealth.zone, state.zone,raw.hdd.number,con.hdd.number) %>% 
   dplyr::mutate(planned.or.exploratory = str_replace_all(.$planned.or.exploratory,c("Deans"="Legacy",
                                                                                     "Captains pick"="Legacy"))) %>%
   dplyr::mutate(sample=as.character(sample)) %>%
@@ -81,7 +89,7 @@ sites <- metadata %>%
 multiple.types <- sites%>%
   dplyr::filter(!planned.or.exploratory=="Captains pick") %>% # use this to see if clusters are given both MBH and Legacy - there is 3 clusters that have multiples
   dplyr::group_by(site)%>%
-  dplyr::summarise(n=n())
+  dplyr::summarise(n = n())
 
 unique(metadata$campaignid) # check the number of campaigns in metadata, and the campaign name
 length(unique(metadata$sample)) # 311 (39+272)

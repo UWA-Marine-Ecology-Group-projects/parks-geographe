@@ -1,9 +1,9 @@
 ###
-# Project: Parks - Abrolhos
-# Data:    BOSS & BRUV fish, habitat
-# Task:    Join BOSS and BRUV, format data for fssGAM
-# author:  Claude, Brooke, Kingsley
-# date:    Nov-Dec 2021
+# Project: Parks - Geographe synthesis 
+# Data:    BRUV fish
+# Task:    Join 2 BRUV campaigns
+# author:  Claude
+# date:    July 2022
 ##
 
 rm(list=ls())
@@ -33,10 +33,14 @@ library(ggplot2)
 working.dir <- getwd()
 setwd(working.dir)
 
-name <- "2014-12_Geographe.Bay_stereoBRUVs"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
 # load and join datasets
 #MaxN
+bruv2007 <- read.csv("data/raw/em export/2007-03_Capes.MF_stereoBRUVs_Count.csv") %>%
+  glimpse()
+
+bruv2012 <- read.csv("data/raw/em export/")
 
 maxn <- read.csv("data/tidy/2014-12_Geographe.Bay_stereoBRUVs_maxn.summary_2022-07-19.csv")%>%
   glimpse()
