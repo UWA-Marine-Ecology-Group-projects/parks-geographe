@@ -1,20 +1,10 @@
-### Error checks of MaxN and Length files created from EventMeasure or generic stereo-video annotations via GlobalArchive
-
-## This script is designed to be used interatively to suggest species name and length corrections that should be made to original EventMeasure (.EMObs) or generic annotation files AND for subsequent data analysis.
-
-# NOTE: ERRORS SHOULD BE FIXED IN THE .EMObs AND RE-UPLOADED TO GLOBAL ARCHIVE!
-
-
-### OBJECTIVES ###
-# 1. Import data and run BASIC error reports
-# 2. Limit length data by range and precision rules
-# 3. run SERIOUS error reports against a master species list
-# 4. Visualise what MaxN are missing in the stereoMaxN
-# 5. Write data for analysis that passes checks
-
-### Please forward any updates and improvements to tim.langlois@uwa.edu.au & brooke.gibbons@uwa.edu.au or raise an issue in the "globalarchive-query" GitHub repository
-
-# Please email tim.langlois@uwa.edu.au & brooke.gibbons@uwa.edu.au if you would like the life.history or synonyms googlesheets shared with you or to have your local species information added.
+###
+# Project: parks - geographe bay synthesis
+# Data:    2007 BRUV & 2014 BRUV
+# Task:    Check MaxN & lengths
+# Author:  Claude
+# Date:    July 2022
+##
 
 # Clear memory ----
 rm(list=ls())
@@ -26,7 +16,7 @@ library(devtools)
 library(GlobalArchive)
 # To connect to life.history
 library(httpuv)
-library(googlesheets)
+library(googlesheets4)
 # To tidy data
 library(tidyr)
 library(plyr)
@@ -37,60 +27,44 @@ library(stringr)
 
 ## Set Study Name ----
 # Change this to suit your study name. This will also be the prefix on your final saved files.
-study<-"2020_south-west_stereo-BRUVs"
-
-## Folder Structure ----
-# This script uses one main folder ('working directory')
-
-# Three subfolders will already be created within the 'working directory'. They are 'Downloads','Data to be checked' and 'Tidy data' (Script 1)
-
-# In addition, this script will make new folders for:
-#'Plots' to save initial checking plots
-#'Errors to check' to save all the error files e.g. lists of taxa that are not in the life history sheet
+study <- "2007-2014-Geographe-stereo-BRUVs"
 
 ## Set your working directory ----
 working.dir <- getwd() # sets working directory to that of this script - or type your own
 
 ## Save these directory names to use later----
-data.dir<-paste(working.dir,"data",sep="/")
-plots.dir<-paste(working.dir,"plots",sep="/")
-download.dir<-paste(data.dir,"raw",sep="/")
+data.dir <- paste(working.dir,"data",sep="/")
+plots.dir <- paste(working.dir,"plots",sep="/")
+download.dir <- paste(data.dir,"raw",sep="/")
 
-to.be.checked.dir<-paste(data.dir,"staging",sep="/") 
-tidy.dir<-paste(data.dir,"tidy",sep="/")
-error.dir=paste(data.dir,"errors to check",sep="/")
-
-## Create a folder for Plots and Errors ----
-# The two lines below will create the 'Plots' and 'Errors to check' subfolders within the working directory
-# dir.create(file.path(working.dir, "Plots"))
-# dir.create(file.path(data.dir, "Errors to check"))
+to.be.checked.dir <- paste(data.dir,"staging",sep="/") 
+tidy.dir <- paste(data.dir,"tidy",sep="/")
+error.dir <- paste(data.dir,"errors to check",sep="/")
 
 # Import unchecked data from staging folder----
 setwd(to.be.checked.dir)
 
 # Import metadata ---
-metadata<-read.csv(paste(study,"metadata.csv",sep="_"))
+metadata <- read.csv(paste(study,"metadata.csv",sep="_"))
 
 # Import MaxN file---
-maxn<-read_csv(paste(study,"maxn.csv",sep="_"))%>%
-  dplyr::mutate(maxn=as.numeric(maxn))%>%
-  dplyr::mutate(species=tolower(species))%>%
-  dplyr::select(campaignid,sample,family,genus,species,maxn)%>%
+maxn <- read_csv(paste(study,"maxn.csv",sep="_"))%>%
+  dplyr::mutate(maxn = as.numeric(maxn))%>%
+  dplyr::mutate(species = tolower(species))%>%
+  dplyr::select(campaignid, sample, family, genus, species, maxn)%>%
   replace_na(list(family="Unknown",genus="Unknown",species="spp"))%>% # remove any NAs in taxa name
-  # dplyr::mutate(genus=ifelse((family%in%c("Carangidae")&species%in%c("sp10")),"Pseudocaranx",genus)) %>%
-  # dplyr::mutate(species=ifelse((species%in%c("sp10")),"spp",species)) %>%
   dplyr::glimpse()
 
 # Check that there is no fish with family unknown
 
-length(unique(maxn$sample)) # 311
+length(unique(maxn$sample)) # 229
 
 # Import length/3d file----
-length<-read_csv(file=paste(study,"length3dpoints.csv",sep = "_"),na = c("", " "))%>%
-  dplyr::mutate(number=as.numeric(number))%>%
-  dplyr::mutate(range=as.numeric(range))%>%
-  dplyr::mutate(length=as.numeric(length))%>%
-  dplyr::select(campaignid,sample,family,genus,species,length,number,range)%>%
+length <- read_csv(file = paste(study,"length3dpoints.csv",sep = "_"), na = c("", " "))%>%
+  dplyr::mutate(number = as.numeric(number))%>%
+  dplyr::mutate(range = as.numeric(range))%>%
+  dplyr::mutate(length = as.numeric(length))%>%
+  dplyr::select(campaignid, sample, family, genus, species, length, number, range)%>%
   dplyr::filter(!is.na(number)) %>% # find and remove sync points that are not fish
   replace_na(list(family="Unknown",genus="Unknown",species="spp"))%>% # remove any NAs in taxa name
   dplyr::mutate(genus=str_replace_all(.$genus,c("NA"="Unknown")))%>%
@@ -116,7 +90,7 @@ three.d.points<-length%>%
 # For large schools (e.g. 100+) a length measurement can be assigned to multiple individuals (by changing the 'Number' in EventMeasure). For example in a school of 500 if you measure 50 fish, and put '10' for each measurement in EM, you would have 500 fish but only 50 measurements
 # Use this check to see if you have these types of measurements (e.g. to fix a mistaken number against multiple lengths).
 
-schools<-length%>%
+schools <- length%>%
   dplyr::filter(number>1)%>%
   dplyr::glimpse() # Do we have schools? 
 
@@ -193,7 +167,6 @@ write.csv(out.of.range, "out.of.range.csv")
 # Use the abbreviation in the code below
 setwd(tidy.dir)
 dir()
-library(googlesheets4)
 
 url <- "https://docs.google.com/spreadsheets/d/1SMLvR9t8_F-gXapR2EemQMEPSw_bUbPLcXd3lJ5g5Bo/edit?ts=5e6f36e2#gid=825736197"
 
@@ -211,7 +184,7 @@ master <- googlesheets4::read_sheet(url) %>%
 
 synonymsurl <- "https://docs.google.com/spreadsheets/d/1R0uU9Q0VkUDQFgGTK3VnIGxmc101jxhlny926ztWoiQ/edit#gid=567803926"
 
-synonyms<- googlesheets4::read_sheet(synonymsurl)%>% 
+synonyms <- googlesheets4::read_sheet(synonymsurl)%>% 
   distinct()%>%
   ga.clean.names()%>%
   dplyr::select(-comment)
@@ -222,19 +195,24 @@ synonyms<- googlesheets4::read_sheet(synonymsurl)%>%
 # Use return.changes=T to view the taxa.names.updated
 # Use save.report to save .csv file in your error directory
 
-hard.drives <-metadata %>%
-  dplyr::select(campaignid,sample,raw.hdd.number,con.hdd.number)
-
-maxn<-ga.change.synonyms(maxn,return.changes=T,save.report = T)
-length<-ga.change.synonyms(length,return.changes=T,save.report = T)
+maxn <- ga.change.synonyms(maxn,return.changes=T,save.report = T) # Bulk changed, old data
+length <- ga.change.synonyms(length,return.changes=T,save.report = T)
 
 # Check MaxN for species that have not previously been observed in your region ----
-maxn.species.not.previously.observed<-master%>%
-  dplyr::anti_join(maxn,.,by=c("family","genus","species"))%>% 
-  dplyr::distinct(campaignid,sample,family,genus,species)%>% # use this line to show specific drops OR
-  #distinct(family,genus,species)%>% # use this line to keep only fam, gen, spe
-  dplyr::filter(!species%in%c("spp","sp1","sp"))%>% # Ignore spp in the report
-  dplyr::left_join(hard.drives) %>%
+maxn.species.not.previously.observed <- master %>%
+  dplyr::anti_join(maxn,.,by = c("family","genus","species")) %>% 
+  dplyr::distinct(campaignid,sample,family,genus,species) %>% # use this line to show specific drops OR
+  dplyr::filter(!species%in%c("spp","sp1","sp", "sp10")) %>% # Ignore spp in the report
+  dplyr::glimpse()
+
+maxn <- maxn %>%
+  dplyr::mutate(species = ifelse(genus %in% "Trygonorrhina" & species %in% "fasciata", "dumerilii", species)) %>%
+  glimpse()
+
+maxn.species.not.previously.observed <- master %>%
+  dplyr::anti_join(maxn,.,by = c("family","genus","species")) %>% 
+  dplyr::distinct(campaignid,sample,family,genus,species) %>% # use this line to show specific drops OR
+  dplyr::filter(!species%in%c("spp","sp1","sp", "sp10")) %>% # Ignore spp in the report
   dplyr::glimpse()
 
 setwd(error.dir)
@@ -242,10 +220,10 @@ write.csv(maxn.species.not.previously.observed,file=paste(study,"maxn.species.no
 
 # Check Length for species that have not previously been observed in your region ----
 #maxn.species.not.previously.observed
-length.species.not.previously.observed<-master%>%
-  dplyr::anti_join(length,.,by=c("family","genus","species"))%>%
-  dplyr::distinct(campaignid,sample,family,genus,species)%>%
-  dplyr::filter(!species%in%c("spp"))%>% # Ignore spp in the report
+length.species.not.previously.observed <- master %>%
+  dplyr::anti_join(length,.,by=c("family","genus","species")) %>%
+  dplyr::distinct(campaignid,sample,family,genus,species) %>%
+  dplyr::filter(!species%in%c("spp")) %>% # Ignore spp in the report
   dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
@@ -255,16 +233,16 @@ write.csv(length.species.not.previously.observed,file=paste(study,"length.specie
 # Check Length measurements vs. maximum length in life.history----
 # 1. Create average max length for each family and each genus (used if species isn't in life history sheet e.g. Scarus spp) ---
 
-family.max.length<-master%>%
-  dplyr::filter(!is.na(fb.length_max))%>%
-  dplyr::group_by(family)%>%
-  dplyr::summarise(famlength_max=mean(fb.length_max))%>%
+family.max.length <- master %>%
+  dplyr::filter(!is.na(fb.length_max)) %>%
+  dplyr::group_by(family) %>%
+  dplyr::summarise(famlength_max=mean(fb.length_max)) %>%
   dplyr::ungroup()
 
-genus.max.length<-master%>%
-  dplyr::filter(!is.na(fb.length_max))%>%
-  dplyr::group_by(genus)%>%
-  dplyr::summarise(genuslength_max=mean(fb.length_max))%>%
+genus.max.length <- master %>%
+  dplyr::filter(!is.na(fb.length_max)) %>%
+  dplyr::group_by(genus) %>%
+  dplyr::summarise(genuslength_max=mean(fb.length_max)) %>%
   dplyr::ungroup()
 
 # 2. Create a new master list with family and genus average maximum length where missing species max.length ----
@@ -273,22 +251,22 @@ genus.max.length<-master%>%
 # In this example the minimum length is 15% of the maximum on fishbase, fish that are smaller will show up as an error ("too small").
 # you can change these values to be stricter (e.g. increase the minimum value and decrease the maximum) or more tolerant (decrease min and increase max) below.
 
-master.min.max<-left_join(master,family.max.length,by=c("family"))%>% # add in family values
-  dplyr::left_join(.,genus.max.length)%>% # add in genus values
-  dplyr::mutate(fb.length_max=ifelse((is.na(fb.length_max)),genuslength_max,fb.length_max))%>%
-  dplyr::mutate(fb.length_max=ifelse((is.na(fb.length_max)),famlength_max,fb.length_max))%>%
-  dplyr::select(-c(famlength_max,genuslength_max))%>%
-  dplyr::mutate(min.length=0.15*fb.length_max)%>% # change values here
-  dplyr::mutate(max.length=0.85*fb.length_max)%>% # change values here
+master.min.max <- left_join(master,family.max.length,by=c("family")) %>% # add in family values
+  dplyr::left_join(.,genus.max.length) %>% # add in genus values
+  dplyr::mutate(fb.length_max=ifelse((is.na(fb.length_max)),genuslength_max,fb.length_max)) %>%
+  dplyr::mutate(fb.length_max=ifelse((is.na(fb.length_max)),famlength_max,fb.length_max)) %>%
+  dplyr::select(-c(famlength_max,genuslength_max)) %>%
+  dplyr::mutate(min.length=0.15*fb.length_max) %>% # change values here
+  dplyr::mutate(max.length=0.85*fb.length_max) %>% # change values here
   dplyr::glimpse()
 
 # 3. Create list of wrong length, ordered by %error, for checking in .EMObs files or removing from data----
-wrong.length.taxa<-left_join(length,master.min.max,by=c("family","genus","species"))%>%
-  dplyr::filter(length<min.length|length>max.length)%>%
-  dplyr::mutate(reason=ifelse(length<min.length,"too small","too big"))%>%
-  dplyr::select(campaignid,sample,family,genus,species,length,min.length,max.length,fb.length_max,reason)%>%
-  dplyr::mutate(difference=ifelse(reason%in%c("too small"),(min.length-length),(length-max.length)))%>%
-  dplyr::mutate(percent.of.fb.max=(length/fb.length_max*100))%>%
+wrong.length.taxa <- left_join(length,master.min.max,by=c("family","genus","species")) %>%
+  dplyr::filter(length<min.length|length>max.length) %>%
+  dplyr::mutate(reason=ifelse(length<min.length,"too small","too big")) %>%
+  dplyr::select(campaignid,sample,family,genus,species,length,min.length,max.length,fb.length_max,reason) %>%
+  dplyr::mutate(difference=ifelse(reason%in%c("too small"),(min.length-length),(length-max.length))) %>%
+  dplyr::mutate(percent.of.fb.max=(length/fb.length_max*100) )%>%
   dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
@@ -303,24 +281,25 @@ write.csv(wrong.length.taxa,file=paste(study,"check.wrong.length.taxa.vs.life.hi
 # this is important if you use the 3D measurements (3D points and length) for abundance 
 # E.g. number above legal size
 
-length.sample <- length%>%distinct(campaignid,sample) # only examine samples where lengths were possible
+length.sample <- length %>%
+  distinct(campaignid,sample) # only examine samples where lengths were possible
 
 # summarise length and then compare to maxn
-taxa.maxn.vs.stereo.summary<-length%>%
-  dplyr::group_by(campaignid,sample,family,genus,species)%>%
-  dplyr::summarise(stereo.maxn=sum(number))%>%
-  dplyr::full_join(maxn)%>%
-  replace_na(list(maxn=0,stereo.maxn=0))%>%
-  dplyr::filter(!stereo.maxn==maxn)%>%
-  dplyr::mutate(percent.difference = (maxn-stereo.maxn)/maxn*100)%>%
-  dplyr::semi_join(length.sample)%>% # only keep ones where length was possible
-  replace_na(list(percent.difference=1))%>%
-  dplyr::filter(!percent.difference%in%c(0))%>% #only for those that have missing lengths
-  dplyr::mutate(difference=(maxn-stereo.maxn))%>%
-  dplyr::mutate(difference=abs(difference))%>%
-  dplyr::mutate(percent.difference=abs(percent.difference))%>%
-  dplyr::select(campaignid,sample,family,genus,species,maxn,stereo.maxn,difference,percent.difference)%>%
-  arrange(-difference)%>%
+taxa.maxn.vs.stereo.summary<-length %>%
+  dplyr::group_by(campaignid,sample,family,genus,species) %>%
+  dplyr::summarise(stereo.maxn=sum(number)) %>%
+  dplyr::full_join(maxn) %>%
+  replace_na(list(maxn=0,stereo.maxn=0)) %>%
+  dplyr::filter(!stereo.maxn==maxn) %>%
+  dplyr::mutate(percent.difference = (maxn-stereo.maxn)/maxn*100) %>%
+  dplyr::semi_join(length.sample) %>% # only keep ones where length was possible
+  replace_na(list(percent.difference=1)) %>%
+  dplyr::filter(!percent.difference%in%c(0)) %>% #only for those that have missing lengths
+  dplyr::mutate(difference=(maxn-stereo.maxn)) %>%
+  dplyr::mutate(difference=abs(difference)) %>%
+  dplyr::mutate(percent.difference=abs(percent.difference)) %>%
+  dplyr::select(campaignid,sample,family,genus,species,maxn,stereo.maxn,difference,percent.difference) %>%
+  arrange(-difference) %>%
   dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
@@ -334,48 +313,6 @@ ggplot(taxa.maxn.vs.stereo.summary,aes(x=maxn,y=stereo.maxn,label = paste(genus,
   geom_text(alpha=0.2)+theme_ga
 setwd(plots.dir)
 ggsave(file=paste(study,"check.stereo.vs.maxn.png",sep = "_"))
-
-############                STOP     AND    READ      NEXT      PART        ############     
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-############                STOP     AND    READ      NEXT      PART        ############    
-
-# We strongly encourage you to fix these errors at the source (i.e. EMObs), however, there may be observations that you want to keep in the raw data but not upload to Global Archive (i.e. seasnakes), that you can drop using the code below.
-# NOW check through the files in your "Errors to check" folder and make corrections to .EMObs / generic files and then re-run this script.
-# IF you are happy to proceed by removing the species, length and range errors here you can run the lines below and write the checked data 
-
-# # Drop errors from data ----
-# 
-# # CAUTION Standardise by Range if you wish  ----
-# length<-length%>%
-#   dplyr::filter(range<10000)%>%
-#   glimpse()
-# 
-# # CAUTION Remove taxa that don't match from the final data ----
-# maxn<-anti_join(maxn,maxn.species.not.previously.observed)
-# length<-anti_join(length,length.species.not.previously.observed)
-# 
-# # CAUTION Drop wrong lengths ----
-# drop.length<-wrong.length.taxa%>% # TO REMOVE LENGTHS OUTSIDE THE MIN/MAX OF MASTER LIST
-#   dplyr::distinct(family,genus,species,length)%>%
-#   dplyr::select(family,genus,species,length)%>%
-#   dplyr::mutate(key = paste(family,genus,species,length, sep = '_'))
-# 
-# length<-length%>%
-#   dplyr::mutate(key = paste(family,genus,species,length, sep = '_'))%>%
-#   dplyr::anti_join(drop.length,by="key")%>% # for dropping wrong.lengths
-#   dplyr::select(-c(key))%>%
-#   dplyr::glimpse()
 
 # WRITE FINAL checked data----
 setwd(to.be.checked.dir)
