@@ -68,7 +68,6 @@ allhab <- allhab %>%
 coordinates(allhab) <- ~longitude + latitude
 
 ders <- readRDS("data/spatial/rasters/bathymetry-derivatives.rds")
-names(ders) <- c("ga.depth", "detrended", "slope")
 plot(ders)
 allhab <- raster::extract(ders, allhab, sp = T)
 allhab <- as.data.frame(allhab)
@@ -96,7 +95,7 @@ ggplot(maxn.sum, aes(x = reorder(scientific, maxn), y = maxn)) +
   #Theme1+
   theme(axis.text.y = element_text(face = "italic"))+
   #theme_collapse+
-  scale_y_continuous(expand = expand_scale(mult = c(0, .1)))#+
+  scale_y_continuous(expand = expansion(mult = c(0, .1)))#+
 
 # Create total abundance and species richness ----
 ta.sr <- maxn %>%

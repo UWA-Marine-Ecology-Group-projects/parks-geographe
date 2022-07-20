@@ -12,15 +12,22 @@ library(stars)
 library(starsExtra)
 library(sf)
 
-bathy <- raster("data/spatial/rasters/GB_Bathy_250m_larger.tif")
-plot(bathy)
+wgscrs  <- CRS("+proj=longlat +datum=WGS84")
+
+# read in and merge GA coarse bathy tiles from https://ecat.ga.gov.au/geonetwork/srv/eng/catalog.search#/metadata/67703
+cbaths <- list.files("data/spatial/rasters", "*tile", full.names = TRUE)
+cbathy <- lapply(cbaths, function(x){read.table(file = x, header = TRUE, sep = ",")})
+cbathy <- do.call("rbind", lapply(cbathy, as.data.frame)) 
+cbathy <- cbathy[cbathy$Z <= 0, ]
+bath_r <- rasterFromXYZ(cbathy)
 
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp") %>%   # all aus mpas
   dplyr::filter(ResName %in% "Geographe")
 e <- extent(aumpa)
 
-sitebathy <- crop(bathy, e) # Crop the bathy to the extent of the Geographe MP
+sitebathy <- crop(bath_r, e) # Crop the bathy to the extent of the Geographe MP
 plot(sitebathy)
+proj4string(sitebathy) <- wgscrs
 
 # create terrain
 siteterr <- terrain(sitebathy, neighbours = 8, unit = "degrees",
@@ -36,7 +43,7 @@ plot(detre)
 
 # stack em up
 all_covs <- stack(sitebathy, detre[[1]], siteterr)
-names(all_covs) <- c("depth", "detrended", "slope")
+names(all_covs) <- c("ga.depth", "detrended", "slope")
 plot(all_covs)
 
 saveRDS(all_covs, 'data/spatial/rasters/bathymetry-derivatives.rds')
