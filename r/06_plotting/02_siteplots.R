@@ -60,21 +60,11 @@ st_crs(aus)         <- st_crs(aumpa)
 st_crs(wanew)       <- st_crs(nb_mp)
 
 # Get sampling data locations
-bruv2014 <- read.csv('data/raw/em export/2014-12_Geographe.Bay_stereoBRUVs_Metadata.csv') %>%
+bruv <- read.csv('data/staging/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv') %>%
   ga.clean.names() %>%
   dplyr::filter(successful.count %in% "Yes") %>%
   dplyr::select(sample, latitude, longitude) %>%
-  dplyr::mutate(campaignid = "2014-12_Geographe.Bay_stereoBRUVs",
-                method = "BRUV",
-                sample = as.character(sample)) %>%
-  glimpse()
-
-bruv2007 <- read.csv("data/raw/em export/2007-03_Capes.MF_stereoBRUVs_Metadata.csv")%>%
-  ga.clean.names() %>%
-  dplyr::filter(successful.count %in% "Yes", site %in% "Geographe.Bay") %>%
-  dplyr::select(sample, latitude, longitude) %>%
-  dplyr::mutate(campaignid = "2007-03_Capes.MF_stereoBRUVs",
-                method = "BRUV",
+  dplyr::mutate(method = "BRUV",
                 sample = as.character(sample)) %>%
   glimpse()
 
@@ -87,7 +77,7 @@ boss2021 <- read.csv("data/raw/em export/2021-03_Geographe_BOSS_Metadata.csv")%>
                 sample = as.character(sample)) %>%
   glimpse()
 
-points <- bind_rows(bruv2014, boss2021) # TOok out BRUV 2007 for now - check if we wil use this
+points <- bind_rows(bruv, boss2021) # TOok out BRUV 2007 for now - check if we wil use this
 
 # simplify zone names
 nb_nmp$ZoneName <- dplyr::recode(nb_nmp$ZoneName,
@@ -308,6 +298,12 @@ p3 <- ggplot() +
 png(file = "plots/spatial/site_overview_map.png", width = 10, height = 6, units = "in", res = 300)
 p3
 dev.off()
+
+test1 <- raster("data/spatial/rasters/Busselton_5m.tif")
+test2 <- raster("data/spatial/rasters/Naturaliste_5m.tif")
+testr <- raster::merge(test1, test2)
+plot(testr)
+
 
 # ggsave("plots/spatial/site_overview_map.png", dpi = 200, width = 10, height = 6)
 
