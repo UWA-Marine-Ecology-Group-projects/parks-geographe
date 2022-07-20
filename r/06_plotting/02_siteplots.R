@@ -299,12 +299,6 @@ png(file = "plots/spatial/site_overview_map.png", width = 10, height = 6, units 
 p3
 dev.off()
 
-test1 <- raster("data/spatial/rasters/Busselton_5m.tif")
-test2 <- raster("data/spatial/rasters/Naturaliste_5m.tif")
-testr <- raster::merge(test1, test2)
-plot(testr)
-
-
 # ggsave("plots/spatial/site_overview_map.png", dpi = 200, width = 10, height = 6)
 
 # jac's map, eh

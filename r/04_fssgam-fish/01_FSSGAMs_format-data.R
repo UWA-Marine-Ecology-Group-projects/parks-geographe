@@ -8,8 +8,7 @@
 
 rm(list=ls())
 
-# libraries----
-detach("package:plyr", unload=TRUE) # will error - don't worry
+# libraries---- SHOULD GO THROUGH AND CULL SOME OF THESE
 library(tidyr)
 library(dplyr)
 options(dplyr.width = Inf) # enables head() to display all coloums
@@ -37,46 +36,47 @@ name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
 # load and join datasets
 #MaxN
-bruv2007 <- read.csv("data/raw/em export/2007-03_Capes.MF_stereoBRUVs_Count.csv") %>%
-  glimpse()
-
-bruv2012 <- read.csv("data/raw/em export/")
-
-maxn <- read.csv("data/tidy/2014-12_Geographe.Bay_stereoBRUVs_maxn.summary_2022-07-19.csv")%>%
+maxn <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.maxn.csv")%>%
   glimpse()
 
 ### HASHED OUT THIS SECTION UNTIL LENGTHS HAVE BEEN FINISHED ----
 # length
-# boss.length <- read.csv("data/Tidy/2021-05_Abrolhos_BOSS.complete.length.csv")%>%
-#   dplyr::mutate(method = "BOSS")%>%
-#   glimpse()
 # 
-# bruv.length <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.length.csv")%>%
+# length <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.length.csv")%>%
 #   dplyr::mutate(method = "BRUV")%>%
-#   glimpse()
-
-# join
-# length <- bind_rows(boss.length,bruv.length)%>%
 #   dplyr::mutate(scientific = paste(family,genus,species, sep = " "))%>%
 #   glimpse()
 
-#habitat
-allhab <- readRDS("data/Tidy/merged_habitat.rds") %>%
+# Load in the habitat data
+allhab <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs_broad.habitat.csv") %>%
   ga.clean.names() %>%
   glimpse()
 
 allhab <- allhab %>%
-  transform(kelps = kelps / totalpts) %>%
-  transform(macroalgae = macroalgae / totalpts) %>%
-  transform(sand = sand / totalpts) %>%
-  transform(rock = rock / totalpts) %>%
-  transform(biog = biog / totalpts) %>%
+  transform(macroalgae = broad.macroalgae / broad.total.points.annotated) %>%
+  transform(sand = broad.unconsolidated / broad.total.points.annotated) %>%
+  transform(rock = broad.consolidated / broad.total.points.annotated) %>%
+  transform(inverts = (broad.sponges + broad.stony.corals) / broad.total.points.annotated) %>%
+  transform(seagrass = broad.seagrasses / broad.total.points.annotated) %>%
   glimpse()
+
+# 5 samples are NA for habitat, MF-GB101, MF-GB112 & MF-GB126 all good were missing in original
+# 13RC13 & GBR-BOB looks like habitat annotation has been missed 
+# Remove these from the fish data - pointless to include
+
+# Load in the bathy derivatives
+coordinates(allhab) <- ~longitude + latitude
+
+ders <- readRDS("data/spatial/rasters/bathymetry-derivatives.rds")
+names(ders) <- c("ga.depth", "detrended", "slope")
+plot(ders)
+allhab <- raster::extract(ders, allhab, sp = T)
+allhab <- as.data.frame(allhab)
 
 names(maxn)
 
-metadata <- maxn %>%
-  distinct(sample, method,latitude, longitude, date, time, location, status, site, 
+metadata <- maxn %>% # Why is this done in this way?
+  distinct(sample,latitude, longitude, date, time, location, status, site, 
            depth, observer, successful.count, successful.length)
 
 # look at top species ----
@@ -101,44 +101,35 @@ ggplot(maxn.sum, aes(x = reorder(scientific, maxn), y = maxn)) +
 # Create total abundance and species richness ----
 ta.sr <- maxn %>%
   dplyr::ungroup() %>%
-  dplyr::group_by(scientific,sample,method) %>%
+  dplyr::group_by(scientific,sample) %>%
   dplyr::summarise(maxn = sum(maxn)) %>%
   tidyr::spread(scientific, maxn, fill = 0) %>% 
   dplyr::ungroup() %>%
-  dplyr::mutate(total.abundance = rowSums(.[, 3:125], na.rm = TRUE )) %>% #Add in Totals
-  dplyr::mutate(species.richness = rowSums(.[, 3:(ncol(.))] > 0)) %>% # double check these
-  dplyr::select(sample, total.abundance, species.richness,method) %>%
+  dplyr::mutate(total.abundance = rowSums(.[, 2:(ncol(.))], na.rm = TRUE )) %>% #Add in Totals
+  dplyr::mutate(species.richness = rowSums(.[, 2:(ncol(.))] > 0)) %>% # double check these
+  dplyr::select(sample, total.abundance, species.richness) %>%
   tidyr::gather(., "scientific", "maxn", 2:3) %>%
   dplyr::glimpse()
+
+# nrow = 458 / 2 = 229 -- All good
 
 dat.maxn <- bind_rows(ta.sr) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
-  dplyr::filter(!scientific%in%c("targeted.abundance"))%>%
-  distinct()
+  dplyr::filter(!is.na(broad.macroalgae))
 
-testboss <- dat.maxn %>%
-  dplyr::filter(method%in%"BOSS")
-
-testbruv <- dat.maxn %>%
-  dplyr::filter(method%in%"BRUV")
-
-length(unique(testboss$sample))
-75*2
-length(unique(testbruv$sample))
-50*2
-
+length(unique(dat.maxn$sample))
+224*2 # Roger - all good
 
 unique(dat.maxn$scientific)
 
 # Set predictor variables---
 names(dat.maxn)
-names(allhab)
 
 pred.vars = c("depth", 
               "macroalgae", 
               "sand", 
-              "biog", 
+              "seagrass", 
               "relief",
               "tpi",
               "roughness",

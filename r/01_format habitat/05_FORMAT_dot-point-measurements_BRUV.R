@@ -51,41 +51,59 @@ metadata <- read.csv("data/staging/2007-2014-Geographe-stereo-BRUVs.checked.meta
 # Doesn't look like habitat has been annotated with codes meaning something else
 
 # Broad points
+# This data is missing a bunch of the 2007 annotations, so use their old ones
+# Both in the same grid format
+
+hab2007 <- read_delim("data/raw/tm export/2007-03_Capes.MF_stereoBRUVs_Habitat.point.score.txt") %>%
+  ga.clean.names() %>%
+  dplyr::select(sample, biota.consolidated, biota.macroalgae, biota.seagrasses, 
+                biota.sponges, biota.stony.corals, biota.unconsolidated) %>%
+  dplyr::rename(broad.consolidated = biota.consolidated, broad.macroalgae = biota.macroalgae,
+                broad.seagrasses = biota.seagrasses, broad.sponges = biota.sponges,
+                broad.stony.corals = biota.stony.corals, broad.unconsolidated = biota.unconsolidated) %>%
+  glimpse()
+
+test <- metadata %>% 
+  dplyr::filter(campaignid %in% "2007-03_Capes.MF_stereoBRUVs") %>%
+  anti_join(hab2007) # 3 samples missing habitat, MF-GB101, MF-GB112 & MF-GB126
+
 broad.points <- habitat %>%
   dplyr::select(-c(morphology, type, fine)) %>%
-  dplyr::filter(!broad%in%c("", NA, "Open Water", "Unknown", "Unscorable")) %>%
+  dplyr::filter(!broad%in%c("", NA, " Open Water", " Unknown", "Unscorable", " Unknown sp1", " Unknown sp2", "Open Water")) %>%
   dplyr::mutate(broad=paste("broad",broad,sep = "."))%>%
   dplyr::mutate(count = 1) %>%
   dplyr::group_by(sample) %>%
   tidyr::pivot_wider(names_from = broad, values_from = count, values_fill = 0) %>% # New version of tidyr::spread
   dplyr::select(-c(point.id)) %>%
+  dplyr::filter(!sample %in% c("MF-GB113", "MF-GB128")) %>% 
   ungroup()%>%
   dplyr::group_by(sample) %>%
   dplyr::summarise_all(funs(sum)) %>%
   ungroup() %>%
   ga.clean.names() %>%
+  bind_rows(hab2007) %>%
   dplyr::mutate(broad.total.points.annotated=rowSums(.[,2:(ncol(.))],na.rm = TRUE ))%>% 
   glimpse()
 
 # Detailed points
-detailed.points <- habitat %>%
-  dplyr::filter(!morphology%in%c("",NA,"Unknown")) %>%
-  dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
-  dplyr::mutate(morphology=paste("detailed",broad,morphology,type, fine,sep = "."))%>%
-  mutate_at("morphology", str_replace, ".NA", "") %>%
-  mutate_at("morphology", str_replace, ".NA", "") %>%                           # Some have double NAs
-  # mutate_at("morphology", str_replace, " \\s*\\([^\\)]+\\)", "") %>%
-  # dplyr::mutate(morphology=str_replace_all(.$morphology, c(".NA"="","[^[:alnum:] ]"="."," "="","10mm.."="10mm.")))%>%
-  dplyr::select(-c(broad,type, fine))%>%
-  dplyr::mutate(count=1)%>%
-  dplyr::group_by(sample)%>%
-  spread(key=morphology,value=count,fill=0)%>%
-  dplyr::select(-c(point.id))%>%
-  dplyr::group_by(sample)%>%
-  dplyr::summarise_all(funs(sum))%>%
-  dplyr::mutate(detailed.total.points.annotated=rowSums(.[,2:(ncol(.))],na.rm = TRUE ))%>%
-  ga.clean.names()%>%
-  glimpse()
+# detailed.points <- habitat %>%
+#   dplyr::filter(!morphology%in%c("",NA,"Unknown")) %>%
+#   dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
+#   dplyr::mutate(morphology=paste("detailed",broad,morphology,type, fine,sep = "."))%>%
+#   mutate_at("morphology", str_replace, ".NA", "") %>%
+#   mutate_at("morphology", str_replace, ".NA", "") %>%                           # Some have double NAs
+#   # mutate_at("morphology", str_replace, " \\s*\\([^\\)]+\\)", "") %>%
+#   # dplyr::mutate(morphology=str_replace_all(.$morphology, c(".NA"="","[^[:alnum:] ]"="."," "="","10mm.."="10mm.")))%>%
+#   dplyr::select(-c(broad,type, fine))%>%
+#   dplyr::mutate(count=1)%>%
+#   dplyr::group_by(sample)%>%
+#   spread(key=morphology,value=count,fill=0)%>%
+#   dplyr::select(-c(point.id))%>%
+#   dplyr::group_by(sample)%>%
+#   dplyr::summarise_all(funs(sum))%>%
+#   dplyr::mutate(detailed.total.points.annotated=rowSums(.[,2:(ncol(.))],na.rm = TRUE ))%>%
+#   ga.clean.names()%>%
+#   glimpse()
 
 # Save broad habitat types ----
 
@@ -94,11 +112,15 @@ broad.hab <- metadata %>%
   dplyr::mutate(campaignid = study) %>%
   glimpse()
 
-detailed.hab <- detailed.points %>%
-  left_join(metadata, by = "sample") %>%
-  dplyr::mutate(campaignid = study) %>%
-  glimpse()
+test <- broad.hab %>% # Only a few 2007 samples got annotated
+  group_by(sample) %>%
+  dplyr::summarise(n = n()) # No duplicated samples using old and new annotations
+
+# detailed.hab <- detailed.points %>%
+#   left_join(metadata, by = "sample") %>%
+#   dplyr::mutate(campaignid = study) %>%
+#   glimpse()
 
 write.csv(broad.hab,paste("data/tidy", sep = "/",paste(study,"broad.habitat.csv",sep="_")),row.names = FALSE)
-write.csv(detailed.hab,paste("data/tidy/Archive", sep = "/",paste(study,"detailed.habitat.csv",sep="_")),row.names = FALSE)
+# write.csv(detailed.hab,paste("data/tidy/Archive", sep = "/",paste(study,"detailed.habitat.csv",sep="_")),row.names = FALSE)
 
