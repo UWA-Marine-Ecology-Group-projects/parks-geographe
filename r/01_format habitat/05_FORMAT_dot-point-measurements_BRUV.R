@@ -1,5 +1,3 @@
-##### NEED TO RUN AGAIN WITH TIDY METADATA
-
 ###
 # Project: parks - geographe bay synthesis
 # Data:    2007 & 2014 stereo-BRUVs
@@ -45,7 +43,7 @@ habitat <- read.csv("data/raw/reefcloud export/BRUVs/stereo-BRUVs_PointTags.csv"
 names(habitat)
 
 # Metadata ----
-metadata <- read.csv("data/staging/2007-2014-Geographe-stereo-BRUVs.csv")%>%
+metadata <- read.csv("data/staging/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv")%>%
   glimpse()
 
 # CREATE catami point score------
@@ -89,18 +87,10 @@ detailed.points <- habitat %>%
   ga.clean.names()%>%
   glimpse()
 
-# Trying to qork out regex ---- 
-# test <- habitat %>%
-#     dplyr::filter(!morphology%in%c("",NA,"Unknown")) %>%
-#     dplyr::filter(!broad%in%c("",NA,"Unknown","Open.Water", "Unscorable"))%>%
-#     dplyr::mutate(morphology=paste("detailed",broad,morphology,type, fine,sep = "."))%>%
-#     mutate_at("morphology", str_replace, ".NA", "") %>%
-#     mutate_at("morphology", str_replace, " \\([[:Caab:]]\\s[:digit:]{8}\\)\\.", "") # lok for space then bracket, then anything but the secon bracket, and then second bracket and fullstop
-
 # Save broad habitat types ----
 
-broad.hab <- broad.points %>%
-  left_join(metadata, by = "sample") %>%
+broad.hab <- metadata %>%
+  left_join(broad.points, by = "sample") %>%
   dplyr::mutate(campaignid = study) %>%
   glimpse()
 
@@ -110,5 +100,5 @@ detailed.hab <- detailed.points %>%
   glimpse()
 
 write.csv(broad.hab,paste("data/tidy", sep = "/",paste(study,"broad.habitat.csv",sep="_")),row.names = FALSE)
-write.csv(detailed.hab,paste("data/tidy", sep = "/",paste(study,"detailed.habitat.csv",sep="_")),row.names = FALSE)
+write.csv(detailed.hab,paste("data/tidy/Archive", sep = "/",paste(study,"detailed.habitat.csv",sep="_")),row.names = FALSE)
 
