@@ -1,15 +1,14 @@
 ###
-# Project: Parks - Abrolhos
-# Data:    BOSS & BRUV fish, habitat
-# Task:    Modelling fish abundance w/ FSSGAM
-# author:  Claude, Brooke, Kingsley
-# date:    Nov-Dec 2021
+# Project: Parks - Geographe synthesis 
+# Data:    BRUV fish
+# Task:    Run FSS-GAM for total abundance and species richness maxn metrics
+# author:  Claude
+# date:    July 2022
 ##
 
 rm(list=ls())
 
 # libraries----
-detach("package:plyr", unload=TRUE)#will error - don't worry
 library(tidyr)
 library(dplyr)
 options(dplyr.width = Inf) #enables head() to display all coloums
@@ -27,22 +26,21 @@ library(FSSgam)
 library(GlobalArchive)
 library(ggplot2)
 
-## Setup ----
-# set your working directory (manually, once for the whole R project)
-# use the 'files' tab to set wd in '~/parks-abrolhos' manually (your relative path) then run this line (if we need it?)
+# Set working directory
 working.dir <- getwd()
 setwd(working.dir)
-name <- "2021-05_Abrolhos_npz6"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
-dat <- readRDS("data/Tidy/dat.maxn.rds")%>%
-  dplyr::filter(location%in%"NPZ6")%>%
+dat <- readRDS("data/tidy/fss-gam-data-ta.sr.rds")%>%
   glimpse()
 
-# # Re-set the predictors for modeling----
-pred.vars <- c("depth", "macroalgae",
-               "biog", "relief","tpi","roughness","detrended") 
+# Re-set the predictors for modeling----
+names(dat)
 
-# Check to make sure Response vector has not more than 80% zeros----
+pred.vars <- c("depth", "macroalgae", "sand",
+               "seagrass", "mean.relief","slope","detrended") 
+
+# Check to make sure Response vector has not more than 90% zeros----
 unique.vars <- unique(as.character(dat$scientific))
 
 resp.vars <- character()
@@ -55,12 +53,10 @@ resp.vars
 
 # Run the full subset model selection----
 savedir <- "output/fssgam - fish"
-use.dat <- as.data.frame(dat) 
+use.dat <- as.data.frame(dat) # Seems a bit pointless this line innit
 str(use.dat)
 
-is.na(dat$status) 
-
-factor.vars <- c("status")# Status as a factors with 2 levels
+# factor.vars <- c("status") # Status as a factors with 2 levels - I think we shouldn't have this in here
 out.all     <- list()
 var.imp     <- list()
 
@@ -69,23 +65,21 @@ str(use.dat)
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
   use.dat <- as.data.frame(dat[which(dat$scientific == resp.vars[i]), ])
-  use.dat$method <- as.factor(use.dat$method)
-  use.dat$location <- as.factor(use.dat$location)
   Model1  <- gam(maxn ~ s(depth, k = 3, bs='cr'),
                  family = tw(),  data = use.dat)
   
   model.set <- generate.model.set(use.dat = use.dat,
                                   test.fit = Model1,
                                   pred.vars.cont = pred.vars,
-                                  pred.vars.fact = factor.vars,
+                                  # pred.vars.fact = factor.vars,
                                   linear.vars = "depth",
                                   k = 3,
-                                  factor.smooth.interactions = F,
-                                  null.terms="method"
+                                  factor.smooth.interactions = F
   )
   out.list <- fit.model.set(model.set,
                             max.models = 600,
-                            parallel = T)
+                            parallel = T, 
+                            n.cores = 8)
   names(out.list)
   
   out.list$failed.models # examine the list of failed models

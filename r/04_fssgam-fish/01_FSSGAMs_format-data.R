@@ -1,7 +1,7 @@
 ###
 # Project: Parks - Geographe synthesis 
 # Data:    BRUV fish
-# Task:    Join 2 BRUV campaigns
+# Task:    Format data for FSS-GAM
 # author:  Claude
 # date:    July 2022
 ##
@@ -25,6 +25,8 @@ library(RCurl) # needed to download data from GitHub
 library(FSSgam)
 library(GlobalArchive)
 library(ggplot2)
+library(sp)
+library(corrr)
 
 ## Setup ----
 # set your working directory (manually, once for the whole R project)
@@ -72,6 +74,9 @@ plot(ders)
 allhab <- raster::extract(ders, allhab, sp = T)
 allhab <- as.data.frame(allhab)
 
+# Save this out for use later
+saveRDS(allhab, file = "data/tidy/habitat-derivatives-tidy.rds")
+
 names(maxn)
 
 metadata <- maxn %>% # Why is this done in this way?
@@ -110,36 +115,45 @@ ta.sr <- maxn %>%
   tidyr::gather(., "scientific", "maxn", 2:3) %>%
   dplyr::glimpse()
 
-# nrow = 458 / 2 = 229 -- All good
+# nrow = 458 / 2 = 229 -- All good - but have some missing habitat so need to remove those
 
 dat.maxn <- bind_rows(ta.sr) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
-  dplyr::filter(!is.na(broad.macroalgae))
+  dplyr::filter(!is.na(broad.macroalgae)) %>%
+  dplyr::mutate(depth = as.numeric(depth), # Warning is fine - converts "N/A" value to actual NA
+                ga.depth = abs(ga.depth)) %>%
+  dplyr::mutate(depth = ifelse(is.na(depth), ga.depth, depth)) # Use GA depth for the sample missing depth
 
 length(unique(dat.maxn$sample))
 224*2 # Roger - all good
 
-unique(dat.maxn$scientific)
+unique(dat.maxn$scientific) # 2 responses, total abundance and species richness
 
 # Set predictor variables---
 names(dat.maxn)
-
+glimpse(dat.maxn)
 pred.vars = c("depth", 
               "macroalgae", 
               "sand", 
-              "seagrass", 
-              "relief",
-              "tpi",
-              "roughness",
+              "rock",
+              "seagrass",
+              "inverts",
+              "mean.relief",
+              "slope",
               "detrended") 
 
 # predictor variables Removed at first pass---
-# broad.Sponges and broad.Octocoral.Black and broad.Consolidated 
+# Don't think there are bugger all sponges or corals in geo bay, didn't include
 
 # Check for correlation of predictor variables- remove anything highly correlated (>0.95)---
+# Correlation filtered by greater than 0.8
+correlate(combined.maxn[,pred.vars], use = "complete.obs") %>%  
+  gather(-term, key = "colname", value = "cor") %>% 
+  dplyr::filter(abs(cor) > 0.8) %>%
+  dplyr::filter(row_number() %% 2 == 1)      #Remove every second row, they are just duplicates
+# None - check on full correlation table
 round(cor(dat.maxn[,pred.vars]), 2)
-# nothing is highly correlated 
 
 # Plot of likely transformations - thanks to Anna Cresswell for this loop!
 par(mfrow = c(3, 2))
@@ -154,15 +168,18 @@ for (i in pred.vars) {
   plot(log(x + 1))
 }
 
-#all looks fine
-#write data to load in to next script
-saveRDS(dat.maxn, "data/Tidy/dat.maxn.rds")
+# Barely any inverts - exclude
+# Barely any rock - exclude
+# Everything else looks good untransformed
 
-#lengths
+# Write data to load in to next script
+saveRDS(dat.maxn, "data/tidy/fss-gam-data-ta.sr.rds")
+
+#lengths - NOT RAN YET
 # Create abundance of all recreational fished species ----
 url <- "https://docs.google.com/spreadsheets/d/1SMLvR9t8_F-gXapR2EemQMEPSw_bUbPLcXd3lJ5g5Bo/edit?ts=5e6f36e2#gid=825736197"
 
-master<-googlesheets4::read_sheet(url)%>%
+master <- googlesheets4::read_sheet(url)%>%
   ga.clean.names()%>%
   filter(grepl('Australia', global.region))%>% # Change country here
   dplyr::select(family,genus,species,fishing.type,australian.common.name,minlegal.wa)%>%

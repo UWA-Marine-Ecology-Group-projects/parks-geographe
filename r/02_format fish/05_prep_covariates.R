@@ -6,6 +6,8 @@
 # date:    July 2022
 ##
 
+rm(list = ls())
+
 library(dplyr)
 library(raster)
 library(stars)
@@ -23,9 +25,10 @@ bath_r <- rasterFromXYZ(cbathy)
 
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp") %>%   # all aus mpas
   dplyr::filter(ResName %in% "Geographe")
-e <- extent(aumpa)
+aumpa <- sf::as_Spatial(aumpa)
+aumpa
 
-sitebathy <- crop(bath_r, e) # Crop the bathy to the extent of the Geographe MP
+sitebathy <- crop(bath_r, buffer(aumpa, width = 0.05)) # Crop the bathy to the extent of the Geographe MP plus a 0.05 degree buffer
 plot(sitebathy)
 proj4string(sitebathy) <- wgscrs
 

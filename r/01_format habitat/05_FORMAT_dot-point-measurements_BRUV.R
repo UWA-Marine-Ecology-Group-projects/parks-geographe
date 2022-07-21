@@ -106,13 +106,52 @@ broad.points <- habitat %>%
 #   glimpse()
 
 # Save broad habitat types ----
+# Relief
+relief2007 <- read.delim("data/raw/tm export/2007-03_Capes.MF_stereoBRUVs_Habitat.point.score.txt") %>%
+  dplyr::select(1:6) %>%
+  ga.clean.names() %>%
+  pivot_longer(cols = starts_with("relief"), names_to = "relief.score", values_to = "count") %>%
+  dplyr::mutate(relief.rank=ifelse(relief.score=="relief.0.flat.substrate.sandy.rubble.with.few.features.0.substrate.slope.",0,
+                                   ifelse(relief.score=="relief.1.some.relief.features.amongst.mostly.flat.substrate.sand.rubble.45.degree.substrate.slope.",1,
+                                          ifelse(relief.score=="relief.2.mostly.relief.features.amongst.some.flat.substrate.or.rubble.45.substrate.slope.",2,
+                                                 ifelse(relief.score=="relief.3.good.relief.structure.with.some.overhangs.45.substrate.slope.",3,
+                                                        ifelse(relief.score=="relief.4.high.structural.complexity.fissures.and.caves.vertical.wall.90.substrate.slope.",4,relief.score))))))%>%
+  dplyr::select(-c(relief.score))%>%
+  tidyr::uncount(count) %>%
+  dplyr::mutate(relief.rank=as.numeric(relief.rank))%>%
+  dplyr::group_by(sample)%>%
+  dplyr::summarise(mean.relief= mean (relief.rank), sd.relief= sd (relief.rank))%>%
+  dplyr::ungroup()%>%
+  glimpse()
+
+relief2014 <- read.delim("data/raw/tm export/2014-12_Geographe.Bay_Habitat.point.score.txt") %>%
+  dplyr::select(1, 4:8) %>%
+  ga.clean.names() %>%
+  dplyr::rename(sample = opcode) %>%
+  pivot_longer(cols = starts_with("relief"), names_to = "relief.score", values_to = "count") %>%
+  dplyr::mutate(relief.rank=ifelse(relief.score=="relief.0.flat.substrate.sandy.rubble.with.few.features.0.substrate.slope.",0,
+                                   ifelse(relief.score=="relief.1.some.relief.features.amongst.mostly.flat.substrate.sand.rubble.45.degree.substrate.slope.",1,
+                                          ifelse(relief.score=="relief.2.mostly.relief.features.amongst.some.flat.substrate.or.rubble.45.substrate.slope.",2,
+                                                 ifelse(relief.score=="relief.3.good.relief.structure.with.some.overhangs.45.substrate.slope.",3,
+                                                        ifelse(relief.score=="relief.4.high.structural.complexity.fissures.and.caves.vertical.wall.90.substrate.slope.",4,relief.score))))))%>%
+  dplyr::select(-c(relief.score))%>%
+  tidyr::uncount(count) %>%
+  dplyr::mutate(relief.rank=as.numeric(relief.rank))%>%
+  dplyr::group_by(sample)%>%
+  dplyr::summarise(mean.relief= mean (relief.rank), sd.relief= sd (relief.rank))%>%
+  dplyr::ungroup()%>%
+  glimpse()
+
+relief <- bind_rows(relief2007, relief2014)
 
 broad.hab <- metadata %>%
   left_join(broad.points, by = "sample") %>%
+  left_join(relief) %>%
   dplyr::mutate(campaignid = study) %>%
+  dplyr::filter(!is.na(broad.total.points.annotated)) %>%
   glimpse()
 
-test <- broad.hab %>% # Only a few 2007 samples got annotated
+test <- broad.hab %>% # 224 samples
   group_by(sample) %>%
   dplyr::summarise(n = n()) # No duplicated samples using old and new annotations
 
