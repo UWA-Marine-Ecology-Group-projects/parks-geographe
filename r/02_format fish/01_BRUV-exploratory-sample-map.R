@@ -93,7 +93,7 @@ broaddf <- as.data.frame(broad, xy = T, na.rm = T)
 
 
 p2 <- ggplot() +
-  geom_tile(data = broaddf, aes(x = x, y = y, fill = GB_Bathy_250m)) +
+  # geom_tile(data = broaddf, aes(x = x, y = y, fill = GB_Bathy_250m)) +
   geom_tile(data = lidardf, aes(x = x, y = y, fill = depth)) +
   scale_fill_gradientn(colours = terrain.colors(10)) +
   geom_point(data = metadata, aes(x = longitude, y = latitude)) + #, color = uwa.analysis.completed, pch = suspect.annotation
