@@ -14,7 +14,7 @@ sf_use_s2(T)
 
 metadata <- read.csv("data/raw/em export/2014-12_Geographe.Bay_stereoBRUVs_Metadata.csv") %>%
   ga.clean.names() %>%
-  dplyr::select(sample, maxn.analyst, curtin.observer, status, successful.count, latitude, longitude) %>%
+  dplyr::select(sample, maxn.analyst, curtin.observer, status, successful.count, latitude, longitude, depth) %>%
   dplyr::filter(successful.count%in%"Yes") %>%
   glimpse()
 
@@ -86,15 +86,18 @@ p1 # We don't have lidar everywhere
 dev.off()
 
 # Load in the broad bathy as well
-broad <- raster("data/spatial/rasters/GB_Bathy_250m.tif")
-plot(broad)
+# broad <- raster("data/spatial/rasters/GB_Bathy_250m.tif")
+# plot(broad)
+# 
+# broaddf <- as.data.frame(broad, xy = T, na.rm = T)
 
-broaddf <- as.data.frame(broad, xy = T, na.rm = T)
-
+sat <- raster("data/spatial/rasters/S2_2021_Satellite_derived_Bathy_GeographeBay_10m.tif")
+satdf <- as.data.frame(sat, xy = T, na.rm = T) %>%
+  dplyr::rename(depth = S2_2021_Satellite_derived_Bathy_GeographeBay_10m)
 
 p2 <- ggplot() +
-  # geom_tile(data = broaddf, aes(x = x, y = y, fill = GB_Bathy_250m)) +
-  geom_tile(data = lidardf, aes(x = x, y = y, fill = depth)) +
+  geom_tile(data = satdf, aes(x = x, y = y, fill = depth)) +
+  # geom_tile(data = lidardf, aes(x = x, y = y, fill = depth)) +
   scale_fill_gradientn(colours = terrain.colors(10)) +
   geom_point(data = metadata, aes(x = longitude, y = latitude)) + #, color = uwa.analysis.completed, pch = suspect.annotation
   # scale_color_manual(values = c("Yes" = "black", "No" = "red")) +
@@ -116,6 +119,12 @@ png(file="plots/spatial/2014-12_stereoBRUVs-sample-map-w-lidar-broad.png",
 p2 # We don't have lidar everywhere
 
 dev.off()
+
+# Load in the bathy derivatives
+coordinates(metadata) <- ~longitude + latitude
+
+test <- raster::extract(sat, metadata, sp = T)
+test <- as.data.frame(test)
 
 # ONLY NEEDED TO RUN THIS ONCE
 
