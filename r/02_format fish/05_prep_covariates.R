@@ -91,6 +91,7 @@ all_covs_lidar <- stack(sitebathy, detre[[1]], siteterr)
 names(all_covs_lidar) <- c("lidar.depth", "detrended", "slope")
 plot(all_covs_lidar)
 
+# Too big to push all together
 saveRDS(all_covs_lidar[[1]], 'data/spatial/rasters/site_lidar_depth.rds')
 saveRDS(all_covs_lidar[[2]], 'data/spatial/rasters/site_lidar_detrended.rds')
 saveRDS(all_covs_lidar[[3]], 'data/spatial/rasters/site_lidar_slope.rds')
