@@ -58,9 +58,12 @@ metadata <- ga.list.files("_Metadata.csv") %>% # list all files ending in "_Meta
   dplyr::filter(successful.count%in%"Yes")%>%
   glimpse()
 
+ggplot() + 
+  geom_point(data = metadata, aes(x = longitude, y = latitude, color = campaignid))
+
 # We are missing commonwealth zone for the 2007 BRUV campaign
 raw.metadata <- metadata %>%
-  dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it (:)
+  dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it :)
 
 # Spatial files ----
 setwd(working.dir)
@@ -79,10 +82,9 @@ metadata.commonwealth.marineparks <- over(metadata, commonwealth.marineparks) %>
 
 metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks)%>%
   dplyr::rename(commonwealth.zone=ZoneName)%>%
-  mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) %>%
-  dplyr::filter(!is.na(commonwealth.zone)) # Don't care about samples outside of commonwealth zone
+  mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) 
   
-length(unique(metadata$sample)) # 229 
+length(unique(metadata$sample)) # 249 
 
 double.ups <- metadata %>%
   dplyr::group_by(sample) %>%
@@ -136,7 +138,7 @@ maxn <- points2012 %>%
   dplyr::filter(successful.count%in%"Yes") %>%
   dplyr::ungroup()
 
-length(unique(maxn$sample)) #229
+length(unique(maxn$sample)) #249
 
 no.fish <- anti_join(metadata,maxn) # none
 

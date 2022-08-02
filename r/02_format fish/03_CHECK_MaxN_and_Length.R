@@ -57,7 +57,7 @@ maxn <- read_csv(paste(study,"maxn.csv",sep="_"))%>%
 
 # Check that there is no fish with family unknown
 
-length(unique(maxn$sample)) # 229
+length(unique(maxn$sample)) # 249
 
 # Import length/3d file----
 length <- read_csv(file = paste(study,"length3dpoints.csv",sep = "_"), na = c("", " "))%>%
@@ -74,7 +74,7 @@ length <- read_csv(file = paste(study,"length3dpoints.csv",sep = "_"), na = c(""
   dplyr::mutate(length = ifelse(family%in%'Dasyatidae',NA,length))%>%
   dplyr::glimpse()
 
-length(unique(length$sample)) # 277
+length(unique(length$sample)) 
 
 # BASIC checks----
 # Check if we have 3d points (Number) in addition to length----
@@ -207,13 +207,15 @@ maxn.species.not.previously.observed <- master %>%
 
 maxn <- maxn %>%
   dplyr::mutate(species = ifelse(genus %in% "Trygonorrhina" & species %in% "fasciata", "dumerilii", species)) %>%
+  dplyr::mutate(species = ifelse(genus %in% "Pelates" & species %in% "sexlineatus", "octolineatus", species)) %>%
+  dplyr::mutate(family = ifelse(genus %in% "Neosebastes" & species %in% "pandus", "Neosebastidae", family)) %>%
   glimpse()
 
 maxn.species.not.previously.observed <- master %>%
   dplyr::anti_join(maxn,.,by = c("family","genus","species")) %>% 
   dplyr::distinct(campaignid,sample,family,genus,species) %>% # use this line to show specific drops OR
   dplyr::filter(!species%in%c("spp","sp1","sp", "sp10")) %>% # Ignore spp in the report
-  dplyr::glimpse()
+  dplyr::glimpse() # All good now
 
 setwd(error.dir)
 write.csv(maxn.species.not.previously.observed,file=paste(study,"maxn.species.not.previously.observed.csv",sep = "."), row.names=FALSE)
@@ -315,10 +317,10 @@ setwd(plots.dir)
 ggsave(file=paste(study,"check.stereo.vs.maxn.png",sep = "_"))
 
 # WRITE FINAL checked data----
-setwd(to.be.checked.dir)
-dir()
-
+setwd(tidy.dir)
 write.csv(metadata, file=paste(study,"checked.metadata.csv",sep = "."), row.names=FALSE)
+
+setwd(to.be.checked.dir)
 write.csv(maxn, file=paste(study,"checked.maxn.csv",sep = "."), row.names=FALSE)
 write.csv(length, file=paste(study,"checked.length.csv",sep = "."), row.names=FALSE)
 
