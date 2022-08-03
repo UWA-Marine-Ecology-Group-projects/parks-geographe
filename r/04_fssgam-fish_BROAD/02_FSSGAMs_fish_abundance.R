@@ -29,7 +29,7 @@ library(ggplot2)
 # Set working directory
 working.dir <- getwd()
 setwd(working.dir)
-name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs-broad"  # set study name
 
 dat <- readRDS("data/tidy/fss-gam-data-ta.sr.rds")%>%
   glimpse()

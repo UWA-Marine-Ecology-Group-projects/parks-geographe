@@ -57,7 +57,7 @@ maxn <- read_csv(paste(study,"maxn.csv",sep="_"))%>%
 
 # Check that there is no fish with family unknown
 
-length(unique(maxn$sample)) # 249
+length(unique(maxn$sample)) # 307
 
 # Import length/3d file----
 length <- read_csv(file = paste(study,"length3dpoints.csv",sep = "_"), na = c("", " "))%>%
@@ -215,7 +215,7 @@ maxn.species.not.previously.observed <- master %>%
   dplyr::anti_join(maxn,.,by = c("family","genus","species")) %>% 
   dplyr::distinct(campaignid,sample,family,genus,species) %>% # use this line to show specific drops OR
   dplyr::filter(!species%in%c("spp","sp1","sp", "sp10")) %>% # Ignore spp in the report
-  dplyr::glimpse() # All good now
+  dplyr::glimpse() # All good now - U. lineatus we probably called vlamingii - change?
 
 setwd(error.dir)
 write.csv(maxn.species.not.previously.observed,file=paste(study,"maxn.species.not.previously.observed.csv",sep = "."), row.names=FALSE)

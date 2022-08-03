@@ -1,6 +1,6 @@
 ###
 # Project: Parks - Geographe synthesis 
-# Data:    BRUV fish
+# Data:    BRUV fish & LiDAR bathymetry
 # Task:    Run FSS-GAM for total abundance and species richness maxn metrics
 # author:  Claude
 # date:    July 2022
@@ -29,9 +29,9 @@ library(ggplot2)
 # Set working directory
 working.dir <- getwd()
 setwd(working.dir)
-name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name
 
-dat <- readRDS("data/tidy/fss-gam-data-ta.sr.rds")%>%
+dat <- readRDS("data/tidy/fss-gam-data-ta.sr-lidar.rds")%>%
   glimpse()
 
 # Re-set the predictors for modeling----

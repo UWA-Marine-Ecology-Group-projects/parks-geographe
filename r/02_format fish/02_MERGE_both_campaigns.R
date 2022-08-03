@@ -84,12 +84,12 @@ metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks)%>%
   dplyr::rename(commonwealth.zone=ZoneName)%>%
   mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) 
   
-length(unique(metadata$sample)) # 249 
+length(unique(metadata$sample)) # 307 
 
 double.ups <- metadata %>%
   dplyr::group_by(sample) %>%
   dplyr::summarise(n=n()) %>%
-  dplyr::filter(n>1) # 10005 & 107 were duplicated but fixed - down as unsuccessful count = "No"
+  dplyr::filter(n>1) # 10005 & 107 were duplicated but fixed - down as successful count = "No"
 
 setwd(staging.dir)
 write.csv(metadata,paste(study,"metadata.csv",sep="_"),row.names = FALSE)
@@ -138,7 +138,7 @@ maxn <- points2012 %>%
   dplyr::filter(successful.count%in%"Yes") %>%
   dplyr::ungroup()
 
-length(unique(maxn$sample)) #249
+length(unique(maxn$sample)) # 307
 
 no.fish <- anti_join(metadata,maxn) # none
 

@@ -34,7 +34,7 @@ library(corrr)
 working.dir <- getwd()
 setwd(working.dir)
 
-name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs-broad"  # set study name
 
 # load and join datasets
 #MaxN
@@ -70,18 +70,21 @@ allhab <- allhab %>%
 coordinates(allhab) <- ~longitude + latitude
 
 ders <- readRDS("data/spatial/rasters/bathymetry-derivatives.rds")
-plot(ders)
+# plot(ders)
 allhab <- raster::extract(ders, allhab, sp = T)
-allhab <- as.data.frame(allhab)
+allhab <- as.data.frame(allhab) %>%
+  dplyr::mutate(depth = ifelse(depth %in% "N/A", ga.depth, depth)) %>%
+  dplyr::mutate(depth = abs(as.numeric(depth)),
+                ga.depth = abs(as.numeric(ga.depth)))
 
 # Save this out for use later
 saveRDS(allhab, file = "data/tidy/habitat-derivatives-tidy.rds")
 
 names(maxn)
 
-metadata <- maxn %>% # Why is this done in this way?
+metadata <- maxn %>% 
   distinct(sample,latitude, longitude, date, time, location, status, site, 
-           depth, observer, successful.count, successful.length)
+           observer, successful.count, successful.length)
 
 # look at top species ----
 maxn.sum <- maxn %>%
@@ -120,13 +123,10 @@ ta.sr <- maxn %>%
 dat.maxn <- bind_rows(ta.sr) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
-  dplyr::filter(!is.na(broad.macroalgae)) %>%
-  dplyr::mutate(depth = as.numeric(depth), # Warning is fine - converts "N/A" value to actual NA
-                ga.depth = abs(ga.depth)) %>%
-  dplyr::mutate(depth = ifelse(is.na(depth), ga.depth, depth)) # Use GA depth for the sample missing depth
+  dplyr::filter(!is.na(broad.macroalgae))
 
-length(unique(dat.maxn$sample))
-224*2 # Roger - all good
+length(unique(dat.maxn$sample)) # 295 - excluding some that don't have habitat
+295*2 # Roger - all good
 
 unique(dat.maxn$scientific) # 2 responses, total abundance and species richness
 
@@ -148,7 +148,7 @@ pred.vars = c("depth",
 
 # Check for correlation of predictor variables- remove anything highly correlated (>0.95)---
 # Correlation filtered by greater than 0.8
-correlate(combined.maxn[,pred.vars], use = "complete.obs") %>%  
+correlate(dat.maxn[,pred.vars], use = "complete.obs") %>%  
   gather(-term, key = "colname", value = "cor") %>% 
   dplyr::filter(abs(cor) > 0.8) %>%
   dplyr::filter(row_number() %% 2 == 1)      #Remove every second row, they are just duplicates

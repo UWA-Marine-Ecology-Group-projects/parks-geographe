@@ -42,7 +42,7 @@ tidy.dir <- paste(data.dir,"tidy",sep="/")
 error.dir <- paste(data.dir,"errors to check",sep="/")
 
 # Read in the data----
-setwd(to.be.checked.dir)
+setwd(tidy.dir)
 dir()
 
 # Read in metadata----
@@ -50,8 +50,9 @@ metadata <- read_csv(file=paste(study,"checked.metadata.csv",sep = "."),na = c("
   dplyr::mutate(id=paste(campaignid,sample,sep="."))%>%
   dplyr::glimpse()
 
-length(unique(metadata$sample)) # 229 
+length(unique(metadata$sample)) # 307 
 
+setwd(to.be.checked.dir)
 # Make complete.maxn: fill in 0s and join in factors----
 dat <- read_csv(file=paste(study,"checked.maxn.csv",sep = "."),na = c("", " "))%>%
   dplyr::mutate(id=paste(campaignid,sample,sep="."))%>%

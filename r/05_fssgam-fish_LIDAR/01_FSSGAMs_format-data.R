@@ -35,7 +35,7 @@ library(corrr)
 working.dir <- getwd()
 setwd(working.dir)
 
-name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
+# name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name --- DON't think we use this??
 
 # load and join datasets
 #MaxN
@@ -63,10 +63,6 @@ allhab <- allhab %>%
   transform(seagrass = broad.seagrasses / broad.total.points.annotated) %>%
   glimpse()
 
-# 5 samples are NA for habitat, MF-GB101, MF-GB112 & MF-GB126 all good were missing in original
-# 13RC13 & GBR-BOB looks like habitat annotation has been missed 
-# Remove these from the fish data - pointless to include
-
 # Load in the bathy derivatives
 coordinates(allhab) <- ~longitude + latitude
 depth <- readRDS("data/spatial/rasters/site_lidar_depth.rds")
@@ -77,16 +73,18 @@ allhab <- raster::extract(depth, allhab, sp = T)
 allhab <- raster::extract(detrended, allhab, sp = T)
 allhab <- raster::extract(slope, allhab, sp = T)
 allhab <- as.data.frame(allhab) %>%
-  filter(!is.na(lidar.depth))
-
+  dplyr::filter(!is.na(lidar.depth)) %>% # Only samples in the lidar area
+  dplyr::mutate(depth = ifelse(depth %in% "N/A", lidar.depth, depth)) %>%
+  dplyr::mutate(depth = abs(as.numeric(depth)),
+                lidar.depth = abs(as.numeric(lidar.depth)))
 # Save this out for use later
 saveRDS(allhab, file = "data/tidy/habitat-derivatives-tidy-lidar.rds")
 
 names(maxn)
 
 metadata <- maxn %>% # Why is this done in this way?
-  distinct(sample,latitude, longitude, date, time, location, status, site, 
-           depth, observer, successful.count, successful.length)
+  distinct(sample,latitude, longitude, date, time, location, status, site,
+           observer, successful.count, successful.length)
 
 # look at top species ----
 maxn.sum <- maxn %>%
@@ -97,15 +95,15 @@ maxn.sum <- maxn %>%
   ungroup()
 
 ## Total frequency of occurrence
-ggplot(maxn.sum, aes(x = reorder(scientific, maxn), y = maxn)) +   
-  geom_bar(stat="identity",position = position_dodge()) +
-  coord_flip() +
-  xlab("Species") +
-  ylab(expression(Overall ~ abundance ~ (Sigma ~ MaxN))) +
-  #Theme1+
-  theme(axis.text.y = element_text(face = "italic"))+
-  #theme_collapse+
-  scale_y_continuous(expand = expansion(mult = c(0, .1)))#+
+# ggplot(maxn.sum, aes(x = reorder(scientific, maxn), y = maxn)) +   
+#   geom_bar(stat="identity",position = position_dodge()) +
+#   coord_flip() +
+#   xlab("Species") +
+#   ylab(expression(Overall ~ abundance ~ (Sigma ~ MaxN))) +
+#   #Theme1+
+#   theme(axis.text.y = element_text(face = "italic"))+
+#   #theme_collapse+
+#   scale_y_continuous(expand = expansion(mult = c(0, .1)))#+
 
 # Create total abundance and species richness ----
 ta.sr <- maxn %>%
@@ -123,10 +121,8 @@ ta.sr <- maxn %>%
 dat.maxn <- bind_rows(ta.sr) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
-  dplyr::filter(!is.na(broad.macroalgae),
-                !is.na(lidar.depth)) %>%
-  dplyr::mutate(depth = as.numeric(depth)) %>% # Warning is fine - converts "N/A" value to actual NA) %>%
-  dplyr::mutate(depth = ifelse(is.na(depth), lidar.depth, depth)) # Use GA depth for the sample missing depth
+  dplyr::filter(!is.na(broad.macroalgae), # Only samples with habitat info
+                !is.na(lidar.depth)) # only samples in the lidar area
 
 length(unique(dat.maxn$sample))
 
@@ -150,7 +146,7 @@ pred.vars = c("depth",
 
 # Check for correlation of predictor variables- remove anything highly correlated (>0.95)---
 # Correlation filtered by greater than 0.8
-correlate(combined.maxn[,pred.vars], use = "complete.obs") %>%  
+correlate(dat.maxn[,pred.vars], use = "complete.obs") %>%  
   gather(-term, key = "colname", value = "cor") %>% 
   dplyr::filter(abs(cor) > 0.8) %>%
   dplyr::filter(row_number() %% 2 == 1)      #Remove every second row, they are just duplicates
@@ -158,24 +154,24 @@ correlate(combined.maxn[,pred.vars], use = "complete.obs") %>%
 round(cor(dat.maxn[,pred.vars]), 2)
 
 # Plot of likely transformations - thanks to Anna Cresswell for this loop!
-par(mfrow = c(3, 2))
-for (i in pred.vars) {
-  x <- dat.maxn[ , i]
-  x = as.numeric(unlist(x)) 
-  hist((x)) #Looks best
-  plot((x), main = paste(i))
-  hist(sqrt(x))
-  plot(sqrt(x))
-  hist(log(x + 1))
-  plot(log(x + 1))
-}
+# par(mfrow = c(3, 2))
+# for (i in pred.vars) {
+#   x <- dat.maxn[ , i]
+#   x = as.numeric(unlist(x)) 
+#   hist((x)) #Looks best
+#   plot((x), main = paste(i))
+#   hist(sqrt(x))
+#   plot(sqrt(x))
+#   hist(log(x + 1))
+#   plot(log(x + 1))
+# }
 
 # Barely any inverts - exclude
 # Barely any rock - exclude
 # Everything else looks good untransformed
 
 # Write data to load in to next script
-saveRDS(dat.maxn, "data/tidy/fss-gam-data-ta.sr.rds")
+saveRDS(dat.maxn, "data/tidy/fss-gam-data-ta.sr-lidar.rds")
 
 #lengths - NOT RAN YET
 # Create abundance of all recreational fished species ----

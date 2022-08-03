@@ -1,0 +1,5 @@
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","depth","macroalgae","sand","seagrass","mean.relief","slope","detrended","cumsum.wi"
+"total.abundance.macroalgae","macroalgae",2919.51943078382,2937.71272132519,0.06569,NA,2.9,0,0,0,0.46,0.923,0,1,0,0,0,0,0,0.46
+"total.abundance.detrended+macroalgae","detrended+macroalgae",2920.53998613944,2945.63438584236,0.07262,NA,4.61,0,1.021,7.922,0.276,0.018,0,1,0,0,0,0,1,0.736
+"species.richness.macroalgae","macroalgae",1694.40953630996,1709.02005701436,0.26583,NA,2,0,0,0,0.491,0.896,0,1,0,0,0,0,0,0.491
+"species.richness.macroalgae+slope","macroalgae+slope",1695.40934704087,1713.63813508892,0.26816,NA,3,0,1,4.618,0.298,0.089,0,1,0,0,0,1,0,0.789

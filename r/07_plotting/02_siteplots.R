@@ -1,10 +1,10 @@
 
 ###
-# Project: MAC HUB South-west Corner
+# Project: Parks geographe synthesis
 # Data:    BRUVS, BOSS
 # Task:    Overview maps
-# author:  Kingsley Griffin
-# date:    Mar 2022
+# author:  Claude
+# date:    August 2022
 ##
 
 rm(list=ls())
@@ -41,7 +41,8 @@ terrnp <- st_read(
 # jacmap <- projectRaster(jacmap, crs = sppcrs, method = "ngb")
 cwatr  <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")       # coastal waters line
 cwatr <- st_crop(cwatr, c(xmin = 114.9, xmax = 115.7, ymin = -33.65, ymax = -33.2))      # crop down coastal waters line to general project area
-bath_r <- raster("data/spatial/rasters/GB_Bathy_250m_larger.tif")               # bathymetry trimmed to project area
+bathy <- readRDS("data/spatial/rasters/bathymetry-derivatives.rds")               # bathymetry trimmed to project area
+bath_r <- bathy[[1]]
 bathdf <- as.data.frame(bath_r, na.rm = TRUE, xy = TRUE)
 colnames(bathdf)[3] <- "Depth"
 
@@ -60,7 +61,7 @@ st_crs(aus)         <- st_crs(aumpa)
 st_crs(wanew)       <- st_crs(nb_mp)
 
 # Get sampling data locations
-bruv <- read.csv('data/staging/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv') %>%
+bruv <- read.csv('data/tidy/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv') %>%
   ga.clean.names() %>%
   dplyr::filter(successful.count %in% "Yes") %>%
   dplyr::select(sample, latitude, longitude) %>%
@@ -77,7 +78,7 @@ boss2021 <- read.csv("data/raw/em export/2021-03_Geographe_BOSS_Metadata.csv")%>
                 sample = as.character(sample)) %>%
   glimpse()
 
-points <- bind_rows(bruv, boss2021) # TOok out BRUV 2007 for now - check if we wil use this
+points <- bind_rows(bruv, boss2021) 
 
 # simplify zone names
 nb_nmp$ZoneName <- dplyr::recode(nb_nmp$ZoneName,

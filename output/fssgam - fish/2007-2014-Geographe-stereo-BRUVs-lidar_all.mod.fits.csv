@@ -1,0 +1,3 @@
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","depth","macroalgae","sand","seagrass","mean.relief","slope","detrended","cumsum.wi"
+"total.abundance","depth+macroalgae",1763.69902815971,1782.35149304778,0.12999,NA,3.86,0,0,0,0.738,0.923,1,1,0,0,0,0,0,0.738
+"species.richness","depth+sand+slope",1034.30891758943,1053.0191111338,0.37989,NA,4,0,0,0,0.988,0.967,1,0,1,0,0,1,0,0.988

@@ -24,7 +24,7 @@ setwd(working.dir)
 
 # Load and format AUV annotation data from BenthoBox----
 habitat <- read.csv("data/raw/reefcloud export/BRUVs/stereo-BRUVs_PointTags.csv") %>%
-  ga.clean.names() %>% # Function Brooke & Tim wrote to tidy column names
+  ga.clean.names() %>% 
   # dplyr::select(image.name,image.source.dataset,point.x.from.top.left.corner.,point.y.from.top.left.corner.,display.name) %>% # Select columns to keep
   tidyr::separate(image.name, c(NA, NA, NA, NA, NA,"image.namex", "image.name"), sep = "/") %>%
   dplyr::mutate(image.name = ifelse(is.na(image.name),image.namex, image.name)) %>% 
@@ -43,8 +43,14 @@ habitat <- read.csv("data/raw/reefcloud export/BRUVs/stereo-BRUVs_PointTags.csv"
 names(habitat)
 
 # Metadata ----
-metadata <- read.csv("data/staging/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv")%>%
+metadata <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv")%>%
   glimpse()
+
+length(unique(metadata$sample))
+
+test <- metadata %>%
+  dplyr::group_by(sample) %>%
+  dplyr::summarise(n = n())
 
 # CREATE catami point score------
 
@@ -65,7 +71,7 @@ hab2007 <- read_delim("data/raw/tm export/2007-03_Capes.MF_stereoBRUVs_Habitat.p
 
 test <- metadata %>% 
   dplyr::filter(campaignid %in% "2007-03_Capes.MF_stereoBRUVs") %>%
-  anti_join(hab2007) # 3 samples missing habitat, MF-GB101, MF-GB112 & MF-GB126
+  anti_join(hab2007) # 7 samples missing habitat
 
 broad.points <- habitat %>%
   dplyr::select(-c(morphology, type, fine)) %>%
@@ -75,7 +81,8 @@ broad.points <- habitat %>%
   dplyr::group_by(sample) %>%
   tidyr::pivot_wider(names_from = broad, values_from = count, values_fill = 0) %>% # New version of tidyr::spread
   dplyr::select(-c(point.id)) %>%
-  dplyr::filter(!sample %in% c("MF-GB113", "MF-GB128")) %>% 
+  dplyr::filter(!sample %in% c("MF-GB109", "MF-GB145", "MF-GB168", "MF-GB192", # Remove habitat samples done twice
+                               "MF-GB199", "MF-GB221", "MF-GB228", "MF-GB113", "MF-GB128")) %>% 
   ungroup()%>%
   dplyr::group_by(sample) %>%
   dplyr::summarise_all(funs(sum)) %>%
@@ -151,9 +158,9 @@ broad.hab <- metadata %>%
   dplyr::filter(!is.na(broad.total.points.annotated)) %>%
   glimpse()
 
-test <- broad.hab %>% # 224 samples
+test <- broad.hab %>% # 240 samples
   group_by(sample) %>%
-  dplyr::summarise(n = n()) # No duplicated samples using old and new annotations
+  dplyr::summarise(n = n()) # None duplicated
 
 # detailed.hab <- detailed.points %>%
 #   left_join(metadata, by = "sample") %>%
