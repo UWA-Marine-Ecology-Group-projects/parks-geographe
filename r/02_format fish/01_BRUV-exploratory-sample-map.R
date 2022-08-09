@@ -61,9 +61,15 @@ lidar <- raster::projectRaster(lidar, crs = wgscrs)
 lidardf <- as.data.frame(lidar, xy = T, na.rm = T) %>%
   dplyr::rename(depth = layer)
 
+# Load the multibeam patch
+multi <- raster("data/spatial/rasters/GeographeBayMultibeamMarineFutures_wgs84z50.tif")
+multi <- raster::projectRaster(multi, crs = wgscrs) 
+multi_df <- as.data.frame(multi, xy = T, na.rm = T) %>%
+  dplyr::rename(depth = GeographeBayMultibeamMarineFutures_wgs84z50)
+
 p1 <- ggplot() +
-  geom_tile(data = lidardf, aes(x = x, y = y, fill = depth), alpha = 1) +
-  scale_fill_gradientn(colours = terrain.colors(10)) +
+  # geom_tile(data = multi_df, aes(x = x, y = y, fill = depth), alpha = 1) +
+  # scale_fill_gradientn(colours = terrain.colors(10)) +
   geom_point(data = metadata, aes(x = longitude, y = latitude)) + #, color = uwa.analysis.completed, pch = suspect.annotation
   # scale_color_manual(values = c("Yes" = "black", "No" = "red")) +
   # scale_shape_manual(values = c("Yes" = 4, "No" = 19)) +
