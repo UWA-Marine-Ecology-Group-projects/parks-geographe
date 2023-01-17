@@ -6,6 +6,9 @@
 # Date:    July 2022
 ##
 
+
+#### THERE ARE LOTS OF MISTAKES ASSOCIATED WITH THIS DATA THAT HAVE NOT BEEN CLEANED!!!! ####
+
 # Clear memory ----
 rm(list=ls())
 
@@ -225,8 +228,8 @@ write.csv(maxn.species.not.previously.observed,file=paste(study,"maxn.species.no
 length.species.not.previously.observed <- master %>%
   dplyr::anti_join(length,.,by=c("family","genus","species")) %>%
   dplyr::distinct(campaignid,sample,family,genus,species) %>%
-  dplyr::filter(!species%in%c("spp")) %>% # Ignore spp in the report
-  dplyr::left_join(hard.drives) %>%
+  dplyr::filter(!species%in%c("spp", "sp1", "sp", "sp10")) %>% # Ignore spp in the report
+  # dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
 setwd(error.dir)
@@ -269,7 +272,7 @@ wrong.length.taxa <- left_join(length,master.min.max,by=c("family","genus","spec
   dplyr::select(campaignid,sample,family,genus,species,length,min.length,max.length,fb.length_max,reason) %>%
   dplyr::mutate(difference=ifelse(reason%in%c("too small"),(min.length-length),(length-max.length))) %>%
   dplyr::mutate(percent.of.fb.max=(length/fb.length_max*100) )%>%
-  dplyr::left_join(hard.drives) %>%
+  # dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
 setwd(error.dir)
@@ -302,7 +305,7 @@ taxa.maxn.vs.stereo.summary<-length %>%
   dplyr::mutate(percent.difference=abs(percent.difference)) %>%
   dplyr::select(campaignid,sample,family,genus,species,maxn,stereo.maxn,difference,percent.difference) %>%
   arrange(-difference) %>%
-  dplyr::left_join(hard.drives) %>%
+  # dplyr::left_join(hard.drives) %>%
   dplyr::glimpse()
 
 setwd(error.dir)

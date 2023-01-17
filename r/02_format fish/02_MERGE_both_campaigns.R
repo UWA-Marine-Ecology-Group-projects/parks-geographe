@@ -6,6 +6,8 @@
 # Date:    July 2022
 ##
 
+#### THERE ARE LOTS OF MISTAKES ASSOCIATED WITH THIS DATA THAT HAVE NOT BEEN CLEANED!!!! ####
+
 rm(list=ls()) # Clear memory
 
 ## Load Libraries ----
@@ -27,6 +29,7 @@ library(stringr)
 # to connect to googlesheets
 library(googlesheets4)
 library(sp)
+library(ggplot2)
 
 ## Set Study Name ----
 # Change this to suit your study name. This will also be the prefix on your final saved files.
@@ -54,42 +57,45 @@ metadata <- ga.list.files("_Metadata.csv") %>% # list all files ending in "_Meta
   dplyr::select(campaignid, sample, latitude, longitude, date, time, location, status, site, depth, observer, successful.count, successful.length, commonwealth.zone,raw.hdd.number,con.hdd.number) %>% 
   dplyr::mutate(sample=as.character(sample),
                 longitude = as.numeric(longitude),
-                latitude = as.numeric(latitude)) %>%
+                latitude = as.numeric(latitude),
+                successful.length = ifelse(campaignid %in% "2007-03_Capes.MF_stereoBRUVs", "No", successful.length)) %>%
   dplyr::filter(successful.count%in%"Yes")%>%
   glimpse()
 
 ggplot() + 
   geom_point(data = metadata, aes(x = longitude, y = latitude, color = campaignid))
 
+#### Turned off this section - don't think need to run it again ####
+
 # We are missing commonwealth zone for the 2007 BRUV campaign
-raw.metadata <- metadata %>%
-  dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it :)
-
-# Spatial files ----
-setwd(working.dir)
-wgs.84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-
-commonwealth.marineparks <- readOGR(dsn="data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")
-proj4string(commonwealth.marineparks)
-
-commonwealth.marineparks <- spTransform(commonwealth.marineparks, CRS = wgs.84)
-
-coordinates(metadata) <- c('longitude', 'latitude') # Convert to spatial dataframe
-proj4string(metadata) <- CRS(wgs.84)
-
-metadata.commonwealth.marineparks <- over(metadata, commonwealth.marineparks) %>%
-  dplyr::select(ZoneName)
-
-metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks)%>%
-  dplyr::rename(commonwealth.zone=ZoneName)%>%
-  mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) 
+# raw.metadata <- metadata %>%
+#   dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it :)
+# 
+# # Spatial files ----
+# setwd(working.dir)
+# wgs.84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+# 
+# commonwealth.marineparks <- readOGR(dsn="data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")
+# proj4string(commonwealth.marineparks)
+# 
+# commonwealth.marineparks <- spTransform(commonwealth.marineparks, CRS = wgs.84)
+# 
+# coordinates(metadata) <- c('longitude', 'latitude') # Convert to spatial dataframe
+# proj4string(metadata) <- CRS(wgs.84)
+# 
+# metadata.commonwealth.marineparks <- over(metadata, commonwealth.marineparks) %>%
+#   dplyr::select(ZoneName)
+# 
+# metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks)%>%
+#   dplyr::rename(commonwealth.zone=ZoneName)%>%
+#   mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) 
   
-length(unique(metadata$sample)) # 307 
+length(unique(metadata$sample)) # 327 
 
 double.ups <- metadata %>%
   dplyr::group_by(sample) %>%
   dplyr::summarise(n=n()) %>%
-  dplyr::filter(n>1) # 10005 & 107 were duplicated but fixed - down as successful count = "No"
+  dplyr::filter(n>1)
 
 setwd(staging.dir)
 write.csv(metadata,paste(study,"metadata.csv",sep="_"),row.names = FALSE)
@@ -116,7 +122,7 @@ maxn2007 <- read.csv("2007-03_Capes.MF_stereoBRUVs_Count.csv") %>%
 
 maxn <- points2012 %>%
   dplyr::select(-c(time)) %>%
-  dplyr::mutate(species=if_else(genus%in%c("Orectolobus","Caesioperca","Platycephalus","Squalus"),"spp",species)) %>% # Turn off once errors are fixed in emobs
+  dplyr::mutate(species=if_else(genus%in%c("Orectolobus","Caesioperca","Platycephalus","Squalus"),"spp",species)) %>% # Lump these ones into spp
   dplyr::ungroup() %>%
   dplyr::group_by(campaignid,sample,filename,period,periodtime,frame,family,genus,species) %>% # removed comment from here
   dplyr::mutate(number=as.numeric(number)) %>%
@@ -138,7 +144,7 @@ maxn <- points2012 %>%
   dplyr::filter(successful.count%in%"Yes") %>%
   dplyr::ungroup()
 
-length(unique(maxn$sample)) # 307
+length(unique(maxn$sample)) # 327 - all matches, dardy as
 
 no.fish <- anti_join(metadata,maxn) # none
 
@@ -146,22 +152,29 @@ no.fish <- anti_join(metadata,maxn) # none
 setwd(staging.dir)
 write.csv(maxn,paste(study,"maxn.csv",sep="_"),row.names = FALSE)
 
-####### NOT RAN ########
 ## Combine Length, Lengths and 3D point files into length3dpoints----
+setwd(download.dir)
 length3dpoints <- ga.create.em.length3dpoints() %>%
   dplyr::mutate(species=if_else(genus %in% c("Orectolobus","Caesioperca","Platycephalus","Squalus"),"spp",species)) %>%
   dplyr::select(-c(time,comment)) %>% # take time out as there is also a time column in the metadata
   dplyr::left_join(metadata) %>%
   dplyr::filter(successful.length%in%"Yes") %>%
   replace_na(list(family="Unknown",genus="Unknown",species="spp")) %>% # remove any NAs in taxa name
-  dplyr::filter(!family%in%c("Unknown")) 
+  dplyr::filter(!family%in%c("Unknown"))  %>%
+  dplyr::select(campaignid, sample, family, genus, species, length, number, range) %>%
   glimpse()
 
-length(unique(length3dpoints$sample))
+# length3dpoints2007 <- read.csv("2007-03_Capes.MF_stereoBRUVs_Length.csv") %>%
+#   ga.clean.names() %>%
+#   left_join(metadata) %>%
+#   glimpse()
 
-no.lengths <- anti_join(metadata,length3dpoints)
+length(unique(length3dpoints$sample)) # 238 - some are not successful count = "Yes"
 
-lengths.no.metadata <- anti_join(length3dpoints,metadata)
+no.lengths <- anti_join(metadata,length3dpoints) %>%
+  dplyr::filter(!successful.length %in% "No") # Just the 2007 campaign - no lengths for some reason?
+
+lengths.no.metadata <- anti_join(length3dpoints,metadata) # None
 
 ## Save length files ----
 setwd(staging.dir)

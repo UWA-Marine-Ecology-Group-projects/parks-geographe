@@ -6,6 +6,8 @@
 # Date:    July 2022
 ##
 
+#### THERE ARE LOTS OF MISTAKES ASSOCIATED WITH THIS DATA THAT HAVE NOT BEEN CLEANED!!!! ####
+
 # Clear memory ----
 rm(list=ls())
 
