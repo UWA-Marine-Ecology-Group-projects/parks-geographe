@@ -282,14 +282,14 @@ ggsave(paste(paste0('plots/spatial/', name) , 'broad-site-plot.png',
 metadata1 <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv") %>%
   dplyr::mutate(method = "BRUV",
                 sample = as.character(sample)) %>%
-  dplyr::select(sample, method, latitude, longitude) %>%
+  dplyr::select(campaignid, sample, method, latitude, longitude) %>%
   glimpse()
 
 metadata2 <- read.csv("data/raw/em export/2021-03_Geographe_BOSS_Metadata.csv") %>%
   ga.clean.names() %>%
   dplyr::mutate(method = "Drop camera",
-                sample = as.character(sample)) %>%
-  dplyr::select(sample, method, latitude, longitude) %>%
+                sample = as.character(sample), campaignid = "2021-03_Geographe_BOSS") %>%
+  dplyr::select(campaignid, sample, method, latitude, longitude) %>%
   glimpse()
 
 metadata <- bind_rows(metadata1, metadata2) %>%
@@ -317,10 +317,10 @@ p4 <- ggplot() +
   # geom_contour(data = bathy, aes(x = x, y = y, z = Z), 
   #              breaks = c(0, -30, -70, -200, - 700, - 9000), colour = "white", alpha = 1, size = 0.2) +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 4/5, size = 0.2) +
-  geom_point(data = metadata %>% arrange(method), aes(longitude, latitude, colour = method),
+  geom_point(data = metadata %>% arrange(method), aes(longitude, latitude, colour = campaignid),
              alpha = 3/5, shape = 10) +
-  scale_colour_manual(values = c("BRUV" = "indianred4",
-                                 "Drop Camera" = "seagreen4")) +
+  # scale_colour_manual(values = c("BRUV" = "indianred4",
+  #                                "Drop Camera" = "seagreen4")) +
   labs(colour = "Sample", x = NULL, y = NULL) +
   guides(fill = guide_legend(order = 2), col = guide_legend(order = 1)) +
   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
