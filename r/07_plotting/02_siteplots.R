@@ -41,7 +41,7 @@ name <- "Parks-Geographe-synthesis"                                             
 # Set CRS for transformations
 wgscrs <- "+proj=longlat +datum=WGS84"
 gdacrs <- "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
-sppcrs <- CRS("+proj=utm +zone=49 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
+sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
 
 # Set cropping extent - larger than most zoomed out plot
 e <- ext(114.8, 116, -33.8, -33) 
@@ -490,32 +490,68 @@ dev.off()
 
 
 # 8. Bathymetry derived metrics (p8)
-# depth
-spreds <- readRDS("data/spatial/rasters/raw bathymetry/Parks-Ningaloo-synthesis_spatial_covariates.rds") %>%
+spreds.ga <- readRDS("data/spatial/rasters/250m_GA_bathymetry-derivatives.rds") %>%
   rast()
-plot(spreds)
-summary(spreds)
-spreddf <- as.data.frame(spreds, xy = T, na.rm = T)
-names(spreddf)
+plot(spreds.ga)
+summary(spreds.ga)
+spreddf.ga <- as.data.frame(spreds.ga, xy = T, na.rm = T)
+names(spreddf.ga)
 
+lidar.depth <- readRDS("data/spatial/rasters/10m_lidar_depth.rds") %>%
+  rast() 
+plot(lidar.depth)
+lidar.depthdf <- as.data.frame(lidar.depth, xy = T, na.rm = T)
+names(lidar.depthdf)
+
+lidar.roughness <- readRDS("data/spatial/rasters/10m_lidar_roughness.rds") %>%
+  rast() 
+plot(lidar.roughness)
+lidar.roughnessdf <- as.data.frame(lidar.roughness, xy = T, na.rm = T)
+names(lidar.roughnessdf)
+
+lidar.detre <- readRDS("data/spatial/rasters/10m_lidar_detrended.rds") %>%
+  rast() 
+plot(lidar.detre)
+lidar.detredf <- as.data.frame(lidar.detre, xy = T, na.rm = T)
+names(lidar.detredf)
+
+# Depth
 pd <- ggplot() +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey62", size = 0.2) +
   geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
   terr_fills +
   new_scale_fill() +
-  geom_tile(data = spreddf, aes(x, y, fill = Z)) +
+  geom_tile(data = spreddf.ga, aes(x, y, fill = Z)) +
   scale_fill_viridis(option = "A") +
   labs(x= NULL, y = NULL, fill = "Depth") +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
   nmpa_cols +
   guides(colour = "none") +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
-  coord_sf(xlim = c(min(spreddf$x), max(spreddf$x)), 
-           ylim = c(min(spreddf$y), max(spreddf$y)), crs = sppcrs) +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
   theme_minimal() +
   theme(axis.text.x = element_text(size = 6.5),
         axis.text.y = element_text(size = 6.5))
 pd
+
+pd.lidar <- ggplot() +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey62", size = 0.2) +
+  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
+  terr_fills +
+  new_scale_fill() +
+  geom_tile(data = lidar.depthdf, aes(x, y, fill = Z)) +
+  scale_fill_viridis(option = "A") +
+  labs(x= NULL, y = NULL, fill = "Depth") +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
+  nmpa_cols +
+  guides(colour = "none") +
+  geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 6.5),
+        axis.text.y = element_text(size = 6.5))
+pd.lidar
 
 # roughness
 pr <- ggplot() +
@@ -523,19 +559,37 @@ pr <- ggplot() +
   geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
   terr_fills +
   new_scale_fill() +
-  geom_tile(data = spreddf, aes(x, y, fill = roughness)) +
+  geom_tile(data = spreddf.ga, aes(x, y, fill = roughness)) +
   scale_fill_viridis(option = "D") +
   labs(x= NULL, y = NULL, fill = "Roughness") +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
   nmpa_cols +
   guides(colour = "none") +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
-  coord_sf(xlim = c(min(spreddf$x), max(spreddf$x)), 
-           ylim = c(min(spreddf$y), max(spreddf$y)), crs = sppcrs) +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
   theme_minimal() +
   theme(axis.text.x = element_text(size = 6.5),
         axis.text.y = element_text(size = 6.5))
 pr
+
+pr.lidar <- ggplot() +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey62", size = 0.2) +
+  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
+  terr_fills +
+  new_scale_fill() +
+  geom_tile(data = lidar.roughnessdf, aes(x, y, fill = roughness)) +
+  scale_fill_viridis(option = "D") +
+  labs(x= NULL, y = NULL, fill = "Roughness") +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
+  nmpa_cols +
+  guides(colour = "none") +
+  geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 6.5),
+        axis.text.y = element_text(size = 6.5))
+pr.lidar
 
 # detrended
 pdt <- ggplot() +
@@ -543,22 +597,42 @@ pdt <- ggplot() +
   geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
   terr_fills +
   new_scale_fill() +
-  geom_tile(data = spreddf, aes(x, y, fill = detrended)) +
+  geom_tile(data = spreddf.ga, aes(x, y, fill = detrended)) +
   scale_fill_viridis(option = "F") +
   labs(x= NULL, y = NULL, fill = "Detrended") +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
   nmpa_cols +
   guides(colour = "none") +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
-  coord_sf(xlim = c(min(spreddf$x), max(spreddf$x)), 
-           ylim = c(min(spreddf$y), max(spreddf$y)), crs = sppcrs) +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
   theme_minimal() +
   theme(axis.text.x = element_text(size = 6.5),
         axis.text.y = element_text(size = 6.5))
 pdt
 
-p8 <- pd + pr +
-  pdt + plot_spacer() + plot_layout(ncol = 2, nrow = 2)
-p8
-ggsave(paste0("figures/spatial/", name, "-site_spatial_layers.png"), width = 7, height = 6, dpi = 160)
+pdt.lidar <- ggplot() +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey62", size = 0.2) +
+  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA) +
+  terr_fills +
+  new_scale_fill() +
+  geom_tile(data = lidar.detredf, aes(x, y, fill = detrended)) +
+  scale_fill_viridis(option = "F") +
+  labs(x= NULL, y = NULL, fill = "Detrended") +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
+  nmpa_cols +
+  guides(colour = "none") +
+  geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.3) +
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 6.5),
+        axis.text.y = element_text(size = 6.5))
+pdt.lidar
+
+p8 <- (pd + pd.lidar) / 
+      (pr + pr.lidar) / 
+      (pdt + pdt.lidar) + 
+      plot_layout(ncol = 2, nrow = 3)
+
+ggsave(paste0("plots/spatial/", name, "-site_spatial_layers.png"), width = 10, height = 6, dpi = 160)
 
