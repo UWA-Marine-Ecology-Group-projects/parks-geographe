@@ -1,0 +1,28 @@
+Ecosystem Complexes ,Ecosystems,Depths,category number,Exp.ecosystem.names,data set
+Shelf and upper slope unvegetated sediments,Shelf unvegetated soft sediments,0-200,1,Shelf.unvegetated.soft.sediments,ga2009
+Shelf and upper slope unvegetated sediments,Upper slope unvegetated soft sediments,200-700,2,Upper.slope.unvegetated.soft.sediments,ga2009
+,Mid slope sediments,700-1500,3,Mid.slope.sediments,
+Mid and lower slope reef and sediments (700m-4000m),Lower slope reef and soft sediments,1500-4000,4,Lower.slope.reef.and.sediments,ga20009
+Abyssal reef and sediments >4000m,Abyssal plain (reef and soft sediments),4000+,5,Abyssal.reef.and.sediments,ga2009
+Seamounts (including guyots),Seamount soft sediments,,6,Seamount.soft.sediments,yesson
+Upper slope rocky reefs (including shelf incised canyons),Shelf incised canyons,all canyons with head<200m,7,Shelf.incising.and.other.canyons,national canyons
+Oceanic reefs,Oceanic coral reefs (offshelf – shallow reefs),<30,8,Oceanic.coral.reefs.offshelf.shallow.reefs,wcmc
+Shelf vegetated sediments,Shelf vegetated sediments,,9,Shelf.vegetated.sediments,"seagrass camaris, seamap"
+Shallow reefs (<30 m),Shallow coral reefs (<30 m depth),<30,10,Shallow.coral.reefs.less.than.30.m.depth,Southern range set by extent of WCMC data & seamap
+Shallow reefs (<30 m),Shallow rocky reefs (< 30 m depth),<30,11,Shallow.rocky.reefs.less.than.30.m.depth,
+Deep shelf reefs (30m to shelf break),Mesophotic coral reefs,30-150,12,Mesophotic.coral.reefs,Southern range set by extent of WCMC data & seamap
+Deep shelf reefs (30m to shelf break),Mesophotic rocky reefs,30-70,13,Mesophotic.rocky.reefs,
+Oceanic reefs,Oceanic mesophotic coral reefs,30-150,14,Oceanic.mesophotic.coral.reefs,Southern range set by extent of WCMC data & seamap
+Deep shelf reefs (30m to shelf break),Rariophotic shelf reefs,70-200 (temperate) | 150-200 (tropical),15,Rariophotic.shelf.reefs,
+Upper slope rocky reefs (including shelf incised canyons),Upper slope rocky reefs (shelf break to 700 m depth),200-700,16,Upper.slope.rocky.reefs.shelf.break.to.700.m.depth,
+Mid and lower slope reef and sediments (700m-4000m),Mid  slope reef,700-1500,17,Mid.slope.reef,
+Seamounts (including guyots),Seamount reefs,,18,Seamount.reefs,
+Artificial habitats - benthic,"Artificial reefs, pipelines and cables",,19,Artificial.reefs.pipelines.and.cables,
+Water column,Bathypelagic & Abyssopelagic,,20,Bathypelagic.and.Abyssopelagic,
+Water column,Mesopelagic,,21,Mesopelagic,
+Water column,Off-shelf (oceanic) epipelagic,,22,Off.shelf.oceanic.epipelagic,
+Water column,On shelf (neritic) epipelagic,,23,On.shelf.neritic.epipelagic,
+Intertidal areas,Beaches,,24,Beaches,
+Intertidal areas,Intertidal coral reefs,,25,Intertidal.coral.reefs,
+Intertidal areas,Rocky shores,,26,Rocky.shores,
+Islands,Islands (including cays and islets),,27,Islands.including.cays.and.islets,
