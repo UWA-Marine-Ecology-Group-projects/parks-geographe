@@ -29,14 +29,14 @@ bath_r <- rasterFromXYZ(cbathy)
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp") %>%   # all aus mpas
   dplyr::filter(ResName %in% "Geographe")
 aumpa <- sf::as_Spatial(aumpa)
-aumpa
 
-sitebathy <- crop(bath_r, buffer(aumpa, width = 0.05)) # Crop the bathy to the extent of the Geographe MP plus a 0.05 degree buffer
+sitebathy <- crop(bath_r, buffer(aumpa, width = 0.1)) # Crop the bathy to the extent of the Geographe MP plus a 0.05 degree buffer
+crs(sitebathy) <- wgscrs
 plot(sitebathy)
 
 # create terrain
 siteterr <- terrain(sitebathy, neighbours = 8, unit = "degrees",
-                    opt = c("slope")) # "roughness"
+                    opt = c("slope", "roughness")) # "roughness"
 plot(siteterr)
 
 # detrended bathymetry
@@ -48,35 +48,34 @@ plot(detre)
 
 # stack em up
 all_covs <- stack(sitebathy, detre[[1]], siteterr)
-names(all_covs) <- c("ga.depth", "detrended", "slope")
 plot(all_covs)
 
-saveRDS(all_covs, 'data/spatial/rasters/bathymetry-derivatives.rds')
+saveRDS(all_covs, 'data/spatial/rasters/250m_GA_bathymetry-derivatives.rds')
 
 sppcrs  <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")
 
 # read in and merge LiDAR
 lidar1 <- raster("data/spatial/rasters/GBlidar1.tif")
-proj4string(lidar1) <- sppcrs
+crs(lidar1) <- sppcrs
 lidar2 <- raster("data/spatial/rasters/GBlidar2.tif")
-proj4string(lidar2) <- sppcrs
+crs(lidar2) <- sppcrs
 lidar3 <- raster("data/spatial/rasters/GBlidar3.tif")
-proj4string(lidar3) <- sppcrs
+crs(lidar3) <- sppcrs
 bath_utm <- raster::merge(lidar1, lidar2, lidar3)
-bath_r <- projectRaster(bath_utm, crs = wgscrs)
+# bath_r <- projectRaster(bath_utm, crs = wgscrs) 
 
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp") %>%   # all aus mpas
   dplyr::filter(ResName %in% "Geographe")
-aumpa <- sf::as_Spatial(aumpa)
-aumpa
+aumpa_utm <- st_transform(aumpa, sppcrs)
+plot(aumpa_utm)
+aumpa_utm <- sf::as_Spatial(aumpa_utm)
 
-sitebathy <- crop(bath_r, buffer(aumpa, width = 0.05)) # Crop the bathy to the extent of the Geographe MP plus a 0.05 degree buffer
+sitebathy <- crop(bath_utm, buffer(aumpa_utm, width = 0.1)) # Crop the bathy to the extent of the Geographe MP plus a 0.05 degree buffer
 plot(sitebathy)
-proj4string(sitebathy) <- wgscrs
 
 # create terrain
 siteterr <- terrain(sitebathy, neighbours = 8, unit = "degrees",
-                    opt = c("slope")) # "roughness"
+                    opt = c("slope", "roughness")) 
 plot(siteterr)
 
 # detrended bathymetry
@@ -88,10 +87,11 @@ plot(detre)
 
 # stack em up
 all_covs_lidar <- stack(sitebathy, detre[[1]], siteterr)
-names(all_covs_lidar) <- c("lidar.depth", "detrended", "slope")
+names(all_covs_lidar)[1] <- c("Z")
 plot(all_covs_lidar)
 
 # Too big to push all together
-saveRDS(all_covs_lidar[[1]], 'data/spatial/rasters/site_lidar_depth.rds')
-saveRDS(all_covs_lidar[[2]], 'data/spatial/rasters/site_lidar_detrended.rds')
-saveRDS(all_covs_lidar[[3]], 'data/spatial/rasters/site_lidar_slope.rds')
+saveRDS(all_covs_lidar[[1]], 'data/spatial/rasters/10m_lidar_depth.rds')
+saveRDS(all_covs_lidar[[2]], 'data/spatial/rasters/10m_lidar_detrended.rds')
+saveRDS(all_covs_lidar[[3]], 'data/spatial/rasters/10m_lidar_roughness.rds')
+saveRDS(all_covs_lidar[[4]], 'data/spatial/rasters/10m_lidar_slope.rds')
