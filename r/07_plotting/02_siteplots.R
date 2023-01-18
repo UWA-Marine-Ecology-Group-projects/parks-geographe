@@ -3,7 +3,7 @@
 # Data:    Geoscience Australia 250m res bathy
 # Task:    Generate exploratory site plots - see TOC
 # author:  Claude Spencer
-# date:    November 2022
+# date:    January 2023
 ##
 
 # CONTENTS
@@ -629,9 +629,9 @@ pdt.lidar <- ggplot() +
         axis.text.y = element_text(size = 6.5))
 pdt.lidar
 
-p8 <- (pd + pd.lidar) / 
-      (pr + pr.lidar) / 
-      (pdt + pdt.lidar) + 
+p8 <- pd + pd.lidar + 
+      pr + pr.lidar + 
+      pdt + pdt.lidar + 
       plot_layout(ncol = 2, nrow = 3)
 
 ggsave(paste0("plots/spatial/", name, "-site_spatial_layers.png"), width = 10, height = 6, dpi = 160)

@@ -59,7 +59,6 @@ str(use.dat)
 # factor.vars <- c("status") # Status as a factors with 2 levels - I think we shouldn't have this in here
 out.all     <- list()
 var.imp     <- list()
-
 str(use.dat)
 
 # Loop through the FSS function for each Taxa----

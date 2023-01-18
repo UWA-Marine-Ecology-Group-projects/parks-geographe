@@ -3,12 +3,12 @@
 # Data:    BRUV fish
 # Task:    Format data for FSS-GAM - LIDAR AREA
 # author:  Claude
-# date:    July 2022
+# date:    January 2023
 ##
 
 rm(list=ls())
 
-# libraries---- SHOULD GO THROUGH AND CULL SOME OF THESE
+# libraries--
 library(tidyr)
 library(dplyr)
 options(dplyr.width = Inf) # enables head() to display all coloums

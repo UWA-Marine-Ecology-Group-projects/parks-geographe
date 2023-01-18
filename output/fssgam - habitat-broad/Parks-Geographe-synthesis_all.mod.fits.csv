@@ -1,0 +1,6 @@
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","detrended","roughness","slope","cumsum.wi"
+"Macroalgae","detrended+slope+Z",8357.64629980482,8410.48288579548,0.0936,NA,12.75,0,0,0,1,1,1,1,0,1,1
+"Seagrass","detrended+roughness+Z",10155.2918463357,10205.4818610819,0.21799,NA,12.11,0,0,0,1,1,1,1,1,0,1
+"Sand","detrended+slope+Z",10947.6438787703,10992.4180974225,0.41588,NA,10.78,0,0,0,1,0.997,1,1,0,1,1
+"Rock","detrended+roughness+Z",1252.48452327594,1304.50440894366,0.00337,NA,12.55,0,0,0,1,0.999,1,1,1,0,1
+"Sessile invertebrates","detrended+slope+Z",662.114516563349,694.836572901879,0.08547,NA,7.86,0,0,0,0.994,0.548,1,1,0,1,0.994
