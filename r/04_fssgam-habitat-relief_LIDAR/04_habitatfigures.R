@@ -17,7 +17,6 @@ library(sf)
 library(ggnewscale)
 library(dplyr)
 
-
 # Set your study name
 name <- "Parks-Geographe-synthesis"                                             # Change here
 
@@ -77,14 +76,14 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")        
 cwatr <- st_crop(cwatr, e)
 
 # Bathymetry data
-cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
-cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
-bath_r <- rast(cbathy)
-crs(bath_r) <- wgscrs
-bath_r <- terra::crop(bath_r, e)
-bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
-bath_r <- clamp(bath_r, upper = 0, value = F)                               # Only data below 0
-bathy <- as.data.frame(bath_r, xy = T, na.rm = T)
+# cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
+# cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
+# bath_r <- rast(cbathy)
+# crs(bath_r) <- wgscrs
+# bath_r <- terra::crop(bath_r, e)
+# bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
+# bath_r <- clamp(bath_r, upper = 0, value = F)                               # Only data below 0
+# bathy <- as.data.frame(bath_r, xy = T, na.rm = T)
 
 terr_fills <- scale_fill_manual(values = c("National Park" = "#c4cea6",          # Set the colours for terrestrial parks
                                            "Nature Reserve" = "#e4d0bb"),
@@ -133,8 +132,8 @@ p1 <- ggplot() +
   hab_fills +
   labs(x = NULL, y = NULL, fill = NULL) +
   new_scale_fill() +
-  geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
-               breaks = c(-30, -70, -200), size = 0.2) +
+  # geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
+  #              breaks = c(-30, -70, -200), size = 0.2) +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
   nmpa_cols +
@@ -149,7 +148,7 @@ p1 <- ggplot() +
   coord_sf(xlim = c(313788.041, 376671.635),
            ylim = c(6313669.457, 6275856.972), crs = sppcrs) +  
   theme_minimal()
-png(filename = paste0("plots/habitat/", name, "_site_dominant_habitat.png"), width = 10, height = 6,
+png(filename = paste0("plots/habitat/", name, "_lidar_dominant_habitat.png"), width = 10, height = 6,
     res = 300, units = "in")
 p1
 dev.off()
@@ -173,16 +172,16 @@ widehabit$variable <- dplyr::recode(widehabit$variable,                         
 # dep_ann <- data.frame(x = c(327004.392,313992.301, 334469.085,351794.461), 
 #                       y = c(7721238.518,7767602.728,7757846.68, 7771841.162), label = c("30m","70m", "30m","70m"))
 
-dep_ann <- data.frame(x = c((115.340000003 + 0.05), (115.219999997 + 0.05), (115.415000005 + 0.065), (115.582000000 + 0.025)), 
-                      y = c(-20.599999997, -20.179999997, -20.270000003, -20.144999998), 
-                      label = c("30m","70m", "Tryal rocks","70m")) # updated BG
+# dep_ann <- data.frame(x = c((115.340000003 + 0.05), (115.219999997 + 0.05), (115.415000005 + 0.065), (115.582000000 + 0.025)), 
+#                       y = c(-20.599999997, -20.179999997, -20.270000003, -20.144999998), 
+#                       label = c("30m","70m", "Tryal rocks","70m")) # updated BG
 
 
 p2 <- ggplot() +
   geom_tile(data = widehabit, aes(x, y, fill = value)) +
   scale_fill_viridis(direction = -1, limits = c(0, max(widehabit$value))) +
-  geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
-               breaks = c(-30, -70, -200), size = 0.2) +
+  # geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
+  #              breaks = c(-30, -70, -200), size = 0.2) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.7, show.legend = F) + 
   nmpa_cols +
   new_scale_color() +
@@ -194,12 +193,12 @@ p2 <- ggplot() +
   labs(x = NULL, y = NULL, fill = "Occurrence (p)") +
   # geom_text(data = dep_ann, aes(x , y, label = label), inherit.aes = F, size = 1.8, colour = "black")+
   geom_sf(data = cwatr, colour = "red", size = 0.7) +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
-  # scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) + 
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) + 
   theme_minimal() +
   wampa_cols +
   facet_wrap(~variable, ncol = 2)
-png(filename = paste0("plots/habitat/", name, "_site_individual_habitat.png"), width = 9, height = 8,
+png(filename = paste0("plots/habitat/", name, "_lidar_individual_habitat.png"), width = 9, height = 8,
     units = "in", res = 300)
 p2
 dev.off()

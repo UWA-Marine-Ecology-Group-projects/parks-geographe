@@ -1,5 +1,3 @@
-#### NEED TO RE RUN THIS AGAIN WITH TIDIED METADATA
-
 ###
 # Project: parks - geographe bay synthesis
 # Data:    2007 & 2014 BRUVs

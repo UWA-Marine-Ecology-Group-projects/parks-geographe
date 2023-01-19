@@ -3,7 +3,7 @@
 # Data:    BRUV fish
 # Task:    Run FSS-GAM for total abundance and species richness maxn metrics
 # author:  Claude
-# date:    July 2022
+# date:    January 2023
 ##
 
 rm(list=ls())
@@ -26,19 +26,20 @@ library(FSSgam)
 library(GlobalArchive)
 library(ggplot2)
 
-# Set working directory
-working.dir <- getwd()
-setwd(working.dir)
-name <- "2007-2014-Geographe-stereo-BRUVs-broad"  # set study name
+name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
-dat <- readRDS("data/tidy/fss-gam-data-ta.sr.rds")%>%
+dat <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
   glimpse()
 
 # Re-set the predictors for modeling----
 names(dat)
 
-pred.vars <- c("depth", "macroalgae", "sand",
-               "seagrass", "mean.relief","slope","detrended") 
+pred.vars <- c("Z", "macroalgae", "inverts",
+               "seagrass", "mean.relief","slope","detrended", "roughness") 
 
 # Check to make sure Response vector has not more than 90% zeros----
 unique.vars <- unique(as.character(dat$scientific))
@@ -52,7 +53,7 @@ for(i in 1:length(unique.vars)){
 resp.vars   
 
 # Run the full subset model selection----
-savedir <- "output/fssgam - fish"
+savedir <- "output/fssgam - fish-broad"
 use.dat <- as.data.frame(dat) # Seems a bit pointless this line innit
 str(use.dat)
 
@@ -64,14 +65,14 @@ str(use.dat)
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
   use.dat <- as.data.frame(dat[which(dat$scientific == resp.vars[i]), ])
-  Model1  <- gam(maxn ~ s(depth, k = 3, bs='cr'),
+  Model1  <- gam(maxn ~ s(Z, k = 3, bs='cr'),
                  family = tw(),  data = use.dat)
   
   model.set <- generate.model.set(use.dat = use.dat,
                                   test.fit = Model1,
                                   pred.vars.cont = pred.vars,
                                   # pred.vars.fact = factor.vars,
-                                  linear.vars = "depth",
+                                  # linear.vars = "depth",
                                   k = 3,
                                   factor.smooth.interactions = F
   )

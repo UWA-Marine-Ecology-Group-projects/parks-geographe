@@ -28,12 +28,6 @@ library(ggplot2)
 library(sp)
 library(corrr)
 
-## Setup ----
-# set your working directory (manually, once for the whole R project)
-# use the 'files' tab to set wd in '~/parks-abrolhos' manually (your relative path) then run this line (if we need it?)
-working.dir <- getwd()
-setwd(working.dir)
-
 name <- "2007-2014-Geographe-stereo-BRUVs-broad"  # set study name
 
 # load and join datasets
@@ -41,35 +35,28 @@ name <- "2007-2014-Geographe-stereo-BRUVs-broad"  # set study name
 maxn <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.maxn.csv")%>%
   glimpse()
 
-### HASHED OUT THIS SECTION UNTIL LENGTHS HAVE BEEN FINISHED ----
 # length
-# 
-# length <- read.csv("data/Tidy/2021-05_Abrolhos_stereo-BRUVs.complete.length.csv")%>%
-#   dplyr::mutate(method = "BRUV")%>%
-#   dplyr::mutate(scientific = paste(family,genus,species, sep = " "))%>%
-#   glimpse()
+
+length <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.length.csv")%>%
+  glimpse()
 
 # Load in the habitat data
 allhab1 <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs_broad.habitat.csv") %>%
   ga.clean.names() %>%
-  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad"), mean.relief) %>%
   dplyr::mutate(method = "BRUV",
                 sample = as.character(sample)) %>%
   glimpse()
 
 allhab2 <- read.csv("data/tidy/2021-03_Geographe_BOSS_broad.habitat.csv") %>%
   ga.clean.names() %>%
-  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%          # No relief for this campaign
   dplyr::mutate(method = "BOSS",
                 sample = as.character(sample)) %>%
   glimpse()
 
 allhab <- bind_rows(allhab1, allhab2) %>%
   glimpse()
-
-# 5 samples are NA for habitat, MF-GB101, MF-GB112 & MF-GB126 all good were missing in original
-# 13RC13 & GBR-BOB looks like habitat annotation has been missed 
-# Remove these from the fish data - pointless to include
 
 # Load in the bathy derivatives
 coordinates(allhab) <- ~longitude + latitude
@@ -81,6 +68,18 @@ allhab <- as.data.frame(allhab)
 
 # Save this out for use later
 saveRDS(allhab, file = "data/tidy/broad_habitat-bathymetry-derivatives.rds")
+
+allhab <- allhab %>%
+  dplyr::filter(method %in% "BRUV") %>%
+  dplyr::mutate(broad.ascidians = ifelse(is.na(broad.ascidians), 0, broad.ascidians),
+                broad.invertebrate.complex = ifelse(is.na(broad.invertebrate.complex), 0, broad.invertebrate.complex)) %>%
+  dplyr::mutate("inverts" = broad.sponges + broad.stony.corals + 
+                  broad.ascidians + broad.invertebrate.complex) %>%
+  dplyr::rename("sand" = broad.unconsolidated,
+                "rock" = broad.consolidated,
+                "macroalgae" = broad.macroalgae,
+                "seagrass" = broad.seagrasses) %>%
+  glimpse()
 
 names(maxn)
 
@@ -120,22 +119,23 @@ ta.sr <- maxn %>%
   tidyr::gather(., "scientific", "maxn", 2:3) %>%
   dplyr::glimpse()
 
-# nrow = 458 / 2 = 229 -- All good - but have some missing habitat so need to remove those
+# nrow = 654/2 = 327
 
 dat.maxn <- bind_rows(ta.sr) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
-  dplyr::filter(!is.na(broad.macroalgae))
+  dplyr::filter(!is.na(macroalgae)) %>%                                   # Quite a few missing habitat - filter out
+  glimpse()
 
-length(unique(dat.maxn$sample)) # 295 - excluding some that don't have habitat
-295*2 # Roger - all good
+length(unique(dat.maxn$sample)) # 291 - excluding some that don't have habitat
+291*2 # Good
 
 unique(dat.maxn$scientific) # 2 responses, total abundance and species richness
 
 # Set predictor variables---
 names(dat.maxn)
 glimpse(dat.maxn)
-pred.vars = c("depth", 
+pred.vars = c("Z", 
               "macroalgae", 
               "sand", 
               "rock",
@@ -143,7 +143,8 @@ pred.vars = c("depth",
               "inverts",
               "mean.relief",
               "slope",
-              "detrended") 
+              "detrended",
+              "roughness") 
 
 # predictor variables Removed at first pass---
 # Don't think there are bugger all sponges or corals in geo bay, didn't include
@@ -152,58 +153,63 @@ pred.vars = c("depth",
 # Correlation filtered by greater than 0.8
 correlate(dat.maxn[,pred.vars], use = "complete.obs") %>%  
   gather(-term, key = "colname", value = "cor") %>% 
-  dplyr::filter(abs(cor) > 0.8) %>%
-  dplyr::filter(row_number() %% 2 == 1)      #Remove every second row, they are just duplicates
-# None - check on full correlation table
+  dplyr::filter(abs(cor) > 0.8)
+# Roughness and slope correlated but not actually that high
 round(cor(dat.maxn[,pred.vars]), 2)
 
 # Plot of likely transformations - thanks to Anna Cresswell for this loop!
-par(mfrow = c(3, 2))
-for (i in pred.vars) {
-  x <- dat.maxn[ , i]
-  x = as.numeric(unlist(x)) 
-  hist((x)) #Looks best
-  plot((x), main = paste(i))
-  hist(sqrt(x))
-  plot(sqrt(x))
-  hist(log(x + 1))
-  plot(log(x + 1))
-}
-
-# Barely any inverts - exclude
-# Barely any rock - exclude
-# Everything else looks good untransformed
+# par(mfrow = c(3, 2))
+# for (i in pred.vars) {
+#   x <- dat.maxn[ , i]
+#   x = as.numeric(unlist(x)) 
+#   hist((x)) #Looks best
+#   plot((x), main = paste(i))
+#   hist(sqrt(x))
+#   plot(sqrt(x))
+#   hist(log(x + 1))
+#   plot(log(x + 1))
+# }
 
 # Write data to load in to next script
-saveRDS(dat.maxn, "data/tidy/fss-gam-data-ta.sr.rds")
+saveRDS(dat.maxn, "data/tidy/fssgam_ta.sr_broad.rds")
 
-#lengths - NOT RAN YET
+#lengths
 # Create abundance of all recreational fished species ----
 url <- "https://docs.google.com/spreadsheets/d/1SMLvR9t8_F-gXapR2EemQMEPSw_bUbPLcXd3lJ5g5Bo/edit?ts=5e6f36e2#gid=825736197"
 
 master <- googlesheets4::read_sheet(url)%>%
   ga.clean.names()%>%
   filter(grepl('Australia', global.region))%>% # Change country here
+  dplyr::filter(grepl('SW', marine.region))%>% # Select marine region (currently this is only for Australia)
   dplyr::select(family,genus,species,fishing.type,australian.common.name,minlegal.wa)%>%
   distinct()%>%
+  glimpse()
+
+spp.species <- length %>%
+  dplyr::mutate(scientific = paste(genus, species, sep = " ")) %>%
+  dplyr::filter(species %in% c("spp", "sp", "sp1", "sp10")) %>%
+  distinct(scientific) %>%
   glimpse()
 
 unique(master$fishing.type)
 
 fished.species <- length %>%
+  dplyr::mutate(scientific = paste(genus, species, sep = " ")) %>%
   dplyr::left_join(master) %>%
-  dplyr::mutate(fishing.type = ifelse(scientific %in%c("Serranidae Plectropomus spp","Scombridae Scomberomorus spp","Lethrinidae Gymnocranius spp",
-                                                       "Lethrinidae Lethrinus spp","Lethrinidae Unknown spp","Platycephalidae Platycephalus spp")
-                                      ,"R",fishing.type))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Serranidae Plectropomus spp"), "450", minlegal.wa))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Scombridae Scomberomorus spp"), "900", minlegal.wa))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Lethrinidae Gymnocranius spp"), "280", minlegal.wa))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Lethrinidae Lethrinus spp"), "280", minlegal.wa))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Lethrinidae Unknown spp"), "280", minlegal.wa))%>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Platycephalidae Platycephalus spp"), "280", minlegal.wa))%>%
-  dplyr::filter(fishing.type %in% c("B/R","B/C/R","R","C/R","C"))%>%
-  dplyr::filter(!family%in%c("Monacanthidae", "Scorpididae", "Mullidae"))%>%    # Brooke removed leatherjackets, sea sweeps and goat fish
-  dplyr::filter(!species%in%c("albimarginatus","longimanus")) 
+  dplyr::mutate(fishing.type = ifelse(scientific %in% c("Pseudocaranx spp", "Pseudorhombus spp", 
+                                                        "Platycephalus spp", "Sillaginodes spp",
+                                                        "Sillago spp"), "R", fishing.type)) %>%
+  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Pseudocaranx spp", "Pseudorhombus spp"), 250, minlegal.wa)) %>%
+  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Platycephalus spp"), 300, minlegal.wa)) %>%
+  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Sillaginodes spp"), 280, minlegal.wa)) %>%
+  dplyr::filter(fishing.type %in% c("B/R","B/C/R","R","C/R","C")) %>%
+  dplyr::filter(!scientific %in% c("Latropiscis purpurissatus", "Dactylophora nigricans", "Ophthalmolepis lineolatus",
+                                   "Acanthaluteres brownii", "Acanthaluteres vittiger", "Eubalichthys mosaicus",
+                                   "Meuschenia flavolineata", "Meuschenia freycineti", "Meuschenia galii",
+                                   "Meuschenia hippocrepis", "Upeneichthys vlamingii", "Hypoplectrodes nigroruber")) %>%
+  glimpse()
+
+unique(fished.species$scientific)
 
 without.min.length <- fished.species %>%
   filter(is.na(minlegal.wa))%>%
@@ -232,63 +238,17 @@ unique(combined.length$scientific)
 
 complete.length <- combined.length %>%
   dplyr::right_join(metadata, by = c("sample")) %>% # add in all samples
-  dplyr::select(sample,scientific,number,method) %>%
-  tidyr::complete(nesting(sample,method), scientific) %>%
+  dplyr::select(sample,scientific,number) %>%
+  tidyr::complete(nesting(sample), scientific) %>%
   replace_na(list(number = 0)) %>% #we add in zeros - in case we want to calculate abundance of species based on a length rule (e.g. greater than legal size)
   dplyr::ungroup()%>%
   dplyr::filter(!is.na(scientific)) %>% # this should not do anything
-  dplyr::left_join(.,metadata) %>%
-  dplyr::left_join(.,allhab) %>%
-  dplyr::filter(successful.length%in%c("Y")) %>%
+  dplyr::left_join(metadata) %>%
+  dplyr::left_join(allhab) %>%
+  dplyr::filter(successful.length%in%c("Yes", "Y", "yes"),
+                !is.na(macroalgae)) %>%
   dplyr::mutate(scientific=as.character(scientific)) %>%
   dplyr::glimpse()
 
-testboss <- complete.length %>%
-  dplyr::filter(method%in%"BOSS")
-
-testbruv <- complete.length %>%
-  dplyr::filter(method%in%"BRUV")
-
-length(unique(testboss$sample))
-75*2
-length(unique(testbruv$sample))
-47*2
-
-# Set predictor variables---
-names(complete.length)
-names(allhab)
-
-pred.vars = c("depth", 
-              "macroalgae", 
-              "sand", 
-              "biog", 
-              "relief",
-              "tpi",
-              "roughness",
-              "detrended") 
-
-# predictor variables Removed at first pass---
-# broad.Sponges and broad.Octocoral.Black and broad.Consolidated , "InPreds","BioTurb" are too rare
-
-dat.length <- complete.length
-
-# Check for correalation of predictor variables- remove anything highly correlated (>0.95)---
-round(cor(dat.length[,pred.vars]),2)
-# nothing is highly correlated 
-
-# Plot of likely transformations - thanks to Anna Cresswell for this loop!
-par(mfrow=c(3,2))
-for (i in pred.vars) {
-  x<-dat.length[ ,i]
-  x = as.numeric(unlist(x))
-  hist((x))#Looks best
-  plot((x),main = paste(i))
-  hist(sqrt(x))
-  plot(sqrt(x))
-  hist(log(x+1))
-  plot(log(x+1))
-}
-
-#all looks fine
-#write data to load in to next script
-saveRDS(dat.length, "data/Tidy/dat.length.rds")
+# write data to load in to next script
+saveRDS(complete.length, "data/tidy/fssgam_length_broad.rds")

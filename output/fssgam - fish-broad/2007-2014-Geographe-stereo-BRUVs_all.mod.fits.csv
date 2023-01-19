@@ -1,0 +1,8 @@
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
+"total.abundance.inverts+macroalgae","inverts+macroalgae",2878.79568201793,2900.51738373964,0.07143,NA,3.92,0,0,2.687,0.237,0.178,0,1,1,0,0,0,0,0,0.237
+"total.abundance.macroalgae","macroalgae",2879.70854911663,2897.83045723378,0.06644,NA,2.9,0,0.913,0,0.15,0.682,0,1,0,0,0,0,0,0,0.387
+"total.abundance.inverts+macroalgae+roughness","inverts+macroalgae+roughness",2880.01534876383,2905.30854530162,0.07372,NA,4.91,0,1.22,7.478,0.129,0.016,0,1,1,0,0,0,0,1,0.516
+"total.abundance.detrended+macroalgae","detrended+macroalgae",2880.46950386833,2905.47582161869,0.07245,NA,4.62,0,1.674,7.645,0.103,0.015,0,1,0,0,0,0,1,0,0.619
+"species.richness.inverts+macroalgae","inverts+macroalgae",1653.87973360744,1672.03877714943,0.32607,NA,3,0,0,0,0.472,0.874,0,1,1,0,0,0,0,0,0.472
+"species.richness.inverts+macroalgae+slope","inverts+macroalgae+slope",1655.78754416595,1679.82816341611,0.32937,NA,4.4,0,1.908,7.789,0.182,0.018,0,1,1,0,0,1,0,0,0.654
+"species.richness.detrended+inverts+macroalgae","detrended+inverts+macroalgae",1655.86896956244,1677.61750267833,0.32674,NA,4,0,1.989,5.579,0.174,0.054,0,1,1,0,0,0,1,0,0.828
