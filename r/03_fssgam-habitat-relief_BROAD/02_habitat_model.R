@@ -70,7 +70,7 @@ m_sand <- gam(cbind(Sand, broad.total.points.annotated - Sand) ~
               data = habi, method = "REML", family = binomial("logit"))
 summary(m_sand)
 gam.check(m_sand)
-vis.gam(m_sand)
+# vis.gam(m_sand)
 
 m_rock <- gam(cbind(Rock, broad.total.points.annotated - Rock) ~ 
                 s(detrended, k = 5, bs = "cr") + 
@@ -95,7 +95,7 @@ prasts <- rasterFromXYZ(preddf)
 plot(prasts)
 
 # categorise by dominant tag
-preddf$dom_tag <- apply(preddf[8:11], 1,
+preddf$dom_tag <- apply(preddf[7:11], 1,
                         FUN = function(x){names(which.max(x))})
 preddf$dom_tag <- sub('.', '', preddf$dom_tag)
 head(preddf)

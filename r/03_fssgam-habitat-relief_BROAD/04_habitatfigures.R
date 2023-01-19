@@ -15,6 +15,7 @@ library(terra)
 library(patchwork)
 library(sf)
 library(ggnewscale)
+library(dplyr)
 
 
 # Set your study name
@@ -23,7 +24,7 @@ name <- "Parks-Geographe-synthesis"                                             
 # Set CRS for transformations
 wgscrs <- "+proj=longlat +datum=WGS84"
 gdacrs <- "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
-sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
+# sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
 
 # Set cropping extent - larger than most zoomed out plot
 e <- ext(114.8, 116, -33.8, -33) 
@@ -64,7 +65,7 @@ wampa$waname <- dplyr::recode(wampa$waname,
                               "MMA" = 'Marine Management Area' )
 
 wampa <- st_crop(wampa, e)                                                      # Crop to the study area
-wasanc <- wampa[wampa$ZONE_TYPE %in% "Sanctuary Zone (IUCN IA)", ]
+wasanc <- wampa[wampa$waname %in% "Sanctuary Zone", ]
 
 # Terrestrial parks
 terrnp <- st_read("data/spatial/shapefiles/Legislated_Lands_and_Waters_DBCA_011.shp") %>%  # Terrestrial reserves
@@ -76,7 +77,6 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")        
 cwatr <- st_crop(cwatr, e)
 
 # Bathymetry data
-# cbaths <- list.files("data/spatial/rasters/raw bathymetry", "*tile", full.names = TRUE)
 cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
 cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
 bath_r <- rast(cbathy)
@@ -109,9 +109,16 @@ wampa_cols <- scale_colour_manual(values = c(
 name = "State Marine Parks")
 
 spreddf <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
-  dplyr::mutate(dom_tag = recode(dom_tag, 
-                                 sand = "Sand")) %>%
   glimpse()
+
+unique(spreddf$dom_tag)
+
+spreddf$dom_tag <- dplyr::recode(spreddf$dom_tag,
+                                 sand = "Sand",
+                                 inverts = "Sessile invertebrates",
+                                 rock = "Rock",
+                                 seagrass = "Seagrass",
+                                 macroalg = "Macroalgae")
 
 hab_fills <- scale_fill_manual(values = c("Sand" = "wheat",
                                           "Sessile invertebrates" = "plum",
@@ -123,38 +130,39 @@ hab_fills <- scale_fill_manual(values = c("Sand" = "wheat",
 p1 <- ggplot() +
   geom_tile(data = spreddf,
             aes(x, y, fill = dom_tag)) +
-  hab_cols +
+  hab_fills +
   labs(x = NULL, y = NULL, fill = NULL) +
   new_scale_fill() +
-  geom_contour(data = bathdf, aes(longitude, latitude, z = Depth), color = "black",
+  geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
                breaks = c(-30, -70, -200), size = 0.2) +
-  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.5) +
-  # geom_sf(data = cwatr, colour = "red", size = 0.7) +
-  geom_sf(data = nw_mpa, fill = NA, colour = "#b9e6fb", size = 1.2) +
-  geom_sf(data = mb_mpa %>% dplyr::filter(waname %in% "Sanctuary Zone"),
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
+  nmpa_cols +
+  new_scale_color() +
+  geom_sf(data = wasanc,
           fill = NA, aes(color = waname), size = 0.7, show.legend = F) +
+  wampa_cols +
+  new_scale_color() +
   geom_sf(data = cwatr, colour = "red", size = 0.9) +
   wampa_cols +
   guides(colour = "none") +
-  coord_sf(xlim = c(115.2517, 116), ylim = c(-20.83627, -20)) +
-  theme_minimal() +
-  annotate(geom = "text", x = c(115.390 + 0.065), y = c(-20.269), label = c("Tryal Rocks"), size = 2.5)
-png(filename = "plots/site_dominant_habitat.png", width = 9, height = 6,
-    res = 160, units = "in")
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +   
+  theme_minimal()
+png(filename = paste0("plots/habitat/", name, "_site_dominant_habitat.png"), width = 10, height = 6,
+    res = 300, units = "in")
 p1
 dev.off()
 
 # fig 2: habitat multiplot
 # melt classes for faceting
-widehabit <- melt(spreddf, measure.vars = c(4:9)) %>%
-  dplyr::filter(!variable %in% "broad.layer_pphotic")
+widehabit <- melt(spreddf, measure.vars = c(7:11)) 
 unique(widehabit$variable)
 widehabit$variable <- dplyr::recode(widehabit$variable,                         #wide habitat but its long :P
-                                    broad.layer_pcoral = "Hard coral",
-                                    broad.layer_pmeso = "Soft coral/sponges",
-                                    broad.layer_pmacro = "Macroalgae",
-                                    broad.layer_prock = "Rock",
-                                    broad.layer_psand = "Sand")
+                                    pseagrass  = "Seagrass",
+                                    pmacroalg  = "Macroalgae",
+                                    psand  = "Sand",
+                                    prock  = "Rock",
+                                    pinverts = "Sessile invertebrates")
 
 # # coord_sf(xlim = c(115.2, 116), ylim = c(-21, -20)) +
 # smb_mpa <- st_crop(mb_mpa, extent(c(-21, 116, -20, 115.2)))
@@ -170,33 +178,27 @@ dep_ann <- data.frame(x = c((115.340000003 + 0.05), (115.219999997 + 0.05), (115
 
 
 p2 <- ggplot() +
-  # geom_contour_filled(data = bathdf, aes(x = longitude, y = latitude, z = Depth,
-  #                                        fill = after_stat(level)),
-  #                     breaks = c(0, -30, -70, -200, -700)) +
-  # scale_fill_grey(start = 1, end = 0.5, guide = "none") +
-  # 
-  # geom_contour(data = bathdf, aes(longitude, latitude, z = Depth),
-  #              breaks = c(0, -30, -70, -200, -700), colour = "white",
-  #              alpha = 1, size = 0.1) +
-  # 
-  # new_scale_fill()+
   geom_tile(data = widehabit, aes(x, y, fill = value)) +
   scale_fill_viridis(direction = -1, limits = c(0, max(widehabit$value))) +
-  geom_contour(data = bathdf, aes(longitude, latitude, z = Depth), color = "black",
+  geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
                breaks = c(-30, -70, -200), size = 0.2) +
-  geom_sf(data = nw_mpa, fill = NA, colour = "#b9e6fb", size = 1.5) + # BG changed size to 1.5
-  geom_sf(data = mb_mpa%>%dplyr::filter(waname%in%"Sanctuary Zone"),
-          fill = NA, aes(color = waname), size = 1.2, show.legend = F) + # BG changed size to 1.2
-  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.7, show.legend = F) + 
+  nmpa_cols +
+  new_scale_color() +
+  geom_sf(data = wasanc,
+          fill = NA, aes(color = waname), size = 0.7, show.legend = F) + 
+  wampa_cols +
+  new_scale_color() +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.1) +
   labs(x = NULL, y = NULL, fill = "Occurrence (p)") +
-  geom_text(data = dep_ann, aes(x , y, label = label), inherit.aes = F, size = 1.8, colour = "black")+
+  # geom_text(data = dep_ann, aes(x , y, label = label), inherit.aes = F, size = 1.8, colour = "black")+
   geom_sf(data = cwatr, colour = "red", size = 0.7) +
-  coord_sf(xlim = c(115.2517, 116), ylim = c(-20.83627, -20)) + # Updated BG
-  scale_x_continuous(breaks = seq(115.3, 116, by = 0.2)) + # Added BG
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  # scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) + 
   theme_minimal() +
   wampa_cols +
-  facet_wrap(~variable)
-png(filename = "plots/site_habitat_predicted.png", width = 9, height = 8,
-    units = "in", res = 160)
+  facet_wrap(~variable, ncol = 2)
+png(filename = paste0("plots/habitat/", name, "_site_individual_habitat.png"), width = 9, height = 8,
+    units = "in", res = 300)
 p2
 dev.off()
