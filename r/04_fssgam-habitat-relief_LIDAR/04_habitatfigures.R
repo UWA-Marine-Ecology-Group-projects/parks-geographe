@@ -24,7 +24,7 @@ name <- "Parks-Geographe-synthesis"                                             
 # Set CRS for transformations
 wgscrs <- "+proj=longlat +datum=WGS84"
 gdacrs <- "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
-# sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
+sppcrs <- "+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs"      
 
 # Set cropping extent - larger than most zoomed out plot
 e <- ext(114.8, 116, -33.8, -33) 
@@ -108,7 +108,7 @@ wampa_cols <- scale_colour_manual(values = c(
 ),
 name = "State Marine Parks")
 
-spreddf <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
+spreddf <- readRDS("output/fssgam - habitat-lidar/lidar_habitat_predictions.rds") %>%
   glimpse()
 
 unique(spreddf$dom_tag)
@@ -146,7 +146,8 @@ p1 <- ggplot() +
   geom_sf(data = cwatr, colour = "red", size = 0.9) +
   wampa_cols +
   guides(colour = "none") +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +   
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +  
   theme_minimal()
 png(filename = paste0("plots/habitat/", name, "_site_dominant_habitat.png"), width = 10, height = 6,
     res = 300, units = "in")

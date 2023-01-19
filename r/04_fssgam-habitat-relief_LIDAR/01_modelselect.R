@@ -30,7 +30,7 @@ rm(list=ls())
 library(FSSgam)
 
 # Bring in and format the data----
-habi <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%           # merged data from 'R/04_fssgam-fish-BROAD/01_FSSGAMs_format-data.R'
+habi <- readRDS("data/tidy/10m_lidar-habitat-bathymetry-derivatives.rds") %>%           # merged data from 'R/05_fssgam-fish-LIDAR/01_FSSGAMs_format-data.R'
   dplyr::mutate(broad.ascidians = ifelse(is.na(broad.ascidians), 0, broad.ascidians),
                 broad.invertebrate.complex = ifelse(is.na(broad.invertebrate.complex), 0, broad.invertebrate.complex)) %>%
   dplyr::mutate("Sessile invertebrates" = broad.sponges + broad.stony.corals + 
@@ -45,14 +45,13 @@ habi <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%       
   glimpse()
 
 names(habi)
+unique(habi$taxa)
 
-test <- readRDS("data/spatial/rasters/250m_GA_bathymetry-derivatives.rds")
-plot(test)
 # Set predictor variables---
 pred.vars <- c("Z","detrended", "roughness", "slope") 
 
 # Check for correlation of predictor variables- remove anything highly correlated (>0.95)---
-round(cor(habi[ , pred.vars]), 2)
+round(cor(habi[ , pred.vars]), 2)                                               # Slope and roughness 0.94 correlated
 
 unique.vars.use <- unique(as.character(habi$taxa))
 
@@ -65,7 +64,7 @@ unique.vars.use <- unique(as.character(habi$taxa))
 # resp.vars     
 
 # Run the full subset model selection----
-outdir    <- ("output/fssgam - habitat-broad/") #Set wd for example outputs - will differ on your computer
+outdir    <- ("output/fssgam - habitat-lidar/") 
 resp.vars <- unique.vars.use
 use.dat   <- habi
 # factor.vars <- c("Status")# Status as a Factor with two levels

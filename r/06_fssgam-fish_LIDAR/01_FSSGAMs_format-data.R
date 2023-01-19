@@ -29,13 +29,7 @@ library(sp)
 library(corrr)
 # devtools::install_github("beckyfisher/FSSgam_package")
 
-## Setup ----
-# set your working directory (manually, once for the whole R project)
-# use the 'files' tab to set wd in '~/parks-abrolhos' manually (your relative path) then run this line (if we need it?)
-working.dir <- getwd()
-setwd(working.dir)
-
-# name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name --- DON't think we use this??
+name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name 
 
 # load and join datasets
 #MaxN
@@ -51,34 +45,47 @@ maxn <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.maxn.csv")
 #   glimpse()
 
 # Load in the habitat data
-allhab <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs_broad.habitat.csv") %>%
+allhab1 <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs_broad.habitat.csv") %>%
   ga.clean.names() %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%
+  dplyr::mutate(method = "BRUV",
+                sample = as.character(sample)) %>%
   glimpse()
 
-allhab <- allhab %>%
-  transform(macroalgae = broad.macroalgae / broad.total.points.annotated) %>%
-  transform(sand = broad.unconsolidated / broad.total.points.annotated) %>%
-  transform(rock = broad.consolidated / broad.total.points.annotated) %>%
-  transform(inverts = (broad.sponges + broad.stony.corals) / broad.total.points.annotated) %>%
-  transform(seagrass = broad.seagrasses / broad.total.points.annotated) %>%
+allhab2 <- read.csv("data/tidy/2021-03_Geographe_BOSS_broad.habitat.csv") %>%
+  ga.clean.names() %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%
+  dplyr::mutate(method = "BOSS",
+                sample = as.character(sample)) %>%
+  glimpse()
+
+allhab <- bind_rows(allhab1, allhab2) %>%
   glimpse()
 
 # Load in the bathy derivatives
+sppcrs  <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")
+wgscrs  <- CRS("+proj=longlat +datum=WGS84")
+
 coordinates(allhab) <- ~longitude + latitude
-depth <- readRDS("data/spatial/rasters/site_lidar_depth.rds")
-detrended <- readRDS("data/spatial/rasters/site_lidar_detrended.rds")
-slope <- readRDS("data/spatial/rasters/site_lidar_slope.rds")
+crs(allhab) <- wgscrs
+allhab <- spTransform(allhab, sppcrs)                                           # Reproject data to match source raster
+
+depth <- readRDS("data/spatial/rasters/10m_lidar_depth.rds")
+detrended <- readRDS("data/spatial/rasters/10m_lidar_detrended.rds")
+slope <- readRDS("data/spatial/rasters/10m_lidar_slope.rds")
+roughness <- readRDS("data/spatial/rasters/10m_lidar_roughness.rds")
+plot(depth)
+plot(allhab, add = T)
 
 allhab <- raster::extract(depth, allhab, sp = T)
 allhab <- raster::extract(detrended, allhab, sp = T)
 allhab <- raster::extract(slope, allhab, sp = T)
+allhab <- raster::extract(roughness, allhab, sp = T)
 allhab <- as.data.frame(allhab) %>%
-  dplyr::filter(!is.na(lidar.depth)) %>% # Only samples in the lidar area
-  dplyr::mutate(depth = ifelse(depth %in% "N/A", lidar.depth, depth)) %>%
-  dplyr::mutate(depth = abs(as.numeric(depth)),
-                lidar.depth = abs(as.numeric(lidar.depth)))
+  dplyr::filter(!is.na(Z)) %>%                                                  # Filter out samples not in the lidar area
+  glimpse()
 # Save this out for use later
-saveRDS(allhab, file = "data/tidy/habitat-derivatives-tidy-lidar.rds")
+saveRDS(allhab, file = "data/tidy/10m_lidar-habitat-bathymetry-derivatives.rds")
 
 names(maxn)
 
