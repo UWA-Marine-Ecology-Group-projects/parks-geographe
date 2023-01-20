@@ -1,0 +1,7 @@
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
+"greater than legal size.seagrass+Z","seagrass+Z",541.283896754552,560.381818997964,0.07777,NA,4.64,0,0,0,0.334,0.331,1,0,0,1,0,0,0,0,0.334
+"greater than legal size.mean.relief+seagrass+Z","mean.relief+seagrass+Z",541.535216570713,563.169005308888,0.08271,NA,5.59,0,0.251,2.787,0.294,0.082,1,0,0,1,1,0,0,0,0.628
+"greater than legal size.detrended+seagrass+Z","detrended+seagrass+Z",543.012594015832,564.78536533335,0.08432,NA,5.66,0,1.729,4.404,0.141,0.037,1,0,0,1,0,0,1,0,0.769
+"smaller than legal size.detrended+inverts","detrended+inverts",659.49397581585,678.262517116726,0.16193,NA,4.43,0,0,2.182,0.338,0.148,0,0,1,0,0,0,1,0,0.338
+"smaller than legal size.detrended+inverts+mean.relief","detrended+inverts+mean.relief",661.073229718504,682.54893594531,0.16221,NA,5.47,0,1.579,6.469,0.153,0.017,0,0,1,0,1,0,1,0,0.491
+"smaller than legal size.detrended+inverts+Z","detrended+inverts+Z",661.441802439375,683.227362600079,0.16702,NA,5.56,0,1.948,7.147,0.128,0.012,1,0,1,0,0,0,1,0,0.619

@@ -18,9 +18,18 @@ library(stringr)
 
 # read in
 dat1 <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
-  dplyr::rename(number=maxn)%>%
+  dplyr::rename(number=maxn) %>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
   glimpse()
-dat2 <- readRDS("data/tidy/fssgam_length_broad.rds")
+dat2 <- readRDS("data/tidy/fssgam_length_broad.rds") %>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
+  glimpse()
 fabund <- bind_rows(dat1,dat2)                        # merged fish data used for fssgam script
 preddf  <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
   dplyr::rename(seagrass = pseagrass,
@@ -28,12 +37,28 @@ preddf  <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds"
                 inverts = pinverts) %>%
   glimpse()
 
-# # reduce predictor space to fit survey area
-# fishsp <- SpatialPointsDataFrame(coords = cbind(fabund$longitude.1, 
-#                                                 fabund$latitude.1), 
-#                                  data = fabund)
-# sbuff  <- buffer(fishsp, 10000)
-# unique(fabund$scientific)
+preds <- rasterFromXYZ(preddf[,1:11])
+
+preds <- preds[[c(1:6, 9)]]
+plot(preds)
+library(dismo)
+xy <- fabund %>%
+  dplyr::filter(scientific %in% "total.abundance") %>%
+  dplyr::select(longitude , latitude) %>%
+  glimpse()
+
+dat <- raster::extract(preds, xy)
+
+messrast <- mess(preds, dat) %>%
+  clamp(lower = -0.01, useValues = F)
+plot(messrast)
+
+# testdf <- as.data.frame(test, xy = T) %>%
+#   dplyr::mutate(mess = ifelse(mess < -500, NA, mess)) 
+# summary(test)
+# hist(testdf$mess)
+# test <- rasterFromXYZ(testdf)
+# plot(test)
 
 # use formula from top model from FSSGam model selection
 #total abundance
@@ -70,6 +95,10 @@ preddf <- cbind(preddf,
 prasts <- rasterFromXYZ(preddf) 
 plot(prasts)
 
+# Mask by the MESS raster
+prasts_m <- mask(prasts, messrast)
+plot(prasts_m)
+
+preddf <- as.data.frame(prasts_m, xy = T)
+
 saveRDS(preddf, "output/fssgam - fish-broad/broad_fish_predictions.rds")
-
-

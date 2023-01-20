@@ -13,6 +13,7 @@ library(mgcv)
 library(ggplot2)
 library(viridis)
 library(raster)
+library(dismo)
 
 # read in
 habi   <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%
@@ -26,6 +27,18 @@ habi   <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%
                 "Seagrass" = broad.seagrasses) %>%
   glimpse()
 preds  <- readRDS("data/spatial/rasters/250m_GA_bathymetry-derivatives.rds")    # spatial covs from 'R/1_mergedata.R'
+plot(preds)
+
+xy <- habi %>%
+  dplyr::select(longitude , latitude) %>%
+  glimpse()
+
+dat <- raster::extract(preds, xy)
+
+messrast <- mess(preds, dat) %>%
+  clamp(lower = -0.01, useValues = F)
+plot(messrast)
+
 preddf <- as.data.frame(preds, xy = TRUE, na.rm = TRUE)
 # preddf$Depth <- preddf$Z * -1
 
@@ -93,6 +106,11 @@ preddf <- cbind(preddf,
 prasts <- rasterFromXYZ(preddf)
 # prasts$dom_tag <- which.max(prasts[[11:15]])
 plot(prasts)
+
+messrast <- crop(messrast, prasts)
+prasts_m <- mask(prasts, messrast)
+plot(prasts_m)
+preddf <- as.data.frame(prasts_m, xy = T, na.rm = T)
 
 # categorise by dominant tag
 preddf$dom_tag <- apply(preddf[7:11], 1,

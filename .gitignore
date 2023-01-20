@@ -1,6 +1,7 @@
 /data/spatial/rasters/tile6c.txt
 /data/spatial/oceanography/large
 /output/fssgam - habitat-lidar/lidar_habitat_predictions.rds
+/output/fssgam - fish-broad/broad_fish_predictions.rds
 
 # History files
 .Rhistory

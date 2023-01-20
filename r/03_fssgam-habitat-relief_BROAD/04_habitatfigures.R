@@ -116,13 +116,12 @@ unique(spreddf$dom_tag)
 spreddf$dom_tag <- dplyr::recode(spreddf$dom_tag,
                                  sand = "Sand",
                                  inverts = "Sessile invertebrates",
-                                 rock = "Rock",
                                  seagrass = "Seagrass",
                                  macroalg = "Macroalgae")
 
 hab_fills <- scale_fill_manual(values = c("Sand" = "wheat",
                                           "Sessile invertebrates" = "plum",
-                                          "Rock" = "grey40",
+                                          # "Rock" = "grey40",
                                           "Macroalgae" = "darkgoldenrod4",
                                           "Seagrass" = "forestgreen"
 ))

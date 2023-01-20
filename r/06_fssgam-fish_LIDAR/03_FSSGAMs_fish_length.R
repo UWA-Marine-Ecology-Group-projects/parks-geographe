@@ -1,19 +1,18 @@
 ###
-# Project: Parks - Abrolhos
-# Data:    BOSS & BRUV fish, habitat
-# Task:    Modelling fish lengths w/ FSSGAM
-# author:  Claude, Brooke, Kingsley
-# date:    Nov-Dec 2021
+# Project: Parks - Geographe synthesis 
+# Data:    BRUV fish
+# Task:    Run FSS-GAM for total abundance and species richness maxn metrics
+# author:  Claude
+# date:    January 2023
 ##
 
 # Part 1-FSS modeling----
 rm(list=ls())
 
 ## librarys----
-detach("package:plyr", unload=TRUE)#will error - don't worry
+# detach("package:plyr", unload=TRUE)#will error - don't worry
 library(tidyr)
 library(dplyr)
-options(dplyr.width = Inf) #enables head() to display all coloums
 library(mgcv)
 library(MuMIn)
 library(car)
@@ -28,26 +27,18 @@ library(FSSgam)
 library(GlobalArchive)
 library(ggplot2)
 
-## set study name
-study <- "2021-05_Abrolhos_npz6" 
-name <- study
+name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name
 
-## Set your working directory ----
-working.dir<-getwd()
-setwd(working.dir)
-
-dat <- readRDS("data/Tidy/dat.length.rds")%>%
-  dplyr::filter(location%in%"NPZ6")%>%
+dat <- readRDS("data/tidy/fssgam_length_lidar.rds")%>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
   glimpse()
 
 # # Re-set the predictors for modeling----
-pred.vars = c("depth", 
-              "macroalgae", 
-              "biog", 
-              "relief",
-              "tpi",
-              "roughness",
-              "detrended")
+pred.vars <- c("Z", "macroalgae", "inverts",
+               "seagrass", "mean.relief","slope","detrended", "roughness") 
 
 # Check to make sure Response vector has not more than 80% zeros----
 unique.vars=unique(as.character(dat$scientific))
@@ -61,38 +52,32 @@ for(i in 1:length(unique.vars)){
 
 unique.vars.use   
 
-# changed to 90% - smaller than legal size included
-
 # Run the full subset model selection----
-savedir <- "output/fssgam - fish"
-resp.vars=unique.vars.use
-use.dat=as.data.frame(dat)
+savedir <- "output/fssgam - fish-lidar"
+resp.vars = unique.vars.use
+use.dat = as.data.frame(dat)
 str(use.dat)
 
-name<- paste(study,"length",sep="_")
+name<- paste(name,"length",sep="_")
 
-factor.vars=c("status")# Status as a Factor with two levels
+# factor.vars=c("status")# Status as a Factor with two levels
 out.all=list()
 var.imp=list()
 
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
   use.dat=as.data.frame(dat[which(dat$scientific==resp.vars[i]),])
-  use.dat$method <- as.factor(use.dat$method)
-  use.dat$location <- as.factor(use.dat$location)
-  Model1=gam(number~s(depth,k=3,bs='cr')
+  Model1=gam(number~s(Z,k=3,bs='cr')
              ,
              family=tw(),  data=use.dat)
   
   model.set=generate.model.set(use.dat=use.dat,
                                test.fit=Model1,
                                pred.vars.cont=pred.vars,
-                               pred.vars.fact=factor.vars,
-                               factor.smooth.interactions = NA,
+                               # pred.vars.fact=factor.vars,
+                               # factor.smooth.interactions = NA,
                               # smooth.smooth.interactions = c("depth", "biog"),
-                               k=3,
-                               null.terms="method"
-                               )
+                               k=3)
   out.list=fit.model.set(model.set,
                          max.models=600,
                          parallel=T)
