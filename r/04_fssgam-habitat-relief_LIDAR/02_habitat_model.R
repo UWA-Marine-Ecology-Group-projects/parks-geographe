@@ -14,6 +14,7 @@ library(ggplot2)
 library(viridis)
 library(raster)
 library(dplyr)
+library(dismo)
 
 # read in
 habi   <- readRDS("data/tidy/10m_lidar-habitat-bathymetry-derivatives.rds") %>%
@@ -32,6 +33,16 @@ detrended <- readRDS("data/spatial/rasters/10m_lidar_detrended.rds")
 slope <- readRDS("data/spatial/rasters/10m_lidar_slope.rds")
 roughness <- readRDS("data/spatial/rasters/10m_lidar_roughness.rds")
 preds <- stack(depth, detrended, slope, roughness)
+
+xy <- habi %>%
+  dplyr::select(longitude , latitude) %>%
+  glimpse()
+
+dat <- raster::extract(preds, xy)
+
+messrast <- mess(preds, dat) %>%
+  clamp(lower = -0.01, useValues = F)
+
 preddf <- as.data.frame(preds, xy = TRUE, na.rm = T) %>%
   dplyr::select(x, y, everything())
 # use formula from top model from '2_modelselect.R'
@@ -89,8 +100,17 @@ preddf <- cbind(preddf,
                 "prock" = predict(m_rock, preddf, type = "response"),
                 "pinverts" = predict(m_inverts, preddf, type = "response"))
 
+prasts <- rasterFromXYZ(preddf)
+# prasts$dom_tag <- which.max(prasts[[11:15]])
+plot(prasts)
+
+messrast <- crop(messrast, prasts)
+prasts_m <- mask(prasts, messrast)
+plot(prasts_m)
+preddf <- as.data.frame(prasts_m, xy = T, na.rm = T)
+
 # categorise by dominant tag
-preddf$dom_tag <- apply(preddf[7:11], 1,
+preddf$dom_tag <- apply(preddf[5:9], 1,
                         FUN = function(x){names(which.max(x))})
 preddf$dom_tag <- sub('.', '', preddf$dom_tag)
 head(preddf)

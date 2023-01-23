@@ -15,8 +15,7 @@ library(viridis)
 library(raster)
 library(dplyr)
 library(stringr)
-
-
+library(dismo)
 
 # read in
 dat1 <- readRDS("data/tidy/fss-gam-data-ta.sr-lidar.rds")%>%
@@ -41,27 +40,20 @@ preddf  <- readRDS("output/fssgam - habitat-lidar/lidar_habitat_predictions.rds"
                 inverts = pinverts) %>%
   glimpse()
 
-preds <- rasterFromXYZ(preddf[,1:11])
-
-preds <- preds[[c(1:6, 9)]]
+preds <- rasterFromXYZ(preddf %>% dplyr::select(x, y, Z, detrended, slope, roughness, seagrass, macroalgae, inverts))
 plot(preds)
-library(dismo)
+
 xy <- fabund %>%
   dplyr::filter(scientific %in% "total.abundance") %>%
   dplyr::select(longitude , latitude) %>%
-  slice(1:10) %>%
   glimpse()
 
 dat <- raster::extract(preds, xy)
 
-test <- mess(preds, dat)
-
-# # reduce predictor space to fit survey area
-# fishsp <- SpatialPointsDataFrame(coords = cbind(fabund$longitude.1, 
-#                                                 fabund$latitude.1), 
-#                                  data = fabund)
-# sbuff  <- buffer(fishsp, 10000)
-# unique(fabund$scientific)
+messrast <- mess(preds, dat)
+messrast <- messrast %>%
+  clamp(lower = -0.01, useValues = F)
+plot(messrast)
 
 # use formula from top model from FSSGam model selection
 #total abundance
@@ -97,8 +89,9 @@ preddf <- cbind(preddf,
 
 # Visualise
 prasts <- rasterFromXYZ(preddf %>% dplyr::select(x, y, p_totabund, p_richness, p_legal, p_sublegal)) 
-plot(prasts)
+prasts_m <- mask(prasts, messrast)
+plot(prasts_m)
 
-saveRDS(preddf, "output/fssgam - fish-broad/broad_fish_predictions.rds")        # Ignored - too large
+preddf <- as.data.frame(prasts_m, xy = T, na.rm = T)
 
-
+saveRDS(preddf, "output/fssgam - fish-lidar/lidar_fish_predictions.rds")        # Ignored - too large

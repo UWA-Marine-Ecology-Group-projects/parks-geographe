@@ -18,11 +18,12 @@ library(ggnewscale)
 library(dplyr)
 
 # Set your study name
-name <- "Parks-Geographe-synthesis"                                             # Change here
+name <- "Parks-Geographe-synthesis-lidar"                                     
 
 # Set CRS for transformations
 wgscrs <- "+proj=longlat +datum=WGS84"
 gdacrs <- "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
+sppcrs <- "+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs" 
 
 # Set cropping extent - larger than most zoomed out plot
 e <- ext(114.8, 116, -33.8, -33) 
@@ -106,7 +107,7 @@ wampa_cols <- scale_colour_manual(values = c(
 ),
 name = "State Marine Parks")
 
-spreddf <- readRDS("output/fssgam - fish-broad/broad_fish_predictions.rds") %>%
+spreddf <- readRDS("output/fssgam - fish-lidar/lidar_fish_predictions.rds") %>%
   glimpse()
 
 # plotting broad maps
@@ -127,12 +128,12 @@ p11 <- ggplot() +
   wampa_cols +
   guides(colour = "none") +
   theme_minimal() +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
   labs(x = NULL, y = NULL, fill = "Total Abundance", title = "Whole assemblage") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
-
-p11
+# p11
 
 #species richness
 p21 <- ggplot() +
@@ -150,12 +151,13 @@ p21 <- ggplot() +
   wampa_cols +
   guides(colour = "none") +
   theme_minimal() +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
   labs(x = NULL, y = NULL, fill = "Species Richness") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
-p21
+# p21
 
 # greater than legal size
 p31 <- ggplot() +
@@ -173,12 +175,13 @@ p31 <- ggplot() +
   wampa_cols +
   guides(colour = "none") +
   theme_minimal() +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
   labs(x = NULL, y = NULL, fill = "Legal", title = "Targeted assemblage") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
-p31
+# p31
 
 #smaller than legal size
 p41 <- ggplot() +
@@ -196,15 +199,16 @@ p41 <- ggplot() +
   wampa_cols +
   guides(colour = "none") +
   theme_minimal() +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  coord_sf(xlim = c(313788.041, 376671.635),
+           ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
   labs(x = NULL, y = NULL, fill = "Sublegal") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
-p41
+# p41
 
 
 gg.predictions.npz <- p11 + p21 + p31 + p41 & theme(legend.justification = "left")    #, aspect.ratio=1
-gg.predictions.npz
+# gg.predictions.npz
 
 ggsave(paste0("plots/fish/", name, "_site_fish_predictions.png"), gg.predictions.npz, width = 10, height = 5, dpi = 300)

@@ -155,7 +155,7 @@ dev.off()
 
 # fig 2: habitat multiplot
 # melt classes for faceting
-widehabit <- melt(spreddf, measure.vars = c(7:11)) 
+widehabit <- melt(spreddf, measure.vars = c(5:9)) 
 unique(widehabit$variable)
 widehabit$variable <- dplyr::recode(widehabit$variable,                         #wide habitat but its long :P
                                     pseagrass  = "Seagrass",

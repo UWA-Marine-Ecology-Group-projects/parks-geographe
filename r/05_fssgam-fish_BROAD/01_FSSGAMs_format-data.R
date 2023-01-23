@@ -206,7 +206,9 @@ fished.species <- length %>%
   dplyr::filter(!scientific %in% c("Latropiscis purpurissatus", "Dactylophora nigricans", "Ophthalmolepis lineolatus",
                                    "Acanthaluteres brownii", "Acanthaluteres vittiger", "Eubalichthys mosaicus",
                                    "Meuschenia flavolineata", "Meuschenia freycineti", "Meuschenia galii",
-                                   "Meuschenia hippocrepis", "Upeneichthys vlamingii", "Hypoplectrodes nigroruber")) %>%
+                                   "Meuschenia hippocrepis", "Mueschenia australis", "Mueschenia venusta" ,
+                                   "Upeneichthys vlamingii", "Hypoplectrodes nigroruber", "Girella zebra", 
+                                   "Scorpis georgiana", "Sphyrna zygaena")) %>%
   glimpse()
 
 unique(fished.species$scientific)
