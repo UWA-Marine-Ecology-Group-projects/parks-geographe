@@ -20,7 +20,7 @@ library(patchwork)
 
 # Set your study name
 name       <- "Parks-Geographe-synthesis"
-zone       <- "Ningaloo"
+zone       <- "Geographe"
 
 #load theme
 Theme1 <-
@@ -46,13 +46,13 @@ Theme1 <-
 se <- function(x) sd(x)/sqrt(length(x))
 
 # read in maxn and lengths
-full.maxn <- read.csv(paste0("data/tidy/", name, ".complete.maxn.csv"))%>%
+full.maxn <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.maxn.csv")%>%
   glimpse()
 
-maxn <- readRDS(paste0("data/tidy/", name, "_gam-abundance.rds"))%>%
+maxn <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
   glimpse()
 
-length <- readRDS(paste0("data/tidy/", name, "_gam-length.rds"))%>%
+length <- readRDS("data/tidy/fssgam_length_broad.rds")%>%
   glimpse()
 
 #read in SST
@@ -89,7 +89,8 @@ cti <- full.maxn %>%
   glimpse()
 
 # need to make a new dataframe - year, species richness (plus SE), greater than legal (plus SE)
-year <- c("2017","2017","2018","2018","2019","2019","2020","2020","2021","2021","2022","2022")
+# year <- c("2017","2017","2018","2018","2019","2019","2020","2020","2021","2021","2022","2022")
+year <- c(2014:2022, 2014:2022)
 status <- c("Fished","No-take")
 dat <- data.frame(year,status)
 dat$year <- as.numeric(dat$year)
@@ -98,9 +99,21 @@ str(dat)
 #species richness
 spr.sr <- maxn %>%
   dplyr::filter(scientific%in%"species.richness") %>%
-  dplyr::mutate(year = as.numeric(ifelse(campaignid %in% "2019-08_Ningaloo_stereo-BRUVs", "2019", "2022"))) %>%
-  dplyr::group_by(year, status) %>%
+  # dplyr::mutate(year = as.numeric(ifelse(campaignid %in% "2019-08_Ningaloo_stereo-BRUVs", "2019", "2022"))) %>%
+  dplyr::group_by(status) %>%
   dplyr::summarise(species.richness = mean(maxn),species.richness.se=se(maxn)) %>%
+  dplyr::mutate(year = 2014) %>%
+  ungroup() %>%
+  glimpse()
+
+spr.sr <- full.maxn %>%
+  dplyr::group_by(campaignid, sample, species) %>%
+  dplyr::summarise(species.richness = )
+  dplyr::filter(scientific%in%"species.richness") %>%
+  # dplyr::mutate(year = as.numeric(ifelse(campaignid %in% "2019-08_Ningaloo_stereo-BRUVs", "2019", "2022"))) %>%
+  dplyr::group_by(status) %>%
+  dplyr::summarise(species.richness = mean(maxn),species.richness.se=se(maxn)) %>%
+  dplyr::mutate(year = 2014) %>%
   ungroup() %>%
   glimpse
 
@@ -118,7 +131,7 @@ spr.cti <- cti %>%
   dplyr::mutate(year = as.numeric(ifelse(campaignid %in% "2019-08_Ningaloo_stereo-BRUVs", "2019", "2022"))) %>%
   dplyr::group_by(year, status)%>%
   dplyr::summarise(cti = mean(CTI),cti.se=se(CTI)) %>%
-  glimpse
+  glimpse()
 
 plot.data <- dat %>%
   left_join(spr.sr) %>%
