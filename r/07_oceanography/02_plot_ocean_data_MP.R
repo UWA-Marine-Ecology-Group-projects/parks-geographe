@@ -1,9 +1,9 @@
 ###
-# Project: mac - swc
+# Project: Parks Geographe
 # Data:    Oceanography - SST, SLA, currents & acidification
 # Task:    Plot oceanography trends
-# author:  Jess Kolbusz & Claude
-# date:    Feb 2022
+# author:  Claude
+# date:    January 2023
 ##
 
 # Clear memory----
@@ -17,29 +17,27 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 library(viridis)
+library(raster)
 # detach("package:cowplot", unload=TRUE)
 
-#set working directory
-working.dir <- getwd()
-setwd(working.dir)
-
 #set name to load and export data
-Zone = "SwC"
+Zone = "Geographe"
 
 #lims of the spatial plots # change for each mp, bigger than you think because of arrrows #
-xxlim = c(114.353, 115.723) 
-yylim = c(-34.618, -33.479) 
+xxlim = c(115.015, 115.48) 
+yylim = c(-33.635, -33.327) 
 
-#set crs
+# set crs
 wgscrs <- CRS("+proj=longlat +datum=WGS84")
 
 #load australian outline
-aus    <- st_read("data/spatial/shapefiles/61395_mif/australia/cstauscd_r.mif") #data/spatial/shp/cstauscd_r.mif")                            # geodata 100k coastline available: https://data.gov.au/dataset/ds-ga-a05f7892-eae3-7506-e044-00144fdd4fa6/
+aus    <- st_read("data/spatial/shapefiles/cstauscd_r.mif") #data/spatial/shp/cstauscd_r.mif")                            # geodata 100k coastline available: https://data.gov.au/dataset/ds-ga-a05f7892-eae3-7506-e044-00144fdd4fa6/
 aus    <- aus[aus$FEAT_CODE == "mainland", ]
 #load marine park boundaries, state and commonwealth
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")         # all aus mpas
-wampa  <- st_read("data/spatial/shapefiles/test1.shp", crs = wgscrs)                           # all wa mpas
+wampa  <- st_read("data/spatial/shapefiles/WA_MPA_2020.shp")                           # all wa mpas
 st_crs(aus)         <- st_crs(aumpa)
+st_crs(wampa)       <- st_crs(aumpa)
 
 ##### SLA ####
 sla.data <- readRDS(paste0("data/spatial/oceanography/",Zone,"_SLA_month.rds"))%>%
@@ -69,12 +67,14 @@ p_1 <- ggplot() +
   geom_sf(data = wampa,fill = NA, color = alpha("grey",0.5))+
   labs(x = "Longitude", y = "Latitude", fill = title_legend, color = title_legend) +
   coord_sf(xlim = xxlim, ylim = yylim) +
-  theme_minimal()+
-  scale_x_continuous(breaks=c(114.5,115.0,115.5))+
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 7)) +
+  scale_x_continuous(breaks = seq(115, 115.4, by = 0.2))+
   facet_wrap(~month, nrow = 4, ncol = 3)
-p_1
 
-ggsave(paste0('plots/spatial/',Zone,'_SLA_monthly_spatial.png'),p_1, dpi = 300, width = 6, height = 4.5)
+png(filename = paste0('plots/spatial/',Zone,'_SLA_monthly_spatial.png'), res = 300,
+    units = "in", width = 6, height = 3)
+p_1
 dev.off()
 
 ######### SST #########
@@ -102,27 +102,25 @@ p_2 <- ggplot() +
                        breaks = seq(from = min_sst, to = max_sst, by = 1),
                        limits = c(min_sst, max_sst)) +
   geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
-  # geom_quiver(data = curr_month, aes(x=long,y=lat,u=uu,v=vv), 
-  #             vecsize=arrow_size, color = "white")+
   geom_sf(data = aumpa,fill = NA, color = alpha("grey",0.5))+
   geom_sf(data = wampa,fill = NA, color = alpha("grey",0.5))+
   labs(x = "Longitude", y = "Latitude", fill = title_legend,color = title_legend) +
   coord_sf(xlim = xxlim, ylim = yylim) +
   theme_minimal()+
-  # ggtitle(month.name[[i]])+
-  scale_x_continuous(breaks=c(114.5,115.0,115.5))+
+  theme(axis.text.x = element_text(size = 7)) +
+  scale_x_continuous(breaks = seq(115, 115.4, by = 0.2))+
   facet_wrap(~month, nrow = 4, ncol = 3)
+
+png(filename = paste0('plots/spatial/',Zone,'_SST_monthly_spatial.png'),
+    res = 300, units = "in", width = 6, height = 3)
 p_2
-
-ggsave(paste0('plots/spatial/',Zone,'_SST_monthly_spatial.png'),p_2, dpi = 300, width = 6, height = 4.5)
-
 dev.off()
 
 ##### DEGREE HEATING WEEKS ####
 dhw.heatwave <- readRDS(paste0("data/spatial/oceanography/",Zone,"_DHW_heatwave.rds"))%>%
-  ungroup()%>%
+  ungroup() %>%
   dplyr::mutate(title=ifelse(year=='2011',"2011 May",year))%>%
-  dplyr::mutate(title=ifelse(title=='2021',"2021 May",title))%>%
+  dplyr::mutate(title=ifelse(title=='2012',"2012 April",title))%>%
   glimpse()
 
 min_dhw = round(min(min(dhw.heatwave$dhw,na.rm = TRUE), na.rm = TRUE))
@@ -143,30 +141,19 @@ p_3 <- ggplot() +
   geom_sf(data = wampa,fill = NA, color = alpha("grey",0.5))+
   labs(x = "Longitude", y = "Latitude", fill = title_legend, color = title_legend) +
   coord_sf(xlim = xxlim, ylim = yylim) +
-  theme_minimal()+
-  scale_x_continuous(breaks=c(114.5,115.0,115.5))+
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 7)) +
+  scale_x_continuous(breaks = seq(115, 115.4, by = 0.2))+
   facet_wrap(~title)
+png(filename = paste0('plots/spatial/',Zone,'_DHW_monthly_spatial.png'), units = "in",
+    res = 300, width = 6, height = 3)
 p_3
-
-ggsave(paste0('plots/spatial/',Zone,'_DHW_monthly_spatial.png'),p_3, dpi = 300, width = 6, height = 3.5)
-
 dev.off()
-
-##### ACIDIFICATION #####
-acd_ts_monthly <- readRDS(paste0("data/spatial/oceanography/",Zone,"_acidification.rds"))%>%
-  dplyr::filter(!year %in% c("1870", "2013")) %>% # These 2 years have inaccurate averages as they are only on 6 months
-  glimpse()
-
-legend_title = "Season"
-acd_mean_plot <- ggplot(data = acd_ts_monthly, aes(x = year, y = acd_mean)) + 
-  geom_line() +
-  geom_ribbon(aes(ymin = acd_mean-acd_sd, ymax = acd_mean+acd_sd), fill = "black",alpha = 0.15) +
-  theme_classic() +
-  labs(x = "Year", y = "pH")
-acd_mean_plot #plot with the other time series
 
 ##### Average plots - time series ####
 #plot for sla, summer and winter mean
+legend_title = "Season"
+
 sla.monthly <- readRDS(paste0("data/spatial/oceanography/",Zone,"_SLA_ts.rds"))%>%
   dplyr::mutate(season = case_when(month %in% c(6,7,8) ~ "Winter", 
                                    month %in% c(12,1,2) ~ "Summer", 
@@ -221,7 +208,7 @@ dhw_plot <- readRDS(paste0("data/spatial/oceanography/",Zone,"_DHW_ts.rds"))%>%
 
 dhw_mean_plot <- ggplot() + 
   geom_vline(xintercept = 2011, color = "red", linetype = 5, alpha = 0.5)+
-  geom_vline(xintercept = 2021, color = "red", linetype = 5, alpha = 0.5)+
+  geom_vline(xintercept = 2012, color = "red", linetype = 5, alpha = 0.5)+
   geom_line(data = dhw_plot, aes(x = year, y = dhw_mean)) + 
   geom_ribbon(data = dhw_plot,aes(x = year, y = dhw_mean,
                                   ymin = dhw_mean-sd_dhw, 
@@ -232,6 +219,9 @@ dhw_mean_plot <- ggplot() +
   labs(x = "Year", y = "DHW")
 dhw_mean_plot
 
-acd_mean_plot+sla_mean_plot+sst_mean_plot + dhw_mean_plot+plot_layout(ncol = 1, nrow = 4)
+png(filename = paste0('plots/spatial/',Zone,'_sla_sst_ts.png'), res = 300, units = "in",
+    width = 6, height = 6.75)
+sla_mean_plot+sst_mean_plot + dhw_mean_plot+plot_layout(ncol = 1, nrow = 3)
+dev.off()
 
-ggsave(paste0('plots/spatial/',Zone,'_acd_sla_sst_ts.png'), dpi = 300, width = 6, height = 6.75)
+# ggsave(paste0('plots/spatial/',Zone,'_sla_sst_ts.png'), dpi = 300, width = 6, height = 6.75)

@@ -81,6 +81,7 @@ arr_long <- arr %>%
 arr_long <- arr_long %>%
   dplyr::mutate(Date = as.Date(Date))%>%
   dplyr::mutate(year = year(Date),month = month(Date))%>%
+  dplyr::filter(!is.na(value)) %>%
   glimpse()
 
 plot_sla_month <- arr_long %>% 
@@ -102,7 +103,7 @@ plot_sla_ts <- arr_long %>%
   glimpse()
 
 saveRDS(plot_sla_ts, paste0("data/spatial/oceanography/",Zone, "_SLA_ts.rds"))
-saveRDS(plot_sla_month,paste0("data/spatial/oceanography/",Zone, "_SwC_SLA_month.rds"))
+saveRDS(plot_sla_month,paste0("data/spatial/oceanography/",Zone, "_SLA_month.rds"))
 saveRDS(plot_sla_year,paste0("data/spatial/oceanography/", Zone, "_SLA_year.rds"))
 
 #clear out the memory
@@ -297,15 +298,13 @@ plot_dhw_ts <- arr_long %>%
   glimpse()
 
 plot_dhw_heatwave <- arr_long %>% 
-  dplyr::filter(month%in%"5"&year%in%"2011"|month%in%"5"&year%in%"2021")%>%
+  dplyr::filter(month%in%"5"&year%in%"2011"|month%in%"4"&year%in%"2012")%>%
   group_by(year,month, Lon, Lat) %>% 
   summarise(dhw = mean(value,na.rm = TRUE), sd = sd(value,na.rm = TRUE)) %>% 
   glimpse()
 
-min_dhw = round(min(min(plot_dhw_heatwave$dhw,na.rm = TRUE), na.rm = TRUE))
-max_dhw = round(max(max(plot_dhw_heatwave$dhw,na.rm = TRUE), na.rm = TRUE))
-
-saveRDS(plot_dhw_month,paste0("data/spatial/oceanography/", Zone, "_SwC_DHW_month.rds"))
+saveRDS(plot_dhw_month,paste0("data/spatial/oceanography/", Zone, "_DHW_month.rds"))
 saveRDS(plot_dhw_year,paste0("data/spatial/oceanography/", Zone, "_DHW_year.rds"))
 saveRDS(plot_dhw_ts,paste0("data/spatial/oceanography/", Zone, "_DHW_ts.rds"))
 saveRDS(plot_dhw_heatwave,paste0("data/spatial/oceanography/", Zone, "_DHW_heatwave.rds"))
+
