@@ -33,7 +33,7 @@ library(ggplot2)
 
 ## Set Study Name ----
 # Change this to suit your study name. This will also be the prefix on your final saved files.
-study <- "2007-2014-Geographe-stereo-BRUVs"  
+study <- "2007-2014-Geographe-stereo-BRUVs"
 
 ## Set your working directory ----
 working.dir <- getwd() # to directory of current file - or type your own
@@ -44,7 +44,7 @@ data.dir <- paste(working.dir,"data",sep="/")
 download.dir <- paste(data.dir,"raw/em export",sep="/")
 
 tidy.dir <- paste(data.dir,"tidy",sep="/")
-staging.dir <- paste(data.dir,"staging",sep="/") 
+staging.dir <- paste(data.dir,"staging",sep="/")
 
 setwd(download.dir)
 
@@ -54,7 +54,7 @@ metadata <- ga.list.files("_Metadata.csv") %>% # list all files ending in "_Meta
   purrr::map_df(~ga.read.files_em.csv(.)) %>% # combine into dataframe
   dplyr::filter(campaignid %in% c("2007-03_Capes.MF_stereoBRUVs", "2014-12_Geographe.Bay_stereoBRUVs"),
                 location %in% c("Geographe.Bay", "Geographe Bay")) %>%
-  dplyr::select(campaignid, sample, latitude, longitude, date, time, location, status, site, depth, observer, successful.count, successful.length, commonwealth.zone,raw.hdd.number,con.hdd.number) %>% 
+  dplyr::select(campaignid, sample, latitude, longitude, date, time, location, status, site, depth, observer, successful.count, successful.length, commonwealth.zone,raw.hdd.number,con.hdd.number) %>%
   dplyr::mutate(sample=as.character(sample),
                 longitude = as.numeric(longitude),
                 latitude = as.numeric(latitude),
@@ -62,33 +62,42 @@ metadata <- ga.list.files("_Metadata.csv") %>% # list all files ending in "_Meta
   dplyr::filter(successful.count%in%"Yes")%>%
   glimpse()
 
-ggplot() + 
+ggplot() +
   geom_point(data = metadata, aes(x = longitude, y = latitude, color = campaignid))
 
 #### Turned off this section - don't think need to run it again ####
 
 # We are missing commonwealth zone for the 2007 BRUV campaign
-# raw.metadata <- metadata %>%
-#   dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it :)
-# 
-# # Spatial files ----
-# setwd(working.dir)
-# wgs.84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-# 
-# commonwealth.marineparks <- readOGR(dsn="data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")
-# proj4string(commonwealth.marineparks)
-# 
-# commonwealth.marineparks <- spTransform(commonwealth.marineparks, CRS = wgs.84)
-# 
-# coordinates(metadata) <- c('longitude', 'latitude') # Convert to spatial dataframe
-# proj4string(metadata) <- CRS(wgs.84)
-# 
-# metadata.commonwealth.marineparks <- over(metadata, commonwealth.marineparks) %>%
-#   dplyr::select(ZoneName)
-# 
-# metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks)%>%
-#   dplyr::rename(commonwealth.zone=ZoneName)%>%
-#   mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take","Fished")) 
+raw.metadata <- metadata %>%
+  dplyr::select(-c(status, commonwealth.zone)) # We already have for most samples but just redo it :)
+
+# Spatial files ----
+setwd(working.dir)
+wgs.84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+
+commonwealth.marineparks <- readOGR(dsn="data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")
+proj4string(commonwealth.marineparks)
+
+state.marineparks <- readOGR(dsn = "data/spatial/shapefiles/WA_MPA_2020.shp")
+proj4string(state.marineparks) <- proj4string(commonwealth.marineparks)
+
+state.marineparks <- spTransform(state.marineparks, CRS = wgs.84)
+commonwealth.marineparks <- spTransform(commonwealth.marineparks, CRS = wgs.84)
+coordinates(metadata) <- c('longitude', 'latitude') # Convert to spatial dataframe
+proj4string(metadata) <- CRS(wgs.84)
+
+metadata.commonwealth.marineparks <- over(metadata, commonwealth.marineparks) %>%
+  dplyr::select(ZoneName)
+
+metadata.state.marineparks <- over(metadata, state.marineparks) %>%
+  dplyr::select(ZONE_TYPE)
+
+metadata <- bind_cols(raw.metadata,metadata.commonwealth.marineparks, metadata.state.marineparks)%>%
+  dplyr::rename(commonwealth.zone=ZoneName,
+                state.zone = ZONE_TYPE) %>%
+  mutate(status = if_else((commonwealth.zone%in%c("National Park Zone")),"No-take",
+                          ifelse(state.zone %in% c("Sanctuary Zone (IUCN VI)"), "No-take", "Fished"))) %>%
+  glimpse()
   
 length(unique(metadata$sample)) # 327 
 
