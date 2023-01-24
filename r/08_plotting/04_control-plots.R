@@ -235,3 +235,4 @@ plot.grid
 #save out plot
 save_plot(paste0("plots/fish/", name, "control-plots.png"), plot.grid, 
           base_height = 6,base_width = 8, dpi = 300)
+
