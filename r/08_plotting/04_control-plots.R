@@ -154,7 +154,7 @@ gg.sr <- ggplot(data = plot.data, aes(x = year, y = species.richness, fill = zon
   geom_errorbar(data = plot.data,aes(ymin=species.richness-species.richness.se,
                                      ymax= species.richness+species.richness.se), 
                 width = 0.8,position=position_dodge(width= 0.6))+
-  geom_point(size = 1.5, position=position_dodge(width = 0.6),stroke = 0.2, color = "black")+
+  geom_point(size = 3, position=position_dodge(width = 0.6),stroke = 0.2, color = "black", alpha = 0.8)+
   theme_classic()+
   scale_y_continuous(limits = c(0,28))+
   scale_x_continuous(limits = c(2006,2022.5))+
@@ -181,7 +181,7 @@ gg.l <- ggplot(data = plot.data,
   geom_errorbar(data = plot.data,
                 aes(ymin=legal-legal.se,ymax= legal+legal.se), 
                 width = 0.8,position=position_dodge(width=0.6))+
-  geom_point(size = 1.5, position=position_dodge(width=0.6),stroke = 0.2, color = "black")+
+  geom_point(size = 3, position=position_dodge(width=0.6),stroke = 0.2, color = "black", alpha = 0.8)+
   theme_classic()+
   scale_y_continuous(limits = c(0,6))+
   scale_x_continuous(limits = c(2006,2022.5))+
@@ -208,8 +208,8 @@ gg.cti <- ggplot()+
   geom_errorbar(data = plot.data,aes(x = year, y = cti,ymin=cti-cti.se,
                                      ymax= cti+cti.se, fill = zone.status), 
                 width = 0.8, position = position_dodge(width = 0.6))+
-  geom_point(data = plot.data, aes(x = year, y = cti, fill = zone.status, shape = zone.status),size = 1.5,
-             stroke = 0.2, color = "black", position = position_dodge(width = 0.6))+
+  geom_point(data = plot.data, aes(x = year, y = cti, fill = zone.status, shape = zone.status),size = 3,
+             stroke = 0.2, color = "black", position = position_dodge(width = 0.6), alpha = 0.8)+
   theme_classic()+
   # scale_y_continuous(limits = c(21.5,25.5))+
   scale_x_continuous(limits = c(2006,2022.5))+

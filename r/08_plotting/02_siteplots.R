@@ -172,6 +172,24 @@ wampa_cols <- scale_colour_manual(values = c(
                                               ),
                                   name = "State Marine Parks")
 
+nmpa_fills <- scale_fill_manual(values = c("Habitat Protection Zone" = "#fff8a3",
+                                           "National Park Zone" = "#7bbc63",
+                                           "Multiple Use Zone" = "#b9e6fb",
+                                           "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
+                                name = "Australian Marine Parks"
+)
+
+wampa_fills <- scale_fill_manual(values = c(
+  # "Marine Management Area" = "#b7cfe1",
+  # "Conservation Area" = "#b3a63d",
+  "Sanctuary Zone" = "#bfd054",
+  "General Use Zone" = "#bddde1",
+  # "Recreation Area" = "#f4e952",
+  "Special Purpose Zone" = "#c5bcc9"
+    # "Marine Nature Reserve" = "#bfd054",
+),
+name = "State Marine Parks")
+
 p2 <- ggplot() +
   geom_tile(data = nrm_df, aes(x, y, fill = exp.ecosystem.names)) +
   nrm_fills +
@@ -207,24 +225,6 @@ dev.off()
 
 # 3. Location overview plot - includes parks zones and an aus inset (p3)
 # assign mpa colours - full levels are saved at end of script for future ref
-nmpa_fills <- scale_fill_manual(values = c("Habitat Protection Zone" = "#fff8a3",
-                                                      "National Park Zone" = "#7bbc63",
-                                                      "Multiple Use Zone" = "#b9e6fb",
-                                                      "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
-                                           name = "Australian Marine Parks"
-)
-
-wampa_fills <- scale_fill_manual(values = c(
-  # "Marine Management Area" = "#b7cfe1",
-  # "Conservation Area" = "#b3a63d",
-  "Sanctuary Zone" = "#bfd054",
-  "General Use Zone" = "#bddde1",
-  # "Recreation Area" = "#f4e952",
-  "Special Purpose Zone" = "#c5bcc9"
-    # "Marine Nature Reserve" = "#bfd054",
-),
-name = "State Marine Parks")
-
 p3 <- ggplot() +
   geom_contour_filled(data = bathy, aes(x = x, y = y, z = Z,
                                          fill = after_stat(level)),
@@ -408,8 +408,8 @@ p7 <- ggplot() +
           colour = "#7bbc63", size = 0.7, fill = NA) +
   geom_sf(data = wampa, colour = "grey61", size = 0.4, fill = NA) +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.5) +
-  annotate(geom = "segment", x = 115.5, xend = 115.0, y = -33.63, yend = -33.30,
-           linetype = "dashed", colour = "gray25") +
+  annotate(geom = "segment", x = 114.99759, xend = 115.46399, y = -33.21202, yend = -33.60794,
+           linetype = "dashed", colour = "gray25") + 
   annotate("point", x = c(115.6409, 115.3473, 115.1074, 115.0630, 115.1573), 
            y = c(-33.3270,-33.6516, -33.6177, -33.9535, -34.3110)) +
   annotate("text", x = c(115.6409 - 0.09, 115.3473 + 0.1, 115.1074 - 0.13, 115.0630 + 0.14, 115.1573 - 0.08), 
@@ -427,8 +427,8 @@ dev.off()
 
 # 6. Bathymetry cross section (p6)
 sf_use_s2(T)
-points <- data.frame(x = c(115.5, 115.0), 
-                     y = c(-33.63, -33.30), id = 1)
+points <- data.frame(x = c(114.99759, 115.46399), 
+                     y = c(-33.21202, -33.60794), id = 1)
 
 tran <- sfheaders::sf_linestring(obj = points,
                                  x = "x", 
@@ -437,7 +437,7 @@ tran <- sfheaders::sf_linestring(obj = points,
 st_crs(tran) <- wgscrs
 
 tranv <- vect(tran)
-dep <- rast(cbathy)
+dep <- rast("data/spatial/rasters/bath_250_good.tif")
 
 bathy <- terra::extract(dep, tranv, xy = T, ID = F)
 
@@ -460,7 +460,7 @@ bath_sf <- bath_cross %>%
 
 bath_df1 <- as.data.frame(bath_sf) %>%
   dplyr::select(-geometry) %>%
-  dplyr::rename(depth = "Z") %>%
+  dplyr::rename(depth = "bath_250_good") %>%
   dplyr::mutate(distance.from.coast = as.numeric(distance.from.coast/1000)) %>%
   dplyr::mutate(distance.from.coast = ifelse(land %in% "FALSE", distance.from.coast*-1, distance.from.coast)) %>%
   dplyr::filter(depth > -250) %>%
@@ -499,7 +499,8 @@ p6 <- ggplot() +
                aes(x = distance.from.coast, xend = distance.from.coast + 7, 
                                  y = depth, yend = depth), linetype = 2, alpha = 0.5) +
   geom_text(data = paleo %>% dplyr::filter(label %in% "9-10 Ka"), 
-            aes(x = distance.from.coast + 9, y = depth, label = label), size = 3)
+            aes(x = distance.from.coast + 9, y = depth, label = label), size = 3) +
+  annotate(geom = "text", x = -55, y = -7, label = "Naturaliste Reefs", size = 3)
 
 png(filename = paste(paste0('plots/spatial/', name) , 'bathymetry-cross-section.png',
                      sep = "-"), units = "in", res = 200, width = 8, height = 4)
@@ -541,7 +542,7 @@ pd <- ggplot() +
   new_scale_fill() +
   geom_tile(data = spreddf.ga, aes(x, y, fill = Z)) +
   scale_fill_viridis(option = "A") +
-  labs(x= NULL, y = NULL, fill = "Depth") +
+  labs(x= NULL, y = NULL, fill = "Depth", title = "Broad scale bathymetry (250m)") +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
   nmpa_cols +
   guides(colour = "none") +
@@ -559,7 +560,7 @@ pd.lidar <- ggplot() +
   new_scale_fill() +
   geom_tile(data = lidar.depthdf, aes(x, y, fill = Z)) +
   scale_fill_viridis(option = "A") +
-  labs(x= NULL, y = NULL, fill = "Depth") +
+  labs(x= NULL, y = NULL, fill = "Depth", title = "Detailed bathymetry (10m)") +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 0.4) +
   nmpa_cols +
   guides(colour = "none") +
@@ -651,6 +652,6 @@ p8 <- pd + pd.lidar +
       pr + pr.lidar + 
       pdt + pdt.lidar + 
       plot_layout(ncol = 2, nrow = 3)
-
+p8
 ggsave(paste0("plots/spatial/", name, "-site_spatial_layers.png"), width = 10, height = 6, dpi = 160)
 

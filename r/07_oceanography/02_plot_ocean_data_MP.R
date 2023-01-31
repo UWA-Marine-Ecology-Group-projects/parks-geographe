@@ -152,6 +152,20 @@ dev.off()
 
 ##### Average plots - time series ####
 #plot for sla, summer and winter mean
+##### ACIDIFICATION #####
+acd_ts_monthly <- readRDS("data/spatial/oceanography/SwC_acidification.rds")%>%
+  dplyr::filter(!year %in% c("1870", "2013")) %>% # These 2 years have inaccurate averages as they are only on 6 months
+  glimpse()
+
+legend_title = "Season"
+acd_mean_plot <- ggplot(data = acd_ts_monthly, aes(x = year, y = acd_mean)) + 
+  geom_line() +
+  geom_ribbon(aes(ymin = acd_mean-acd_sd, ymax = acd_mean+acd_sd), fill = "black",alpha = 0.15) +
+  theme_classic() +
+  labs(x = "Year", y = "pH")
+acd_mean_plot #plot with the other time series
+
+
 legend_title = "Season"
 
 sla.monthly <- readRDS(paste0("data/spatial/oceanography/",Zone,"_SLA_ts.rds"))%>%
@@ -221,7 +235,7 @@ dhw_mean_plot
 
 png(filename = paste0('plots/spatial/',Zone,'_sla_sst_ts.png'), res = 300, units = "in",
     width = 6, height = 6.75)
-sla_mean_plot+sst_mean_plot + dhw_mean_plot+plot_layout(ncol = 1, nrow = 3)
+acd_mean_plot+sla_mean_plot+sst_mean_plot + dhw_mean_plot+plot_layout(ncol = 1, nrow = 4)
 dev.off()
 
 # ggsave(paste0('plots/spatial/',Zone,'_sla_sst_ts.png'), dpi = 300, width = 6, height = 6.75)
