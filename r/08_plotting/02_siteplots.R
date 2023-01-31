@@ -44,8 +44,8 @@ gdacrs <- "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs"
 sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")       # crs for sp objects
 
 # Set cropping extent - larger than most zoomed out plot
-e <- ext(114.8, 116, -33.8, -33) 
-
+# e <- ext(114.8, 116, -33.8, -33) 
+e <- ext(114.2, 115.8,-34.7, -33.1) 
 # Load necessary spatial files
 sf_use_s2(F)                                                                    # Switch off spatial geometry for cropping
 # Australian outline and state and commonwealth marine parks
@@ -104,15 +104,14 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")       #
 cwatr <- st_crop(cwatr, e)
 
 # Bathymetry data
-# cbaths <- list.files("data/spatial/rasters/raw bathymetry", "*tile", full.names = TRUE)
-cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
-cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
-bath_r <- rast(cbathy)
+bath_r <- rast("data/spatial/rasters/bath_250_good.tif")
 crs(bath_r) <- wgscrs
 bath_r <- terra::crop(bath_r, e)
 bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
 bath_r <- clamp(bath_r, upper = 0, value = F)                               # Only data below 0
-bathy <- as.data.frame(bath_r, xy = T, na.rm = T)
+bathy <- as.data.frame(bath_r, xy = T, na.rm = T) %>%
+  dplyr::rename(Z = bath_250_good) %>%
+  glimpse()
 
 # 2. National Reef Model plot (p2)
 nrm <- rast("data/spatial/rasters/ecosystem-types-19class-naland.tif")
@@ -249,10 +248,15 @@ p3 <- ggplot() +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 4/5, size = 0.4) +
   labs(x = NULL, y = NULL) +
   guides(fill = guide_legend(order = 1)) +
-  annotate("point", x = c(115.6409, 115.3473, 115.1074), y = c(-33.3270,-33.6516, -33.6177)) +
-  annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
-           label = c("Bunbury", "Busselton", "Dunsborough"), size = 2.8) +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +                  
+  annotate("point", x = c(115.6409, 115.3473, 115.1074, 115.0630, 115.1573), 
+           y = c(-33.3270,-33.6516, -33.6177, -33.9535, -34.3110)) +
+  annotate("text", x = c(115.6409 - 0.08, 115.3473 + 0.09, 115.1074 - 0.11, 115.0630 + 0.13, 115.1573 - 0.07), 
+           y = c(-33.3270,-33.65, -33.6177, -33.9535, -34.3110), 
+           label = c("Bunbury", "Busselton", "Dunsborough", "Margaret River", "Augusta"), size = 2.8) +
+  annotate("rect", xmin = 114.88, xmax = 115.67, ymin = -33.67, ymax = -33.3,
+           fill = "white", colour = "gray20", alpha = 0.2, size = 0.4) + 
+  # coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  coord_sf(xlim = c(114.4, 115.67), ylim = c(-33.3, -34.6)) + 
   theme_minimal() +
   theme(legend.justification = "top")
 # p3
@@ -271,12 +275,19 @@ p3.1 <- ggplot(data = aus) +
         panel.border = element_rect(colour = "grey70"))
 # p3.1
 
+# design <- "
+# 12
+# 12
+# 1#
+# "
+# p3 + guide_area() +  plot_layout(design = design)
+
 # plot both 
-p3 + inset_element(p3.1, left = 0.8, right = 1.03, top = 0.4, bottom = -0.01)  
-# + plot_layout(widths = c(0.8, 2.2))
+# p3 + inset_element(p3.1, left = 1, right = 1.4, top = 0.4, bottom = -0.01)
+p3 + inset_element(p3.1, left = 1, right = 1.5, top = 0.5, bottom = -0.01)  
 
 ggsave(paste(paste0('plots/spatial/', name) , 'broad-site-plot.png', 
-             sep = "-"), dpi = 200, width = 10, height = 6)
+             sep = "-"), dpi = 200, width = 8, height = 6)
 
 # 4. Site zoom plot - including sampling points (p4)
 metadata1 <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.checked.metadata.csv") %>%
@@ -370,22 +381,26 @@ dev.off()
 #                                  labels = c("9-10 Ka", "15-17 Ka", "20-30 Ka"),
 #                                  name = "Coastline age")
 
-depth_fills <- scale_fill_manual(values = c("#b8d9a9", "#8dbc80"),
-                                 labels = c("9-10 Ka", "15-17 Ka"),
-                                 name = "Coastline age")
+depth_fills <- scale_fill_manual(values = c("#b8d9a9","#8dbc80", "#5d9d52"),
+                                labels = c("9-10 Ka", "15-17 Ka", "20-30 Ka"),
+                                name = "Coastline age")
 
 # build basic plot elements
 
 p7 <- ggplot() +
-  # geom_tile(data = bathy %>% dplyr::filter(Z < -50), aes(x = x, y = y, fill = Z)) +
-  # scale_fill_gradient2(low = "royalblue4", mid = "lightskyblue1", high = "white", name = "Depth (m)") +
-  # new_scale_fill() +
+  geom_tile(data = bathy %>% dplyr::filter(Z < -50), aes(x = x, y = y, fill = Z)) +
+  scale_fill_gradient2(low = "royalblue4", mid = "lightskyblue1", high = "white", name = "Depth (m)") +
+  new_scale_fill() +
   geom_contour_filled(data = bathy, aes(x = x, y = y, z = Z,
                                         fill = after_stat(level)),
-                      breaks = c(0, -40, -70)) +
+                      breaks = c(0, -40, -70, -125)) +
   depth_fills +
   new_scale_fill() +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey62", size = 0.2) +
+  new_scale_fill() +
+  geom_sf(data = terrnp, aes(fill = leg_catego), alpha = 4/5, colour = NA, show.legend = F) +
+  labs(fill = "Terrestrial Managed Areas") +
+  terr_fills +
   new_scale_fill() +
   geom_sf(data = mpa%>%dplyr::filter(!ZoneName %in% "National Park Zone"), 
           colour = "grey61", size = 0.4, fill = NA) +
@@ -395,15 +410,18 @@ p7 <- ggplot() +
   geom_sf(data = cwatr, colour = "firebrick", alpha = 0.7, size = 0.5) +
   annotate(geom = "segment", x = 115.5, xend = 115.0, y = -33.63, yend = -33.30,
            linetype = "dashed", colour = "gray25") +
-  annotate("point", x = c(115.6409, 115.3473, 115.1074), y = c(-33.3270,-33.6516, -33.6177)) +
-  annotate("text", x = c(115.67, 115.38, 115.066), y = c(-33.3270,-33.65, -33.6177), 
-           label = c("Bunbury", "Busselton", "Dunsborough"), size = 3) +
-  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
+  annotate("point", x = c(115.6409, 115.3473, 115.1074, 115.0630, 115.1573), 
+           y = c(-33.3270,-33.6516, -33.6177, -33.9535, -34.3110)) +
+  annotate("text", x = c(115.6409 - 0.09, 115.3473 + 0.1, 115.1074 - 0.13, 115.0630 + 0.14, 115.1573 - 0.08), 
+           y = c(-33.3270,-33.6516, -33.6177, -33.9535, -34.3110), 
+           label = c("Bunbury", "Busselton", "Dunsborough", "Margaret River", "Augusta"), size = 3) +
+  # coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +
+  coord_sf(xlim = c(114.4, 115.67), ylim = c(-33.3, -34.6)) + 
   labs(x = "Longitude", y = "Latitude") +
   theme_minimal() +
   theme(panel.background = element_rect(fill = "#b8d9a9", colour = NA))
 png(filename = paste(paste0('plots/spatial/', name) , 'old-sea-levels.png', 
-                     sep = "-"), units = "in", res = 200, width = 10, height = 6)
+                     sep = "-"), units = "in", res = 200, width = 8, height = 6)
 p7
 dev.off()
 
