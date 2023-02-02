@@ -1,8 +1,15 @@
-"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
-"total.abundance.inverts+macroalgae","inverts+macroalgae",2878.79568201793,2900.51738373964,0.07143,NA,3.92,0,0,2.687,0.237,0.178,0,1,1,0,0,0,0,0,0.237
-"total.abundance.macroalgae","macroalgae",2879.70854911663,2897.83045723378,0.06644,NA,2.9,0,0.913,0,0.15,0.682,0,1,0,0,0,0,0,0,0.387
-"total.abundance.inverts+macroalgae+roughness","inverts+macroalgae+roughness",2880.01534876383,2905.30854530162,0.07372,NA,4.91,0,1.22,7.478,0.129,0.016,0,1,1,0,0,0,0,1,0.516
-"total.abundance.detrended+macroalgae","detrended+macroalgae",2880.46950386833,2905.47582161869,0.07245,NA,4.62,0,1.674,7.645,0.103,0.015,0,1,0,0,0,0,1,0,0.619
-"species.richness.inverts+macroalgae","inverts+macroalgae",1653.87973360744,1672.03877714943,0.32607,NA,3,0,0,0,0.472,0.874,0,1,1,0,0,0,0,0,0.472
-"species.richness.inverts+macroalgae+slope","inverts+macroalgae+slope",1655.78754416595,1679.82816341611,0.32937,NA,4.4,0,1.908,7.789,0.182,0.018,0,1,1,0,0,1,0,0,0.654
-"species.richness.detrended+inverts+macroalgae","detrended+inverts+macroalgae",1655.86896956244,1677.61750267833,0.32674,NA,4,0,1.989,5.579,0.174,0.054,0,1,1,0,0,0,1,0,0.828
+Response,modname,delta.AICc,wi.AICc,r2.vals,edf
+Total abundance,inverts+macroalgae,0,0.237,0.07143,3.92
+,macroalgae,0.913,0.15,0.06644,2.9
+,inverts+macroalgae+roughness,1.22,0.129,0.07372,4.91
+,detrended+macroalgae,1.674,0.103,0.07245,4.62
+Species richness,inverts+macroalgae,0,0.472,0.32607,3
+,inverts+macroalgae+slope,1.908,0.182,0.32937,4.4
+,detrended+inverts+macroalgae,1.989,0.174,0.32674,4
+Greater than legal size,detrended+mean.relief+seagrass,0,0.197,0.03522,4.8
+,detrended+seagrass,1.117,0.112,0.02638,3.78
+,detrended+inverts+seagrass,1.478,0.094,0.02992,4.79
+,mean.relief+seagrass,1.745,0.082,0.02519,3.81
+Smaller than legal size,detrended+Z,0,0.382,0.07768,3
+,detrended+roughness+Z,1.824,0.154,0.07748,4
+,detrended+slope+Z,1.88,0.149,0.07763,4

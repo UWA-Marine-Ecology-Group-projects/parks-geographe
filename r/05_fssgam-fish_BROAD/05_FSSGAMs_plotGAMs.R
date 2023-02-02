@@ -1,7 +1,7 @@
 ###
-# Project: Parks - Abrolhos
+# Project: Parks - Geographe
 # Data:    BOSS & BRUV fish, habitat
-# Task:    Plotting fish GAM relationships at npz6
+# Task:    Plotting fish GAM relationships
 # author:  Claude
 # date:    Nov-Dec 2021
 ##
