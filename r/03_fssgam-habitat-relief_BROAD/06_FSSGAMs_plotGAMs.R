@@ -1,25 +1,16 @@
 ###
-# Project: Parks - Abrolhos
+# Project: Parks - Geographe
 # Data:    BOSS fish, habitat
 # Task:    Habitat GAM plots
 # author:  Claude
-# date:    Nov-Dec 2021
+# date:    February 2023
 ##
 
 rm(list=ls())
 
-library(dplyr)
-library(tidyr)
-library(gridExtra)
-library(grid)
-library(GlobalArchive)
-library(stringr)
+library(tidyverse)
 library(ggplot2)
 library(gamm4)
-library(ggmap)
-library(rgdal)
-library(raster)
-library(png)
 library(cowplot)
 library(reshape2)
 
@@ -46,436 +37,304 @@ Theme1 <-
     strip.background = element_blank())
 
 # Set the study name
-name <- "2021-05_Abrolhos_Habitat" # for the study
-
-## Set working directory----
-working.dir <- getwd()
-setwd(working.dir)
-#OR Set manually once
+name <- "Parks-Geographe-synthesis" # for the study
 
 # Load the dataset -
 #habitat
-dat <- readRDS("data/tidy/merged_habitat.rds")                                 # merged data from 'R/1_mergedata.R'
-
-dat <- dat[ , -c(9:49)]
-
-colnames(dat)
-dat <- melt(dat, measure.vars = c(21:26))%>%                                  # collect all taxa tags for univariate stats   
-  glimpse() 
-
-dat <- dat %>%
-  mutate(logdepth = log(Depth)) %>%
-  # mutate(sqrttri = sqrt(tri)) %>%
-  mutate(sqrtrough = sqrt(roughness)) %>%
-  # mutate(sqrtslope = sqrt(slope)) %>%
-  rename(Taxa = variable) %>%
+dat <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%           # merged data from 'R/04_fssgam-fish-BROAD/01_FSSGAMs_format-data.R'
+  dplyr::mutate(broad.ascidians = ifelse(is.na(broad.ascidians), 0, broad.ascidians),
+                broad.invertebrate.complex = ifelse(is.na(broad.invertebrate.complex), 0, broad.invertebrate.complex)) %>%
+  dplyr::mutate("Sessile invertebrates" = broad.sponges + broad.stony.corals + 
+                  broad.ascidians + broad.invertebrate.complex) %>%
+  dplyr::rename("sand" = broad.unconsolidated,
+                "Rock" = broad.consolidated,
+                "Macroalgae" = broad.macroalgae,
+                "Seagrass" = broad.seagrasses) %>%
+  melt(measure.vars = c("Macroalgae", "Seagrass", "sand", "Rock", "Sessile invertebrates")) %>%
+  rename(taxa = variable) %>%
   rename(response = value) %>%
-  ga.clean.names()
+  glimpse()
 
 # Manually make the most parsimonious GAM models for each taxa ----
-#### Abrolhos habitat ####
+#### Habitat ####
 unique(dat$taxa)
 names(dat)
 
-# MODEL Kelps (depth + roughness + tpi) ----
-dat.kelps <- dat %>% filter(taxa%in%"kelps")
+# MODEL macroalgae (detrended + slope + Z) ----
+dat.macroalgae <- dat %>% filter(taxa%in%"Macroalgae")
 
-gamm=gam(cbind(response, (totalpts - response)) ~ 
-           s(depth, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5)+s(tpi, bs = 'cr', k = 5),
-         family = binomial("logit"), method = "REML", data=dat.kelps)
-
-# predict - depth ----
-mod<-gamm
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 100),
-                        roughness=mean(mod$model$roughness),
-                        tpi=mean(mod$model$tpi)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.kelps.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# predict - roughness ----
-mod<-gamm
-testdata <- expand.grid(roughness=seq(min(dat$roughness),max(dat$roughness),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        tpi=mean(mod$model$tpi)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.kelps.roughness = testdata%>%data.frame(fits)%>%
-  group_by(roughness)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# predict - tpi ----
-mod<-gamm
-testdata <- expand.grid(tpi=seq(min(dat$tpi),max(dat$tpi),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        roughness=mean(mod$model$roughness)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.kelps.tpi = testdata%>%data.frame(fits)%>%
-  group_by(tpi)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# PLOTS for kelp ----
-# depth ----
-ggmod.kelp.depth<- ggplot() +
-  ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.kelps,aes(x=depth,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.kelps.depth,aes(x=depth,y=response),alpha=0.5)+
-  geom_line(data=predicts.kelps.depth,aes(x=depth,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.kelps.depth,aes(x=depth,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1+
-  ggtitle("Kelp") +
-  theme(plot.title = element_text(hjust = 0))
-ggmod.kelp.depth
-
-# PLOTS for kelp ----
-# roughness ----
-ggmod.kelp.roughness<- ggplot() +
-  ylab("")+
-  xlab("Roughness")+
-  geom_point(data=dat.kelps,aes(x=roughness,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.kelps.roughness,aes(x=roughness,y=response),alpha=0.5)+
-  geom_line(data=predicts.kelps.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.kelps.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.kelp.roughness
-
-# PLOTS for kelp ----
-# tpi ----
-ggmod.kelp.tpi<- ggplot() +
-  ylab("")+
-  xlab("TPI")+
-  geom_point(data=dat.kelps,aes(x=tpi,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.kelps.tpi,aes(x=tpi,y=response),alpha=0.5)+
-  geom_line(data=predicts.kelps.tpi,aes(x=tpi,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.kelps.tpi,aes(x=tpi,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.kelp.tpi
-
-# MODEL Macroalgae (depth + detrended + roughness) ----
-dat.macro <- dat %>% filter(taxa%in%"macroalgae")
-
-gamm=gam(cbind(response, (totalpts - response)) ~ 
-           s(depth, bs = 'cr', k = 5)+s(detrended, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5),
-         family = binomial("logit"),method = 'REML',data=dat.macro)
-
-# predict - depth ----
-mod<-gamm
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 100),
-                        roughness=mean(mod$model$roughness),
-                        detrended=mean(mod$model$detrended)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.macro.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# predict - roughness ----
-mod<-gamm
-testdata <- expand.grid(roughness=seq(min(dat$roughness),max(dat$roughness),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        detrended=mean(mod$model$detrended)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.macro.roughness = testdata%>%data.frame(fits)%>%
-  group_by(roughness)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
+mod=gam(cbind(response, (broad.total.points.annotated - response)) ~ 
+          s(detrended, bs = 'cr', k = 5)+s(slope, bs = 'cr', k = 5)+s(Z, bs = 'cr', k = 5),
+        family = binomial("logit"), method = "REML", data=dat.macroalgae)
 
 # predict - detrended ----
-mod<-gamm
-testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 20),
-                        depth=mean(mod$model$depth),
-                        roughness=mean(mod$model$roughness)) %>%
+testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
+                        slope=mean(mod$model$slope),
+                        Z=mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.macro.detrended = testdata%>%data.frame(fits)%>%
+predicts.macroalgae.detrended = testdata%>%data.frame(fits)%>%
   group_by(detrended)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# PLOTS for macroalgae ----
-# depth ----
-ggmod.macroalgae.depth<- ggplot() +
+# predict - slope ----
+testdata <- expand.grid(slope=seq(min(dat$slope),max(dat$slope),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        Z=mean(mod$model$Z)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.macroalgae.slope = testdata%>%data.frame(fits)%>%
+  group_by(slope)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# predict - depth ----
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        slope=mean(mod$model$slope)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.macroalgae.depth = testdata%>%data.frame(fits)%>%
+  group_by(Z)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# PLOTS for Macroalgae ----
+# detrended ----
+ggmod.macroalgae.detrended<- ggplot() +
   ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.kelps,aes(x=depth,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.macro.depth,aes(x=depth,y=response),alpha=0.5)+
-  geom_line(data=predicts.macro.depth,aes(x=depth,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.macro.depth,aes(x=depth,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Detrended")+
+  geom_point(data=dat.macroalgae,aes(x=detrended,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.macroalgae.detrended,aes(x=detrended,y=response),alpha=0.5)+
+  geom_line(data=predicts.macroalgae.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.macroalgae.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
   ggtitle("Macroalgae") +
   theme(plot.title = element_text(hjust = 0))
+ggmod.macroalgae.detrended
+
+# slope ----
+ggmod.macroalgae.slope<- ggplot() +
+  ylab("")+
+  xlab("Slope")+
+  geom_point(data=dat.macroalgae,aes(x=slope,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.macroalgae.slope,aes(x=slope,y=response),alpha=0.5)+
+  geom_line(data=predicts.macroalgae.slope,aes(x=slope,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.macroalgae.slope,aes(x=slope,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.macroalgae.slope
+
+# depth ----
+ggmod.macroalgae.depth<- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.macroalgae,aes(x=Z,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.macroalgae.depth,aes(x=Z,y=response),alpha=0.5)+
+  geom_line(data=predicts.macroalgae.depth,aes(x=Z,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.macroalgae.depth,aes(x=Z,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
 ggmod.macroalgae.depth
 
-# PLOTS for macroalgae ----
-# roughness ----
-ggmod.macro.roughness<- ggplot() +
-  ylab("")+
-  xlab("Roughness")+
-  geom_point(data=dat.macro,aes(x=roughness,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.macro.roughness,aes(x=roughness,y=response),alpha=0.5)+
-  geom_line(data=predicts.macro.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.macro.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.macro.roughness
+# MODEL seagrass (detrended + roughness + Z) ----
+dat.seagrass <- dat %>% filter(taxa%in%"Seagrass")
 
-# PLOTS for macroalgae ----
-# detrended ----
-ggmod.macro.detrended<- ggplot() +
-  ylab("")+
-  xlab("Detrended")+
-  geom_point(data=dat.kelps,aes(x=detrended,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.macro.detrended,aes(x=detrended,y=response),alpha=0.5)+
-  geom_line(data=predicts.macro.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.macro.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.macro.detrended
+mod=gam(cbind(response, (broad.total.points.annotated - response)) ~ 
+           s(detrended, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5)+s(Z, bs = 'cr', k = 5),
+         family = binomial("logit"), method = "REML", data=dat.seagrass)
 
-# MODEL biogenic reef (depth + detrended + roughness) ----
-dat.biog <- dat %>% filter(taxa%in%"biog")
-
-gamm=gam(cbind(response, (totalpts - response)) ~ 
-           s(depth, bs = 'cr', k = 5)+s(detrended, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5),
-         family = binomial("logit"),method = 'REML',data=dat.biog)
-
-# predict - depth ----
-mod<-gamm
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 100),
+# predict - detrended ----
+testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
                         roughness=mean(mod$model$roughness),
-                        detrended=mean(mod$model$detrended)) %>%
+                        Z=mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.biog.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
+predicts.seagrass.detrended = testdata%>%data.frame(fits)%>%
+  group_by(detrended)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
 # predict - roughness ----
-mod<-gamm
 testdata <- expand.grid(roughness=seq(min(dat$roughness),max(dat$roughness),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        detrended=mean(mod$model$detrended)) %>%
+                        detrended=mean(mod$model$detrended),
+                        Z=mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.biog.roughness = testdata%>%data.frame(fits)%>%
+predicts.seagrass.roughness = testdata%>%data.frame(fits)%>%
   group_by(roughness)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# predict - detrended ----
-mod<-gamm
-testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
-                        depth=mean(mod$model$depth),
+# predict - depth ----
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 100),
+                        detrended=mean(mod$model$detrended),
                         roughness=mean(mod$model$roughness)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.biog.detrended = testdata%>%data.frame(fits)%>%
+predicts.seagrass.depth = testdata%>%data.frame(fits)%>%
+  group_by(Z)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# PLOTS for seagrass ----
+# detrended ----
+ggmod.seagrass.detrended<- ggplot() +
+  ylab("")+
+  xlab("Detrended")+
+  geom_point(data=dat.seagrass,aes(x=detrended,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.seagrass.detrended,aes(x=detrended,y=response),alpha=0.5)+
+  geom_line(data=predicts.seagrass.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.seagrass.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1+
+  ggtitle("Seagrass") +
+  theme(plot.title = element_text(hjust = 0))
+ggmod.seagrass.detrended
+
+# roughness ----
+ggmod.seagrass.roughness<- ggplot() +
+  ylab("")+
+  xlab("Roughness")+
+  geom_point(data=dat.seagrass,aes(x=roughness,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.seagrass.roughness,aes(x=roughness,y=response),alpha=0.5)+
+  geom_line(data=predicts.seagrass.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.seagrass.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.seagrass.roughness
+
+# depth ----
+ggmod.seagrass.depth<- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.seagrass,aes(x=Z,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.seagrass.depth,aes(x=Z,y=response),alpha=0.5)+
+  geom_line(data=predicts.seagrass.depth,aes(x=Z,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.seagrass.depth,aes(x=Z,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.seagrass.depth
+
+# MODEL sand (detrended + slope + Z) ----
+dat.sand <- dat %>% filter(taxa%in%"sand")
+
+mod=gam(cbind(response, (broad.total.points.annotated - response)) ~ 
+          s(detrended, bs = 'cr', k = 5)+s(slope, bs = 'cr', k = 5)+s(Z, bs = 'cr', k = 5),
+        family = binomial("logit"), method = "REML", data=dat.sand)
+
+# predict - detrended ----
+testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
+                        slope=mean(mod$model$slope),
+                        Z=mean(mod$model$Z)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.sand.detrended = testdata%>%data.frame(fits)%>%
   group_by(detrended)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# PLOTS for biogenic reef ----
-# depth ----
-ggmod.biog.depth<- ggplot() +
-  ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.biog,aes(x=depth,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.biog.depth,aes(x=depth,y=response),alpha=0.5)+
-  geom_line(data=predicts.biog.depth,aes(x=depth,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.biog.depth,aes(x=depth,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1+
-  ggtitle("Biogenic reef") +
-  theme(plot.title = element_text(hjust = 0))
-ggmod.biog.depth
+# predict - slope ----
+testdata <- expand.grid(slope=seq(min(dat$slope),max(dat$slope),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        Z=mean(mod$model$Z)) %>%
+  distinct()%>%
+  glimpse()
 
-# PLOTS for biogenic reef ----
-# roughness ----
-ggmod.biog.roughness<- ggplot() +
-  ylab("")+
-  xlab("Roughness")+
-  geom_point(data=dat.biog,aes(x=roughness,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.biog.roughness,aes(x=roughness,y=response),alpha=0.5)+
-  geom_line(data=predicts.biog.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.biog.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.biog.roughness
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-# PLOTS for biogenic reef ----
-# detrended ----
-ggmod.biog.detrended<- ggplot() +
-  ylab("")+
-  xlab("Detrended")+
-  geom_point(data=dat.biog,aes(x=detrended,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.biog.detrended,aes(x=detrended,y=response),alpha=0.5)+
-  geom_line(data=predicts.biog.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.biog.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.biog.detrended
-
-# MODEL sand  (depth + roughness + tpi) ----
-dat.sand <- dat %>% filter(taxa%in%"sand")
-
-gamm=gam(cbind(response, (totalpts - response)) ~ 
-           s(depth, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5)+s(tpi, bs = 'cr', k = 5),
-         family = binomial("logit"),method = 'REML',data=dat.sand)
+predicts.sand.slope = testdata%>%data.frame(fits)%>%
+  group_by(slope)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
 
 # predict - depth ----
-mod<-gamm
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 100),
-                        roughness=mean(mod$model$roughness),
-                        tpi=mean(mod$model$tpi)) %>%
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        slope=mean(mod$model$slope)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
 predicts.sand.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# predict - roughness ----
-mod<-gamm
-testdata <- expand.grid(roughness=seq(min(dat$roughness),max(dat$roughness),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        tpi=mean(mod$model$tpi)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.sand.roughness = testdata%>%data.frame(fits)%>%
-  group_by(roughness)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
-
-# predict - tpi ----
-mod<-gamm
-testdata <- expand.grid(tpi=seq(min(dat$tpi),max(dat$tpi),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        roughness=mean(mod$model$roughness)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.sand.tpi = testdata%>%data.frame(fits)%>%
-  group_by(tpi)%>% #only change here
+  group_by(Z)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
 # PLOTS for sand ----
-# depth ----
-ggmod.sand.depth<- ggplot() +
+# detrended ----
+ggmod.sand.detrended<- ggplot() +
   ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.sand,aes(x=depth,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.sand.depth,aes(x=depth,y=response),alpha=0.5)+
-  geom_line(data=predicts.sand.depth,aes(x=depth,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.sand.depth,aes(x=depth,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Detrended")+
+  geom_point(data=dat.sand,aes(x=detrended,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.sand.detrended,aes(x=detrended,y=response),alpha=0.5)+
+  geom_line(data=predicts.sand.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.sand.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
   ggtitle("Sand") +
   theme(plot.title = element_text(hjust = 0))
+ggmod.sand.detrended
+
+# slope ----
+ggmod.sand.slope<- ggplot() +
+  ylab("")+
+  xlab("Slope")+
+  geom_point(data=dat.sand,aes(x=slope,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.sand.slope,aes(x=slope,y=response),alpha=0.5)+
+  geom_line(data=predicts.sand.slope,aes(x=slope,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.sand.slope,aes(x=slope,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.sand.slope
+
+# depth ----
+ggmod.sand.depth<- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.sand,aes(x=Z,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.sand.depth,aes(x=Z,y=response),alpha=0.5)+
+  geom_line(data=predicts.sand.depth,aes(x=Z,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.sand.depth,aes(x=Z,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
 ggmod.sand.depth
 
-# PLOTS for sand ----
-# roughness ----
-ggmod.sand.roughness<- ggplot() +
-  ylab("")+
-  xlab("Roughness")+
-  geom_point(data=dat.sand,aes(x=roughness,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.sand.roughness,aes(x=roughness,y=response),alpha=0.5)+
-  geom_line(data=predicts.sand.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.sand.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.sand.roughness
+# MODEL rock (detrended + roughness + Z) ----
+dat.rock <- dat %>% filter(taxa%in%"Rock")
 
-# PLOTS for sand ----
-# tpi ----
-ggmod.sand.tpi<- ggplot() +
-  ylab("")+
-  xlab("TPI")+
-  geom_point(data=dat.sand,aes(x=tpi,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.sand.tpi,aes(x=tpi,y=response),alpha=0.5)+
-  geom_line(data=predicts.sand.tpi,aes(x=tpi,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.sand.tpi,aes(x=tpi,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1
-ggmod.sand.tpi
-
-# MODEL rock  (depth + detrended + tpi) ----
-dat.rock <- dat %>% filter(taxa%in%"rock")
-
-gamm=gam(cbind(response, (totalpts - response)) ~ 
-           s(depth, bs = 'cr', k = 5)+s(detrended, bs = 'cr', k = 5)+s(tpi, bs = 'cr', k = 5),
-         family = binomial("logit"),method = 'REML',data=dat.rock)
-
-# predict - depth ----
-mod<-gamm
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 100),
-                        detrended=mean(mod$model$detrended),
-                        tpi=mean(mod$model$tpi)) %>%
-  distinct()%>%
-  glimpse()
-
-fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
-
-predicts.rock.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
-  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
-  ungroup()
+mod=gam(cbind(response, (broad.total.points.annotated - response)) ~ 
+          s(detrended, bs = 'cr', k = 5)+s(roughness, bs = 'cr', k = 5)+s(Z, bs = 'cr', k = 5),
+        family = binomial("logit"), method = "REML", data=dat.rock)
 
 # predict - detrended ----
-mod<-gamm
 testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        tpi=mean(mod$model$tpi)) %>%
+                        roughness=mean(mod$model$roughness),
+                        Z=mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
@@ -486,73 +345,172 @@ predicts.rock.detrended = testdata%>%data.frame(fits)%>%
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# predict - tpi ----
-mod<-gamm
-testdata <- expand.grid(tpi=seq(min(dat$tpi),max(dat$tpi),length.out = 100),
-                        depth=mean(mod$model$depth),
-                        detrended=mean(mod$model$detrended)) %>%
+# predict - roughness ----
+testdata <- expand.grid(roughness=seq(min(dat$roughness),max(dat$roughness),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        Z=mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.rock.tpi = testdata%>%data.frame(fits)%>%
-  group_by(tpi)%>% #only change here
+predicts.rock.roughness = testdata%>%data.frame(fits)%>%
+  group_by(roughness)%>% #only change here
   summarise(response=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# PLOTS for rock ----
-# depth ----
-ggmod.rock.depth<- ggplot() +
-  ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.rock,aes(x=depth,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.rock.depth,aes(x=depth,y=response),alpha=0.5)+
-  geom_line(data=predicts.rock.depth,aes(x=depth,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.rock.depth,aes(x=depth,y=response + se.fit),linetype="dashed",alpha=0.5)+
-  theme_classic()+
-  Theme1+
-  ggtitle("Rock") +
-  theme(plot.title = element_text(hjust = 0))
-ggmod.rock.depth
+# predict - depth ----
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        roughness=mean(mod$model$roughness)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.rock.depth = testdata%>%data.frame(fits)%>%
+  group_by(Z)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
 
 # PLOTS for rock ----
 # detrended ----
 ggmod.rock.detrended<- ggplot() +
   ylab("")+
   xlab("Detrended")+
-  geom_point(data=dat.rock,aes(x=detrended,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_point(data=dat.rock,aes(x=detrended,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
   geom_line(data=predicts.rock.detrended,aes(x=detrended,y=response),alpha=0.5)+
   geom_line(data=predicts.rock.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
   geom_line(data=predicts.rock.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
-  Theme1
+  Theme1+
+  ggtitle("Rock") +
+  theme(plot.title = element_text(hjust = 0))
 ggmod.rock.detrended
 
-# PLOTS for rock ----
-# tpi ----
-ggmod.rock.tpi<- ggplot() +
+# roughness ----
+ggmod.rock.roughness<- ggplot() +
   ylab("")+
-  xlab("TPI")+
-  geom_point(data=dat.rock,aes(x=tpi,y=response/totalpts),  alpha=0.2, size=1,show.legend=FALSE)+
-  geom_line(data=predicts.rock.tpi,aes(x=tpi,y=response),alpha=0.5)+
-  geom_line(data=predicts.rock.tpi,aes(x=tpi,y=response - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.rock.tpi,aes(x=tpi,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Roughness")+
+  geom_point(data=dat.rock,aes(x=roughness,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.rock.roughness,aes(x=roughness,y=response),alpha=0.5)+
+  geom_line(data=predicts.rock.roughness,aes(x=roughness,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.rock.roughness,aes(x=roughness,y=response + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1
-ggmod.rock.tpi
+ggmod.rock.roughness
+
+# depth ----
+ggmod.rock.depth<- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.rock,aes(x=Z,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.rock.depth,aes(x=Z,y=response),alpha=0.5)+
+  geom_line(data=predicts.rock.depth,aes(x=Z,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.rock.depth,aes(x=Z,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.rock.depth
+
+# MODEL inverts (detrended + slope + Z) ----
+dat.inverts <- dat %>% filter(taxa%in%"Sessile invertebrates")
+
+mod=gam(cbind(response, (broad.total.points.annotated - response)) ~ 
+          s(detrended, bs = 'cr', k = 5)+s(slope, bs = 'cr', k = 5)+s(Z, bs = 'cr', k = 5),
+        family = binomial("logit"), method = "REML", data=dat.inverts)
+
+# predict - detrended ----
+testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 100),
+                        slope=mean(mod$model$slope),
+                        Z=mean(mod$model$Z)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.inverts.detrended = testdata%>%data.frame(fits)%>%
+  group_by(detrended)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# predict - slope ----
+testdata <- expand.grid(slope=seq(min(dat$slope),max(dat$slope),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        Z=mean(mod$model$Z)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.inverts.slope = testdata%>%data.frame(fits)%>%
+  group_by(slope)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# predict - depth ----
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 100),
+                        detrended=mean(mod$model$detrended),
+                        slope=mean(mod$model$slope)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.inverts.depth = testdata%>%data.frame(fits)%>%
+  group_by(Z)%>% #only change here
+  summarise(response=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# PLOTS for inverts ----
+# detrended ----
+ggmod.inverts.detrended<- ggplot() +
+  ylab("")+
+  xlab("Detrended")+
+  geom_point(data=dat.inverts,aes(x=detrended,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.inverts.detrended,aes(x=detrended,y=response),alpha=0.5)+
+  geom_line(data=predicts.inverts.detrended,aes(x=detrended,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.inverts.detrended,aes(x=detrended,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1+
+  ggtitle("Sessile invertebrates") +
+  theme(plot.title = element_text(hjust = 0))
+ggmod.inverts.detrended
+
+# slope ----
+ggmod.inverts.slope<- ggplot() +
+  ylab("")+
+  xlab("Slope")+
+  geom_point(data=dat.inverts,aes(x=slope,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.inverts.slope,aes(x=slope,y=response),alpha=0.5)+
+  geom_line(data=predicts.inverts.slope,aes(x=slope,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.inverts.slope,aes(x=slope,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.inverts.slope
+
+# depth ----
+ggmod.inverts.depth<- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.inverts,aes(x=Z,y=response/broad.total.points.annotated),  alpha=0.2, size=1,show.legend=FALSE)+
+  geom_line(data=predicts.inverts.depth,aes(x=Z,y=response),alpha=0.5)+
+  geom_line(data=predicts.inverts.depth,aes(x=Z,y=response - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.inverts.depth,aes(x=Z,y=response + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.inverts.depth
 
 # Combine with cowplot
 library(cowplot)
 
 # view plots
-plot.grid.habitat <- plot_grid(ggmod.kelp.depth, ggmod.kelp.roughness,ggmod.kelp.tpi,
-                       ggmod.macroalgae.depth, ggmod.macro.detrended,ggmod.macro.roughness,
-                       ggmod.biog.depth, ggmod.biog.detrended, ggmod.biog.roughness,
-                       ggmod.sand.depth,ggmod.sand.roughness,ggmod.sand.tpi,
-                       ggmod.rock.depth,ggmod.rock.detrended,ggmod.rock.tpi,
-                       ncol = 3, labels = c('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o'),align = "vh")
+plot.grid.habitat <- plot_grid(ggmod.macroalgae.detrended, ggmod.macroalgae.slope,ggmod.macroalgae.depth,
+                       ggmod.seagrass.detrended, ggmod.seagrass.roughness,ggmod.seagrass.depth,
+                       ggmod.sand.detrended, ggmod.sand.slope, ggmod.sand.depth,
+                       ggmod.rock.detrended,ggmod.rock.roughness,ggmod.rock.depth,
+                       ggmod.inverts.detrended,ggmod.inverts.slope,ggmod.inverts.depth,
+                       ncol = 3, labels = "auto",align = "vh")
 plot.grid.habitat
 
 #save plots
-save_plot("plots/abrolhos.habitat.gam.png", plot.grid.habitat,base_height = 9,base_width = 8.5)
+save_plot(paste0("plots/habitat/", name, "_habitat.gam.png"), plot.grid.habitat,base_height = 9,base_width = 8.5)

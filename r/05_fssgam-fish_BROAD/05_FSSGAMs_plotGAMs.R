@@ -45,101 +45,128 @@ Theme1 <-
     strip.background = element_blank())
 
 # Set the study name
-name <- "2021-05_Abrolhos_npz6" # for the study
-
-## Set working directory----
-working.dir <- getwd()
-setwd(working.dir)
-#OR Set manually once
+name <- "Parks-Geographe-synthesis" # for the study
 
 # Bring in and format the  data----
-dat.maxn <- readRDS("data/Tidy/dat.maxn.rds")%>%
-  dplyr::filter(location%in%"NPZ6")%>%
+dat.maxn <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
   dplyr::rename(number = maxn)%>%
   glimpse()
 
-dat.length <- readRDS("data/Tidy/dat.length.rds")%>%
-  dplyr::filter(location%in%"NPZ6")%>%
+dat.length <- readRDS("data/tidy/fssgam_length_broad.rds")%>%
+  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
+                rock = rock/broad.total.points.annotated,
+                inverts = inverts/broad.total.points.annotated,
+                seagrass = seagrass/broad.total.points.annotated) %>%
   glimpse()
 
 dat <- bind_rows(dat.maxn,dat.length)
 
 # Manually make the most parsimonious GAM models for each taxa ----
-#### Abrolhos MaxN ####
+#### MaxN ####
 unique(dat$scientific)
 
-# MODEL Total abundance (relief) ----
+# MODEL Total abundance (macroalgae) ----
 dat.total <- dat %>% filter(scientific=="total.abundance")
 
-mod=gam(number~s(relief,k=3,bs='cr'), family=tw,data=dat.total)
+mod <- gam(number ~ s(macroalgae, k = 3, bs = 'cr'), family = tw,data = dat.total)
 
-# predict - relief ----
-testdata <- expand.grid(relief=seq(min(dat$relief),max(dat$relief),length.out = 20)) %>%
+# predict - macroalgae ----
+testdata <- expand.grid(macroalgae=seq(min(dat$macroalgae),max(dat$macroalgae),length.out = 20)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.total.relief = testdata%>%data.frame(fits)%>%
-  group_by(relief)%>% #only change here
+predicts.total.macroalgae = testdata%>%data.frame(fits)%>%
+  group_by(macroalgae)%>% #only change here
   summarise(number=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
 # PLOTS for Total abundance ----
-# detrended bathy ----
-ggmod.total.relief<- ggplot() +
+# macroalgae ----
+ggmod.total.macroalgae <- ggplot() +
   ylab("")+
-  xlab("Relief")+
-  geom_point(data=dat.total,aes(x=relief,y=number),  alpha=0.2, size=1,show.legend=F)+
-  geom_line(data=predicts.total.relief,aes(x=relief,y=number),alpha=0.5)+
-  geom_line(data=predicts.total.relief,aes(x=relief,y=number - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.total.relief,aes(x=relief,y=number + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Macroalgae")+
+  geom_point(data=dat.total,aes(x=macroalgae,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.total.macroalgae,aes(x=macroalgae,y=number),alpha=0.5)+
+  geom_line(data=predicts.total.macroalgae,aes(x=macroalgae,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.total.macroalgae,aes(x=macroalgae,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
   ggtitle("Total abundance") +
   theme(plot.title = element_text(hjust = 0))
-ggmod.total.relief
+ggmod.total.macroalgae
 
-# MODEL Species richness (depth) ----
+# MODEL Species richness (inverts + macroalgae) ----
 dat.species <- dat %>% filter(scientific=="species.richness")
 
-mod=gam(number~s(depth,k=3,bs='cr'), family=tw,data=dat.species)
+mod = gam(number~s(inverts,k=3,bs='cr') + s(macroalgae, k=3,bs='cr'), family=tw,data=dat.species)
 
-# predict - depth ----
-testdata <- expand.grid(depth=seq(min(dat$depth),max(dat$depth),length.out = 20)) %>%
+# predict - macroalgae ----
+testdata <- expand.grid(macroalgae=seq(min(dat$macroalgae),max(dat$macroalgae),length.out = 20),
+                        inverts = mean(mod$model$inverts)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.species.depth = testdata%>%data.frame(fits)%>%
-  group_by(depth)%>% #only change here
+predicts.species.macroalgae = testdata%>%data.frame(fits)%>%
+  group_by(macroalgae)%>% #only change here
+  summarise(number=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# predict - inverts ----
+testdata <- expand.grid(inverts=seq(min(dat$inverts),max(dat$inverts),length.out = 20),
+                        macroalgae = mean(mod$model$macroalgae)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.species.inverts = testdata%>%data.frame(fits)%>%
+  group_by(inverts)%>% #only change here
   summarise(number=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
 # PLOTS for Species richness ----
-# depth ----
-ggmod.species.depth<- ggplot() +
+# inverts ----
+ggmod.species.inverts<- ggplot() +
   ylab("")+
-  xlab("Depth")+
-  geom_point(data=dat.species,aes(x=depth,y=number),  alpha=0.2, size=1,show.legend=F)+
-  geom_line(data=predicts.species.depth,aes(x=depth,y=number),alpha=0.5)+
-  geom_line(data=predicts.species.depth,aes(x=depth,y=number - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.species.depth,aes(x=depth,y=number + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Sessile invertebrates")+
+  geom_point(data=dat.species,aes(x=inverts,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.species.inverts,aes(x=inverts,y=number),alpha=0.5)+
+  geom_line(data=predicts.species.inverts,aes(x=inverts,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.species.inverts,aes(x=inverts,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
   ggtitle("Species richness") +
   theme(plot.title = element_text(hjust = 0))
-ggmod.species.depth
+ggmod.species.inverts
 
-# MODEL Greater than legal size (detrended + status) ----
+# inverts ----
+ggmod.species.macroalgae<- ggplot() +
+  ylab("")+
+  xlab("Macroalgae")+
+  geom_point(data=dat.species,aes(x=macroalgae,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.species.macroalgae,aes(x=macroalgae,y=number),alpha=0.5)+
+  geom_line(data=predicts.species.macroalgae,aes(x=macroalgae,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.species.macroalgae,aes(x=macroalgae,y=number + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.species.macroalgae
+
+# MODEL Greater than legal size (detrended + seagrass) ----
 dat.legal <- dat %>% filter(scientific=="greater than legal size")
 
-mod=gam(number~s(detrended,k=3,bs='cr') + status, family=tw,data=dat.legal)
+mod=gam(number~s(detrended,k=3,bs='cr') + s(seagrass,k=3,bs='cr') , family=tw,data=dat.legal)
 
 # predict - detrended ----
 testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 20),
-                        status=c("No-take","Fished")) %>%
+                        seagrass=mean(mod$model$seagrass)) %>%
   distinct()%>%
   glimpse()
 
@@ -150,16 +177,16 @@ predicts.legal.detrended = testdata%>%data.frame(fits)%>%
   summarise(number=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
-# predict - status ----
-testdata <- expand.grid(detrended=mean(mod$model$detrended),
-                        status=c("No-take","Fished")) %>%
+# predict - seagrass ----
+testdata <- expand.grid(seagrass=seq(min(dat$seagrass),max(dat$seagrass),length.out = 20),
+                        detrended=mean(mod$model$detrended)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.legal.status = testdata%>%data.frame(fits)%>%
-  group_by(status)%>% #only change here
+predicts.legal.seagrass = testdata%>%data.frame(fits)%>%
+  group_by(seagrass)%>% #only change here
   summarise(number=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
@@ -178,63 +205,87 @@ ggmod.legal.detrended<- ggplot() +
   theme(plot.title = element_text(hjust = 0))
 ggmod.legal.detrended
 
-# status ----
-ggmod.legal.status<- ggplot(aes(x=status,y=number,fill=status,colour=status), data=predicts.legal.status,show.legend=FALSE) +
+# seagrass ----
+ggmod.legal.seagrass<- ggplot() +
   ylab("")+
-  xlab('Status')+
-  scale_fill_manual(labels = c("Fished", "No-take"),values=c("grey", "#1470ad"))+
-  scale_colour_manual(labels = c("Fished", "No-take"),values=c("black", "black"))+
-  scale_x_discrete(limits = rev(levels(predicts.legal.status$status)))+
-  geom_bar(stat = "identity")+
-  geom_errorbar(aes(ymin = number-se.fit,ymax = number+se.fit),width = 0.5) +
+  xlab("Seagrass")+
+  geom_point(data=dat.legal,aes(x=seagrass,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.legal.seagrass,aes(x=seagrass,y=number),alpha=0.5)+
+  geom_line(data=predicts.legal.seagrass,aes(x=seagrass,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.legal.seagrass,aes(x=seagrass,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
-  scale_y_continuous(expand = expand_scale(mult = c(0, .1)))+
-  Theme1+
-  theme(legend.position = "none")
-ggmod.legal.status
+  Theme1
+ggmod.legal.seagrass
 
-# MODEL Smaller than legal size (tpi) ----
+# MODEL Smaller than legal size (detrended + Z) ----
 dat.sublegal <- dat %>% filter(scientific=="smaller than legal size")
 
-mod=gam(number~s(tpi,k=3,bs='cr'), family=tw,data=dat.sublegal)
+mod=gam(number~s(detrended,k=3,bs='cr') + s(Z,k=3,bs='cr'), family=tw,data=dat.sublegal)
 
-# predict - depth ----
-testdata <- expand.grid(tpi=seq(min(dat$tpi),max(dat$tpi),length.out = 20)) %>%
+# predict - detrended ----
+testdata <- expand.grid(detrended=seq(min(dat$detrended),max(dat$detrended),length.out = 20),
+                        Z = mean(mod$model$Z)) %>%
   distinct()%>%
   glimpse()
 
 fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
 
-predicts.sublegal.tpi = testdata%>%data.frame(fits)%>%
-  group_by(tpi)%>% #only change here
+predicts.sublegal.detrended = testdata%>%data.frame(fits)%>%
+  group_by(detrended)%>% #only change here
+  summarise(number=mean(fit),se.fit=mean(se.fit))%>%
+  ungroup()
+
+# predict - Z ----
+testdata <- expand.grid(Z=seq(min(dat$Z),max(dat$Z),length.out = 20),
+                        detrended = mean(mod$model$detrended)) %>%
+  distinct()%>%
+  glimpse()
+
+fits <- predict.gam(mod, newdata=testdata, type='response', se.fit=T)
+
+predicts.sublegal.depth = testdata%>%data.frame(fits)%>%
+  group_by(Z)%>% #only change here
   summarise(number=mean(fit),se.fit=mean(se.fit))%>%
   ungroup()
 
 # PLOTS for Smaller than legal size ----
-# tpi ----
-ggmod.sublegal.tpi<- ggplot() +
+# detrended ----
+ggmod.sublegal.detrended<- ggplot() +
   ylab("")+
-  xlab("TPI")+
-  geom_point(data=dat.sublegal,aes(x=tpi,y=number),  alpha=0.2, size=1,show.legend=F)+
-  geom_line(data=predicts.sublegal.tpi,aes(x=tpi,y=number),alpha=0.5)+
-  geom_line(data=predicts.sublegal.tpi,aes(x=tpi,y=number - se.fit),linetype="dashed",alpha=0.5)+
-  geom_line(data=predicts.sublegal.tpi,aes(x=tpi,y=number + se.fit),linetype="dashed",alpha=0.5)+
+  xlab("Detrended bathymetry")+
+  geom_point(data=dat.sublegal,aes(x=detrended,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.sublegal.detrended,aes(x=detrended,y=number),alpha=0.5)+
+  geom_line(data=predicts.sublegal.detrended,aes(x=detrended,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.sublegal.detrended,aes(x=detrended,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
   ggtitle("Smaller than legal size") +
   theme(plot.title = element_text(hjust = 0))
-ggmod.sublegal.tpi
+ggmod.sublegal.detrended
+
+# detrended ----
+ggmod.sublegal.depth <- ggplot() +
+  ylab("")+
+  xlab("Depth")+
+  geom_point(data=dat.sublegal,aes(x=Z,y=number),  alpha=0.2, size=1,show.legend=F)+
+  geom_line(data=predicts.sublegal.depth,aes(x=Z,y=number),alpha=0.5)+
+  geom_line(data=predicts.sublegal.depth,aes(x=Z,y=number - se.fit),linetype="dashed",alpha=0.5)+
+  geom_line(data=predicts.sublegal.depth,aes(x=Z,y=number + se.fit),linetype="dashed",alpha=0.5)+
+  theme_classic()+
+  Theme1
+ggmod.sublegal.depth
 
 # Combine with cowplot
 library(cowplot)
 
 # view plots
-plot.grid.npz6 <- plot_grid(ggmod.total.relief, NULL,
-                       ggmod.species.depth, NULL,
-                       ggmod.legal.detrended, ggmod.legal.status,
-                       ggmod.sublegal.tpi,
-                       ncol = 2, labels = c('a','','b','','c','d','e',''),align = "vh")
-plot.grid.npz6
+plot.grid <- plot_grid(ggmod.total.macroalgae, NULL,
+                       ggmod.species.inverts, ggmod.species.macroalgae,
+                       ggmod.legal.detrended, ggmod.legal.seagrass,
+                       ggmod.sublegal.detrended, ggmod.sublegal.depth, 
+                       ncol = 2, labels = c('a','','b','c','d','e','f','g'),align = "vh")
+plot.grid
 
 #Save plots
-save_plot("plots/abrolhos.npz6.gam.png", plot.grid.npz6,base_height = 9,base_width = 8.5)
+save_plot(paste0("plots/fish/", name, "_gam-plots.png"), plot.grid,base_height = 9,base_width = 8.5,
+          dpi = 300)

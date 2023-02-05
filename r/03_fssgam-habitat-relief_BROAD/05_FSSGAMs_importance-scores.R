@@ -1,9 +1,9 @@
 ###
-# Project: Parks - Abrolhos
+# Project: Parks - Geographe
 # Data:    BOSS fish, habitat
 # Task:    Habitat importance scores
 # author:  Claude
-# date:    Nov-Dec 2021
+# date:    February 2023
 ##
 
 rm(list=ls())
@@ -11,31 +11,38 @@ rm(list=ls())
 # Plotting defaults----
 library(ggplot2)
 library(dplyr)
+library(cowplot)
 
-## Set working directory----
-working.dir <- getwd()
-setwd(working.dir)
-#OR Set manually once
+# Set the study name
+name <- "Parks-Geographe-synthesis" # for the study
 
-dat.taxa <-read.csv("output/fssgam/egall.var.imp.csv")%>% #from local copy
-  rename(resp.var=response)%>%
+dat.taxa <-read.csv("output/fssgam - habitat-broad/Parks-Geographe-synthesis_all.var.imp.csv") %>% #from local copy
+  rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))%>%
   mutate(label=NA)%>%
-  mutate(label=ifelse(predictor=="Depth"&resp.var=="kelps","X",label))%>%
-  mutate(label=ifelse(predictor=="roughness"&resp.var=="kelps","X",label))%>%
-  mutate(label=ifelse(predictor=="tpi"&resp.var=="kelps","X",label))%>%
-  mutate(label=ifelse(predictor=="Depth"&resp.var=="macroalgae","X",label))%>%
-  mutate(label=ifelse(predictor=="detrended"&resp.var=="macroalgae","X",label))%>%
-  mutate(label=ifelse(predictor=="roughness"&resp.var=="macroalgae","X",label))%>%
-  mutate(label=ifelse(predictor=="Depth"&resp.var=="biog","X",label))%>%
-  mutate(label=ifelse(predictor=="detrended"&resp.var=="biog","X",label))%>%
-  mutate(label=ifelse(predictor=="roughness"&resp.var=="biog","X",label))%>%
-  mutate(label=ifelse(predictor=="Depth"&resp.var=="sand","X",label))%>%
-  mutate(label=ifelse(predictor=="roughness"&resp.var=="sand","X",label))%>%
-  mutate(label=ifelse(predictor=="tpi"&resp.var=="sand","X",label))%>%
-  mutate(label=ifelse(predictor=="Depth"&resp.var=="rock","X",label))%>%
-  mutate(label=ifelse(predictor=="detrended"&resp.var=="rock","X",label))%>%
-  mutate(label=ifelse(predictor=="tpi"&resp.var=="rock","X",label))%>%
+  mutate(label=ifelse(predictor=="detrended"&resp.var=="Macroalgae","X",label))%>%
+  mutate(label=ifelse(predictor=="slope"&resp.var=="Macroalgae","X",label))%>%
+  mutate(label=ifelse(predictor=="Z"&resp.var=="Macroalgae","X",label))%>%
+  mutate(label=ifelse(predictor=="detrended"&resp.var=="Seagrass","X",label))%>%
+  mutate(label=ifelse(predictor=="roughness"&resp.var=="Seagrass","X",label))%>%
+  mutate(label=ifelse(predictor=="Z"&resp.var=="Seagrass","X",label))%>%
+  mutate(label=ifelse(predictor=="detrended"&resp.var=="Sand","X",label))%>%
+  mutate(label=ifelse(predictor=="slope"&resp.var=="Sand","X",label))%>%
+  mutate(label=ifelse(predictor=="Z"&resp.var=="Sand","X",label))%>%
+  mutate(label=ifelse(predictor=="detrended"&resp.var=="Rock","X",label))%>%
+  mutate(label=ifelse(predictor=="roughness"&resp.var=="Rock","X",label))%>%
+  mutate(label=ifelse(predictor=="Z"&resp.var=="Rock","X",label))%>%
+  mutate(label=ifelse(predictor=="detrended"&resp.var=="Sessile invertebrates","X",label))%>%
+  mutate(label=ifelse(predictor=="slope"&resp.var=="Sessile invertebrates","X",label))%>%
+  mutate(label=ifelse(predictor=="Z"&resp.var=="Sessile invertebrates","X",label))%>%
+  dplyr::mutate(importance = ifelse(resp.var == "Sand" & predictor %in% c("detrended", "Z"), 
+                                    importance * -1, importance)) %>%
+  dplyr::mutate(importance = ifelse(resp.var == "Seagrass" & predictor %in% c("detrended", "roughness"), 
+                                    importance * -1, importance)) %>%
+  dplyr::mutate(importance = ifelse(resp.var == "Rock" & predictor %in% c("roughness"), 
+                                    importance * -1, importance)) %>%
+  dplyr::mutate(importance = ifelse(resp.var == "Sessile invertebrates" & predictor %in% c("Z"), 
+                                    importance * -1, importance)) %>%
   glimpse()
 
 # Theme-
@@ -70,8 +77,8 @@ gg.importance.scores <- ggplot(dat.taxa, aes(x=predictor,y=resp.var,fill=importa
    geom_tile(show.legend=T) +
    scale_fill_gradientn(legend_title, colours=c(re), na.value = "grey98",
                          limits = c(-1, 1))+
-      scale_y_discrete( labels=c("Biogenic","Kelp", "Macroalgae", "Rock", "Sand"))+
-   scale_x_discrete(labels = c("Depth","Detrended","Roughness", "TPI"))+
+   # scale_y_discrete( labels=c("Biogenic","Kelp", "Macroalgae", "Rock", "Sand"))+
+   scale_x_discrete(labels = c("Detrended","Roughness","Slope", "Depth"))+
    xlab(NULL)+
    ylab(NULL)+
    theme_classic()+
@@ -80,4 +87,4 @@ gg.importance.scores <- ggplot(dat.taxa, aes(x=predictor,y=resp.var,fill=importa
 gg.importance.scores
 
 #save plots
-save_plot("plots/abrolhos.habitat.importance.scores.png", gg.importance.scores,base_height = 4.5,base_width = 4.25)
+save_plot(paste0("plots/habitat/", name, "_habitat.importance.scores.png"), gg.importance.scores,base_height = 4.5,base_width = 6)
