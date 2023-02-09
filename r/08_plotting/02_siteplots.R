@@ -489,6 +489,9 @@ rm("temp", "dat")
 p6 <- ggplot() +
   geom_rect(aes(xmin = min(bath_df1$distance.from.coast), xmax = max(bath_df1$distance.from.coast), ymin =-Inf, ymax = 0), fill = "#12a5db", alpha = 0.5) +
   annotate("segment", x = -5.556, xend = - 5.556, y = 0, yend = -33, colour = "red") +
+  annotate("segment", x = -5.556 - 0.1, xend = - 5.556 - 0.1, y = 0, yend = -33, colour = "#7bbc63") +
+  annotate("segment", x = -5.556 - 3.8, xend = - 5.556 - 3.8, y = 0, yend = -33, colour = "#7bbc63") +
+  annotate("segment", x = -5.556 - 31, xend = - 5.556 - 31, y = 0, yend = -50, colour = "#b9e6fb") +
   geom_line(data = bath_df1, aes(y = depth, x = distance.from.coast)) +
   geom_ribbon(data = bath_df1, aes(ymin = -Inf, ymax = depth, x = distance.from.coast), fill = "tan") +
   theme_classic() +

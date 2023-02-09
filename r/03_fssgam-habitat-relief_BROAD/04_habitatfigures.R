@@ -17,7 +17,6 @@ library(sf)
 library(ggnewscale)
 library(dplyr)
 
-
 # Set your study name
 name <- "Parks-Geographe-synthesis"                                             # Change here
 
