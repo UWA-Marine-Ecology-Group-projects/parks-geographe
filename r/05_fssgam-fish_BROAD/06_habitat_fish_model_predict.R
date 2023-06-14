@@ -102,3 +102,12 @@ plot(prasts_m)
 preddf <- as.data.frame(prasts_m, xy = T)
 
 saveRDS(preddf, "output/fssgam - fish-broad/broad_fish_predictions.rds")
+
+prasts <- readRDS("output/fssgam - fish-broad/broad_fish_predictions.rds") %>%
+  dplyr::select(x, y, p_legal) %>%
+  rast(crs = "epsg:4326")
+
+name <- "parks-geographe"
+
+terra::writeRaster(prasts, paste0("output/fssgam - fish-broad/", name, "_", names(prasts), ".tif"),
+                   overwrite = T)

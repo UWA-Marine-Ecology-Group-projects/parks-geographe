@@ -14,6 +14,7 @@ library(ggplot2)
 library(viridis)
 library(raster)
 library(dismo)
+library(tidyverse)
 
 # read in
 habi   <- readRDS("data/tidy/broad_habitat-bathymetry-derivatives.rds") %>%
@@ -119,3 +120,12 @@ preddf$dom_tag <- sub('.', '', preddf$dom_tag)
 head(preddf)
 
 saveRDS(preddf, "output/fssgam - habitat-broad/broad_habitat_predictions.rds")
+
+prasts <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
+  dplyr::select(x, y, starts_with("p")) %>%
+  rast(crs = "epsg:4326")
+
+name <- "parks-geographe"
+
+terra::writeRaster(prasts, paste0("output/fssgam - habitat-broad/", name, "_", names(prasts), "_predicted-habitat.tif"),
+                   overwrite = T)
