@@ -95,3 +95,10 @@ plot(prasts_m)
 preddf <- as.data.frame(prasts_m, xy = T, na.rm = T)
 
 saveRDS(preddf, "output/fssgam - fish-lidar/lidar_fish_predictions.rds")        # Ignored - too large
+
+prasts <- readRDS("output/fssgam - fish-lidar/lidar_fish_predictions.rds") %>%
+  dplyr::select(x, y, p_legal) %>%
+  rast(crs = crs(dom_rast))
+
+terra::writeRaster(prasts, paste0("output/fssgam - fish-lidar/", name, "_legal.tif"),
+                   overwrite = T)
