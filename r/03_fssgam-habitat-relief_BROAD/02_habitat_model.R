@@ -129,3 +129,27 @@ name <- "parks-geographe"
 
 terra::writeRaster(prasts, paste0("output/fssgam - habitat-broad/", name, "_", names(prasts), "_predicted-habitat.tif"),
                    overwrite = T)
+
+# Convert it to a shapefile
+dom_rast <- preddf %>%
+  dplyr::select(x, y, dom_tag) %>%
+  dplyr::mutate(dom_tag = dplyr::recode(dom_tag,
+                                        "sand" = "1",
+                                        "inverts" = "2",
+                                        "macroalg" = "3",
+                                        "seagrass" = "4")) %>%
+  rast(type = "xyz", crs = "epsg:4326") 
+plot(dom_rast)
+# Don't think I need this step?
+pred_stars <- st_as_stars(dom_rast)
+
+dom.habs <- st_as_sf(pred_stars, as_points = FALSE, merge = TRUE) %>%
+  dplyr::mutate(dom_tag = dplyr::recode(dom_tag,
+                                        "1" = "sand",
+                                        "2" = "inverts", 
+                                        "3" = "macroalg",
+                                        "4" = "seagrass")) 
+plot(dom.habs)
+
+st_write(dom.habs, paste0("output/fssgam - habitat-broad/", name, "_predicted-dominant-habitat.shp"),
+         append = F)
