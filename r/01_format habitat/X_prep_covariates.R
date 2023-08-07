@@ -82,6 +82,7 @@ plot(all_covs_lidar)
 
 # Too big to push all together
 saveRDS(all_covs_lidar[[1]], 'data/spatial/rasters/10m_lidar_depth.rds')
+writeRaster(all_covs_lidar[[1]], "data/spatial/rasters/geographe-lidar.tiff")   # For sampling designs - probably need to change format
 saveRDS(all_covs_lidar[[2]], 'data/spatial/rasters/10m_lidar_detrended.rds')
 saveRDS(all_covs_lidar[[3]], 'data/spatial/rasters/10m_lidar_roughness.rds')
 saveRDS(all_covs_lidar[[4]], 'data/spatial/rasters/10m_lidar_slope.rds')
