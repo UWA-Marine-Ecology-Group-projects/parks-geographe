@@ -50,21 +50,39 @@ preds <- readRDS("output/mbh-design/lidar-derivatives.rds")
 
 # Make inclusion probabilities ----
 # By detrended bathymetry
+n = 150 # Set the number of samples
+
 hist(preds$detrended)
 detrended_qs <- c(0, 0.55, 0.9, 1)
 detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
 cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
 plot(cat_detrended)
 
-# detrended_split <- data.frame(zones = unique(cat_detrended),
-#                               split = c(0.2, 0.4, 0.4))
-# detrended_split$nsamps <- detrended_split$split * n
-# detrended_split
+detrended_split <- data.frame(zones = unique(cat_detrended),
+                              split = c(0.2, 0.4, 0.4))
+
+icr_df    <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
+  group_by(detrended) %>%
+  dplyr::summarise(n = n()) %>%
+  ungroup() %>%
+  left_join(detrended_split) %>%
+  dplyr::mutate(prop = n / sum(n),
+                inclp = split / prop,
+                incl_prob = inclp / sum(inclp)) %>%
+  glimpse()
+
+inp_rasts <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
+  left_join(icr_df) %>%
+  dplyr::select(x, y, incl_prob) %>%
+  rast(type = "xyz", crs = crs(cat_detrended)) %>%
+  resample(cat_detrended)
+plot(inp_rasts)
 
 # Zone type
 zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
   dplyr::filter(NAME %in% c("Geographe", "Ngari Capes")) %>%
   dplyr::select(geometry, NAME, ZONE_TYPE) %>%
+  st_transform(crs(cat_detrended)) %>%
   st_crop(cat_detrended) %>%
   dplyr::mutate(ZONE_TYPE = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone" ~ 0,
@@ -84,30 +102,26 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
                                     park.code == 1 ~ 15,
                                     park.code == 2 ~ 15,
                                     park.code == 3 ~ 45),
-                density = n_samps / area,
-                prob = density / sum(density)) %>%
+                density = n_samps / area) %>%
   glimpse()
 
 plot(zone_sf)
 
-zone_vect <- vect(zone_sf %>% dplyr::select(geometry, prob)) %>%
-  project(crs(preds[[1]]))
+zone_vect <- vect(zone_sf %>% dplyr::select(geometry, density))
 plot(zone_vect)
 
 blank_raster <- rast(preds, nlyr = 0)
-zones <- rasterize(zone_vect, blank_raster, field = "prob") %>%
+zones <- rasterize(zone_vect, blank_raster, field = "density") %>%
   mask(preds[[1]])
 plot(zones)
 
-inc_probs <- rast(list(as.double(zones), as.double(cat_detrended)))
+inc_probs <- rast(list(as.double(zones), as.double(inp_rasts)))
 inc_probs$means <- lapp(inc_probs, fun = function(x,y){return(x*y)})
 plot(inc_probs)
 
 inp_stars <- st_as_stars(inc_probs$means)
 plot(inp_stars)
 
-
-n = 150 # Set the number of samples
 inp_sf <- st_as_sf(inp_stars) %>%
   group_by(means) %>%
   dplyr::summarise(geometry = st_union(geometry)) %>%
@@ -118,22 +132,21 @@ inp_sf <- st_as_sf(inp_stars) %>%
   dplyr::mutate(nsamps = ifelse(nsamps == 0, 1, nsamps)) %>%
   st_make_valid() %>%
   glimpse()
-# plot(inp_sf)
 
-inp_sf$nsamps <- as.integer(inp_sf$nsamps)
-
-test <- data.frame(nsamps = inp_sf$nsamps,
+base_samps <- data.frame(nsamps = inp_sf$nsamps,
                    strata = inp_sf$strata) %>%
   pivot_wider(names_from = strata,
               values_from = nsamps) %>%
   glimpse()
 
 # Run the sampling design ----
-test.sample <- grts(inp_sf, ## the smapling frame from above
-     n_base = test, ### base number of samples
-     stratum_var = "strata", ### the strata from the raster
-     DesignID = "GB-BRUV", ### add a suffix to each point
-     mindis = 250) ## min dist range
+test.sample <- grts(inp_sf, 
+     n_base = base_samps, 
+     stratum_var = "strata", 
+     DesignID = "GB-BRUV", 
+     mindis = 250) 
+
+test <- as.data.frame(test.sample$sites_base)
 
 st_write(test.sample$sites_base, 
          "output/mbh-design/GB_BRUV-design.shp")
