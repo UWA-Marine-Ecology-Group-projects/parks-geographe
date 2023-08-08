@@ -49,8 +49,6 @@ library(starsExtra)
 preds <- readRDS("output/mbh-design/lidar-derivatives.rds")
 
 # Make inclusion probabilities ----
-n = 100
-
 # By detrended bathymetry
 hist(preds$detrended)
 detrended_qs <- c(0, 0.55, 0.9, 1)
@@ -67,62 +65,78 @@ plot(cat_detrended)
 zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
   dplyr::filter(NAME %in% c("Geographe", "Ngari Capes")) %>%
   dplyr::select(geometry, NAME, ZONE_TYPE) %>%
-  dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone (IUCN VI)" ~ 0,
-                                      ZONE_TYPE %in% "Habitat Protection Zone (IUCN IV)" ~ 1,
-                                      ZONE_TYPE %in% "National Park Zone (IUCN II)" ~ 2,
-                                      ZONE_TYPE %in% "Special Purpose Zone (Mining Exclusion) (IUCN VI)" ~ 3,
-                                      ZONE_TYPE %in% "Recreation Zone (IUCN VI)" ~ 4,
-                                      ZONE_TYPE %in% "Sanctuary Zone (IUCN VI)" ~ 5,
-                                      ZONE_TYPE %in% "General Use Zone (IUCN VI)" ~ 6,
-                                      ZONE_TYPE %in% "Special Purpose Zone (Surfing) (IUCN VI)" ~ 7,
-                                      ZONE_TYPE %in% "Special Purpose Zone (Shore-based Activities) (IUCN VI)" ~ 8)) %>%
-  # dplyr::mutate(status = ifelse(ZONE_TYPE %in% c("Sanctuary Zone (IUCN VI)", "National Park Zone (IUCN II)"), 1, 0)) %>%
+  st_crop(cat_detrended) %>%
+  dplyr::mutate(ZONE_TYPE = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
+  dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone" ~ 0,
+                                      ZONE_TYPE %in% "Habitat Protection Zone" ~ 1,
+                                      ZONE_TYPE %in% "National Park Zone" ~ 2,
+                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 0,
+                                      ZONE_TYPE %in% "Recreation Zone" ~ 0,
+                                      ZONE_TYPE %in% "Sanctuary Zone" ~ 3,
+                                      ZONE_TYPE %in% "General Use Zone" ~ 0,
+                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 0,
+                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 0)) %>%
   group_by(park.code) %>%
   dplyr::summarise(geometry = st_union(geometry)) %>%
   ungroup() %>%
-  dplyr::mutate(weighting = 1) %>% # Set probabilities for each zone if necessary
+  dplyr::mutate(area = st_area(.)) %>%
+  dplyr::mutate(n_samps = case_when(park.code == 0 ~ 75, # Set the number of samples you want in each park zone
+                                    park.code == 1 ~ 15,
+                                    park.code == 2 ~ 15,
+                                    park.code == 3 ~ 45),
+                density = n_samps / area,
+                prob = density / sum(density)) %>%
   glimpse()
 
 plot(zone_sf)
 
-zone_vect <- vect(zone_sf %>% dplyr::select(geometry, park.code, weighting)) %>%
+zone_vect <- vect(zone_sf %>% dplyr::select(geometry, prob)) %>%
   project(crs(preds[[1]]))
 plot(zone_vect)
 
 blank_raster <- rast(preds, nlyr = 0)
-zones <- rasterize(zone_vect, blank_raster, field = "weighting") %>%
+zones <- rasterize(zone_vect, blank_raster, field = "prob") %>%
   mask(preds[[1]])
 plot(zones)
 
+inc_probs <- rast(list(as.double(zones), as.double(cat_detrended)))
+inc_probs$means <- lapp(inc_probs, fun = function(x,y){return(x*y)})
+plot(inc_probs)
 
-inc_probs <- zones * cat_detrended
-
-inp_stars <- st_as_stars(inc_probs)
+inp_stars <- st_as_stars(inc_probs$means)
 plot(inp_stars)
+
+
+n = 150 # Set the number of samples
 inp_sf <- st_as_sf(inp_stars) %>%
-  group_by(weighting) %>%
+  group_by(means) %>%
   dplyr::summarise(geometry = st_union(geometry)) %>%
-  ungroup()
-inp_sf$strata <- paste("Strata", row.names(inp_sf), sep = " ")
-inp_sf$prob <- dplyr::mutate(prob = case_when())
-inp_sf$nsamps <- 
-plot(inp_sf)
+  ungroup() %>%
+  dplyr::mutate(strata = paste("strata", row.names(.), sep = " "),
+                prop.means = means / sum(means),
+                nsamps = round(prop.means * n, digits = 0)) %>%
+  dplyr::mutate(nsamps = ifelse(nsamps == 0, 1, nsamps)) %>%
+  st_make_valid() %>%
+  glimpse()
+# plot(inp_sf)
+
+inp_sf$nsamps <- as.integer(inp_sf$nsamps)
+
+test <- data.frame(nsamps = inp_sf$nsamps,
+                   strata = inp_sf$strata) %>%
+  pivot_wider(names_from = strata,
+              values_from = nsamps) %>%
+  glimpse()
 
 # Run the sampling design ----
-# Set the number of samples in each strata
+test.sample <- grts(inp_sf, ## the smapling frame from above
+     n_base = test, ### base number of samples
+     stratum_var = "strata", ### the strata from the raster
+     DesignID = "GB-BRUV", ### add a suffix to each point
+     mindis = 250) ## min dist range
 
-
-# Run the design
-test.sample <- grts(design = inp_sf, # Frame
-                    DesignID = "BRUV design",
-                    # type.frame = "area",
-                    # src.frame = "shapefile",
-                    # in.shape = inp_sf,
-                    stratum = "strata",
-                    n_base = inp_sf$nsamps, # Number of samples per strata
-                    shapefile = TRUE,
-                    out.shape = "output/mbh-design/BRUV-design.shp",
-                    mindis = 250)
+st_write(test.sample$sites_base, 
+         "output/mbh-design/GB_BRUV-design.shp")
 
 # zone_split <- data.frame(zones = unique(zones$park.code),
 #                          split = c(0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.1))
