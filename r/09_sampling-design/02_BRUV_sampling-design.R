@@ -86,20 +86,23 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
 
 plot()
 
-bounding.box <- data.frame(lon = c(e[1], e[2]),
-                           lat = c(e[3], e[4]),
-                           group = "a")
+# Instead of this bit below
+# For the last iteration of the loop, just mask the bathy inverse by the other 3 zones
 
-study.extent <- bounding.box %>% 
-  st_as_sf(coords = c('lon','lat'), crs = crs(zone_sf))  %>%
-  group_by(group) %>%
-  summarise(geometry = st_as_sfc(st_bbox(geometry))) %>%
-  st_difference(zone_sf %>% dplyr::filter(park.code %in% c(2, 3, 4)))
-
-ggplot() +
-  geom_sf(data = study.extent, fill = NA, colour = "red") +
-  # geom_sf(data = zone_sf, fill = NA, colour = "green") +
-  coord_sf()
+# bounding.box <- data.frame(lon = c(e[1], e[2]),
+#                            lat = c(e[3], e[4]),
+#                            group = "a")
+# 
+# study.extent <- bounding.box %>% 
+#   st_as_sf(coords = c('lon','lat'), crs = crs(zone_sf))  %>%
+#   group_by(group) %>%
+#   summarise(geometry = st_as_sfc(st_bbox(geometry))) %>%
+#   st_difference(zone_sf %>% dplyr::filter(park.code %in% c(2, 3, 4)))
+# 
+# ggplot() +
+#   geom_sf(data = study.extent, fill = NA, colour = "red") +
+#   # geom_sf(data = zone_sf, fill = NA, colour = "green") +
+#   coord_sf()
 
 # New way
 for (i in 1:length(unique(zone_sf$park.code))) {
