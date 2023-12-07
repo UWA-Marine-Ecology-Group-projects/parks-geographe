@@ -89,8 +89,8 @@ inp_sf <- st_as_sf(inp_stars) %>%
   ungroup() %>%
   st_make_valid() %>%
   st_intersection(zone_sf) %>%                                                  # Intersect with zone
-  dplyr::mutate(prop = case_when(strata %in% 1 ~ 0.4,                           # Proportion of samples within each detrended strata
-                                 strata %in% 2 ~ 0.2, 
+  dplyr::mutate(prop = case_when(strata %in% 1 ~ 0.2,                           # Proportion of samples within each detrended strata
+                                 strata %in% 2 ~ 0.4, 
                                  strata %in% 3 ~ 0.4),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
                                       park.code == 1 ~ 75,                      # AMPS + NGARI - MUZ, SPZ, GUZ
@@ -127,6 +127,7 @@ zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Are
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
+  labs(fill = "Inclusion probability \n(detrended)") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -135,7 +136,8 @@ ggplot() +
                                "Special Purpose Zone" = "#368ac1",
                                "Recreation Zone" = "#f4e952",
                                "Sanctuary Zone" = "#bfd054",
-                               "General Use Zone" = "#bddde1")) +
+                               "General Use Zone" = "#bddde1"),
+                    name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
   coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.38))+
   theme_minimal()

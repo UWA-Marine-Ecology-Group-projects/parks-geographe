@@ -23,7 +23,7 @@ library(tidyterra)
 library(ggnewscale)
 
 # Set the seed for reproducible plans
-set.seed(15)
+set.seed(28)
 
 # Load the bathymetry data and crop ----
 e <- ext(318817, 357808, 6274000, 6324010)
@@ -31,6 +31,32 @@ e <- ext(318817, 357808, 6274000, 6324010)
 preds <- readRDS("output/mbh-design/lidar-derivatives.rds") %>%
   crop(e)
 plot(preds)
+
+# Using detrended bathymetry
+hist(preds$detrended)
+detrended_qs <- c(0, 0.9, 0.97, 1)
+detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
+cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
+plot(cat_detrended)
+
+# Test to see what roughness looks like
+hist(preds$roughness)
+roughness_qs <- c(0, 0.9, 0.97, 1)
+roughness_cuts   <- global(preds$roughness, probs = roughness_qs, fun = quantile, na.rm = T)
+cat_roughness <- classify(preds$roughness, rcl = as.numeric(roughness_cuts[1,]))
+plot(cat_roughness)
+
+inp_rasts <- as.data.frame(cat_roughness, xy = TRUE, na.rm = T) %>%
+  dplyr::mutate(roughness = as.factor(roughness)) %>%
+  dplyr::mutate(strata = as.integer(roughness)) %>%                             # NO idea how that works haha
+  dplyr::select(x, y, strata) %>%
+  rast(type = "xyz", crs = crs(cat_roughness)) %>%
+  resample(cat_detrended)
+plot(inp_rasts)
+
+# To stars object
+inp_stars <- st_as_stars(inp_rasts)
+plot(inp_stars)
 
 # Make inclusion probabilities ----
 # Load state and commonwealth zones
@@ -55,33 +81,6 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
   dplyr::mutate(area = st_area(.)) %>%
   glimpse()
 
-# Using detrended bathymetry
-
-hist(preds$detrended)
-detrended_qs <- c(0, 0.55, 0.9, 1)
-detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
-cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
-plot(cat_detrended)
-
-# Test to see what roughness looks like
-hist(preds$roughness)
-roughness_qs <- c(0, 0.6, 0.9, 1)
-roughness_cuts   <- global(preds$roughness, probs = roughness_qs, fun = quantile, na.rm = T)
-cat_roughness <- classify(preds$roughness, rcl = as.numeric(roughness_cuts[1,]))
-plot(cat_roughness)
-
-inp_rasts <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
-  dplyr::mutate(detrended = as.factor(detrended)) %>%
-  dplyr::mutate(strata = as.integer(detrended)) %>%                             # NO idea how that works haha
-  dplyr::select(x, y, strata) %>%
-  rast(type = "xyz", crs = crs(cat_detrended)) %>%
-  resample(cat_detrended)
-plot(inp_rasts)
-
-# To stars object
-inp_stars <- st_as_stars(inp_rasts)
-plot(inp_stars)
-
 # To simple features - and intersect with zones to create final strata
 inp_sf <- st_as_sf(inp_stars) %>%
   group_by(strata) %>%
@@ -89,9 +88,9 @@ inp_sf <- st_as_sf(inp_stars) %>%
   ungroup() %>%
   st_make_valid() %>%
   st_intersection(zone_sf) %>%                                                  # Intersect with zone
-  dplyr::mutate(prop = case_when(strata %in% 1 ~ 0.4,                           # Proportion of samples within each detrended strata
-                                 strata %in% 2 ~ 0.2, 
-                                 strata %in% 3 ~ 0.4),
+  dplyr::mutate(prop = case_when(strata %in% 1 ~ 0.1,                           # Proportion of samples within each detrended strata
+                                 strata %in% 2 ~ 0.3, 
+                                 strata %in% 3 ~ 0.6),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
                   park.code == 1 ~ 75,                      # AMPS + NGARI - MUZ, SPZ, GUZ
                   park.code == 2 ~ 15,                      # AMP HPZ
@@ -114,8 +113,7 @@ base_samps <- data.frame(nsamps = inp_sf$nsamps,
 sample.design <- grts(inp_sf, 
                       n_base = base_samps, 
                       stratum_var = "strata.new", 
-                      DesignID = "GB-BV",                                       # Prefix for sample name                          
-                      mindis = 250)
+                      DesignID = "GB-CP")
 
 # Have a look
 zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
@@ -127,6 +125,7 @@ zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Are
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
+  labs(fill = "Inclusion probability \n(roughness)") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -135,7 +134,8 @@ ggplot() +
                                "Special Purpose Zone" = "#368ac1",
                                "Recreation Zone" = "#f4e952",
                                "Sanctuary Zone" = "#bfd054",
-                               "General Use Zone" = "#bddde1")) +
+                               "General Use Zone" = "#bddde1"),
+                    name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
   coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.38))+
   theme_minimal()
