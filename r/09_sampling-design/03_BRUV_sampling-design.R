@@ -26,10 +26,7 @@ library(ggnewscale)
 set.seed(15)
 
 # Load the bathymetry data and crop ----
-e <- ext(318817, 357808, 6274000, 6324010)
-
-preds <- readRDS("output/mbh-design/lidar-derivatives.rds") %>%
-  crop(e)
+preds <- readRDS("output/mbh-design/ga250-derivatives.rds")
 plot(preds)
 
 # Make inclusion probabilities ----
@@ -83,7 +80,9 @@ inp_stars <- st_as_stars(inp_rasts)
 plot(inp_stars)
 
 # To simple features - and intersect with zones to create final strata
+# Going to do 240 BRUVs
 inp_sf <- st_as_sf(inp_stars) %>%
+  dplyr::mutate(strata = as.integer(strata)) %>%
   group_by(strata) %>%
   dplyr::summarise(geometry = st_union(geometry)) %>%
   ungroup() %>%
@@ -93,13 +92,15 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                  strata %in% 2 ~ 0.4, 
                                  strata %in% 3 ~ 0.4),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
-                                      park.code == 1 ~ 75,                      # AMPS + NGARI - MUZ, SPZ, GUZ
+                                      park.code == 1 ~ 180,                     # AMPS + NGARI - MUZ, SPZ, GUZ
                                       park.code == 2 ~ 15,                      # AMP HPZ
                                       park.code == 3 ~ 15,                      # AMP NPZ
-                                      park.code == 4 ~ 45),                     # NGARI SZ
+                                      park.code == 4 ~ 30),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%
   
   dplyr::mutate(nsamps = round(prop * zonesamps, digits = 0)) %>%               # Number of samples * proportion
+  dplyr::mutate(area = st_area(.)) %>%
+  st_transform(9473) %>%
   glimpse()
 plot(inp_sf[c("park.code", "strata", "strata.new", "nsamps")])
 
@@ -115,7 +116,7 @@ sample.design <- grts(inp_sf,
                       n_base = base_samps, 
                       stratum_var = "strata.new", 
                       DesignID = "GB-BV",                                       # Prefix for sample name                          
-                      mindis = 250)
+                      mindis = 400)
 
 # Have a look
 zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
@@ -124,10 +125,12 @@ zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Are
   dplyr::mutate(tidy_name = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   glimpse()
 
+png("plots/sampling-design/bruv-design.png",
+    height = 4.5, width = 8, units = "in", res = 300)
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
-  labs(fill = "Inclusion probability \n(detrended)") +
+  labs(fill = "Inclusion probability \n(detrended)", title = "BRUV design") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -139,8 +142,9 @@ ggplot() +
                                "General Use Zone" = "#bddde1"),
                     name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
-  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.38))+
+  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.3))+
   theme_minimal()
+dev.off()
 
 # Select useful columns and export the design ----
 zones_vect <- vect(zones)

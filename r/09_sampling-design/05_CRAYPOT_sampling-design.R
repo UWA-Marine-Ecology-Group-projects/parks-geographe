@@ -26,15 +26,20 @@ library(ggnewscale)
 set.seed(28)
 
 # Load the bathymetry data and crop ----
-e <- ext(318817, 357808, 6274000, 6324010)
+cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp") %>%
+  st_make_valid() %>%
+  st_transform(4326) %>%
+  summarise(geometry = st_union(geometry)) %>%
+  st_cast("POLYGON")
 
-preds <- readRDS("output/mbh-design/lidar-derivatives.rds") %>%
-  crop(e)
+preds <- readRDS("output/mbh-design/ga250-derivatives.rds") %>%
+  mask(cwatr, inverse = T) %>%
+  project("EPSG:9473")
 plot(preds)
 
 # Using detrended bathymetry
 hist(preds$detrended)
-detrended_qs <- c(0, 0.9, 0.97, 1)
+detrended_qs <- c(0, 0.8, 0.97, 1)
 detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
 cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
 plot(cat_detrended)
@@ -46,11 +51,11 @@ roughness_cuts   <- global(preds$roughness, probs = roughness_qs, fun = quantile
 cat_roughness <- classify(preds$roughness, rcl = as.numeric(roughness_cuts[1,]))
 plot(cat_roughness)
 
-inp_rasts <- as.data.frame(cat_roughness, xy = TRUE, na.rm = T) %>%
-  dplyr::mutate(roughness = as.factor(roughness)) %>%
-  dplyr::mutate(strata = as.integer(roughness)) %>%                             # NO idea how that works haha
+inp_rasts <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
+  dplyr::mutate(detrended = as.factor(detrended)) %>%
+  dplyr::mutate(strata = as.integer(detrended)) %>%                             # NO idea how that works haha
   dplyr::select(x, y, strata) %>%
-  rast(type = "xyz", crs = crs(cat_roughness)) %>%
+  rast(type = "xyz", crs = crs(cat_detrended)) %>%
   resample(cat_detrended)
 plot(inp_rasts)
 
@@ -63,7 +68,7 @@ plot(inp_stars)
 zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
   dplyr::filter(NAME %in% c("Geographe", "Ngari Capes")) %>%
   dplyr::select(geometry, NAME, ZONE_TYPE) %>%
-  st_transform(crs(cat_detrended)) %>%
+  st_transform(9473) %>%
   st_crop(cat_detrended) %>%
   dplyr::mutate(ZONE_TYPE = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone" ~ 1,   # Recode to numeric to use as a categorical raster
@@ -80,7 +85,7 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
   ungroup() %>%
   dplyr::mutate(area = st_area(.)) %>%
   glimpse()
-
+plot(zone_sf["park.code"])
 # To simple features - and intersect with zones to create final strata
 inp_sf <- st_as_sf(inp_stars) %>%
   group_by(strata) %>%
@@ -92,10 +97,10 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                  strata %in% 2 ~ 0.3, 
                                  strata %in% 3 ~ 0.6),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
-                  park.code == 1 ~ 75,                      # AMPS + NGARI - MUZ, SPZ, GUZ
-                  park.code == 2 ~ 15,                      # AMP HPZ
-                  park.code == 3 ~ 15,                      # AMP NPZ
-                  park.code == 4 ~ 45),                     # NGARI SZ
+                  park.code == 1 ~ 100,                      # AMPS + NGARI - MUZ, SPZ, GUZ
+                  park.code == 2 ~ 25,                      # AMP HPZ
+                  park.code == 3 ~ 25,
+                  park.code == 4 ~ 0),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%
   
   dplyr::mutate(nsamps = round(prop * zonesamps, digits = 0)) %>%               # Number of samples * proportion
@@ -105,6 +110,7 @@ plot(inp_sf[c("park.code", "strata", "strata.new", "nsamps")])
 # GRTS needs the number of samples in this horrible wide format for some reason
 base_samps <- data.frame(nsamps = inp_sf$nsamps,
                          strata.new = inp_sf$strata.new) %>%
+  dplyr::filter(nsamps > 0) %>%
   pivot_wider(names_from = strata.new,
               values_from = nsamps) %>%
   glimpse()
@@ -122,10 +128,12 @@ zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Are
   dplyr::mutate(tidy_name = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   glimpse()
 
+png("plots/sampling-design/craypot-design.png",
+    height = 4.5, width = 8, units = "in", res = 300)
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
-  labs(fill = "Inclusion probability \n(roughness)") +
+  labs(fill = "Inclusion probability \n(detrended)", title = "Craypot design") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -137,8 +145,9 @@ ggplot() +
                                "General Use Zone" = "#bddde1"),
                     name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
-  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.38))+
+  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.3))+
   theme_minimal()
+dev.off()
 
 # Select useful columns and export the design ----
 samples <- sample.design$sites_base %>%

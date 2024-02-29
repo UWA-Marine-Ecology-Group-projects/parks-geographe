@@ -26,7 +26,15 @@ library(ggnewscale)
 set.seed(34)
 
 # Load the bathymetry data and crop ----
-preds <- readRDS("output/mbh-design/ga250-derivatives.rds") 
+cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp") %>%
+  st_make_valid() %>%
+  st_transform(4326) %>%
+  summarise(geometry = st_union(geometry)) %>%
+  st_cast("POLYGON")
+
+preds <- readRDS("output/mbh-design/ga250-derivatives.rds") %>%
+  mask(cwatr, inverse = T) %>%
+  project("EPSG:9473")
 plot(preds)
 
 # Make inclusion probabilities ----
@@ -70,13 +78,13 @@ inp_rasts <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
   dplyr::mutate(strata = as.integer(detrended)) %>%                             # NO idea how that works haha
   dplyr::select(x, y, strata) %>%
   rast(type = "xyz", crs = crs(cat_detrended)) %>%
-  resample(cat_detrended) %>%
-  project("EPSG:9473")
+  resample(cat_detrended)
 plot(inp_rasts)
-
+hist(inp_rasts)
 # To stars object
 inp_stars <- st_as_stars(inp_rasts)
 plot(inp_stars)
+unique(st_as_sf(inp_stars)$strata)
 
 # To simple features - and intersect with zones to create final strata
 inp_sf <- st_as_sf(inp_stars) %>%
@@ -89,12 +97,10 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                  strata %in% 2 ~ 0.4, 
                                  strata %in% 3 ~ 0.4),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
-                  park.code == 1 ~ 135,                     # AMPS + NGARI - MUZ, SPZ, GUZ
+                  park.code == 1 ~ 140,                     # AMPS + NGARI - MUZ, SPZ, GUZ
                   park.code == 2 ~ 20,                      # AMP HPZ
-                  park.code == 3 ~ 20,                      # AMP NPZ
-                  park.code == 4 ~ 75),                     # NGARI SZ
+                  park.code == 3 ~ 20),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%
-  
   dplyr::mutate(nsamps = round(prop * zonesamps, digits = 0)) %>%               # Number of samples * proportion
   dplyr::filter(!is.na(nsamps)) %>%
   glimpse()
@@ -120,10 +126,12 @@ zones <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Are
   dplyr::mutate(tidy_name = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   glimpse()
 
+png("plots/sampling-design/boss-design.png",
+    height = 4.5, width = 8, units = "in", res = 300)
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
-  labs(fill = "Inclusion probability \n(detrended)") +
+  labs(fill = "Inclusion probability \n(detrended)", title = "BOSS design") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -135,8 +143,9 @@ ggplot() +
                                "General Use Zone" = "#bddde1"),
                     name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
-  coord_sf(crs = 4326, xlim = c(115.05, 115.558), ylim = c(-33.67, -33.349))+
+  coord_sf(crs = 4326, xlim = c(115.05, 115.558), ylim = c(-33.67, -33.3))+
   theme_minimal()
+dev.off()
 
 # Select useful columns and export the design ----
 samples <- sample.design$sites_base %>%

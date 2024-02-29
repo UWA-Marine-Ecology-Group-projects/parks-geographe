@@ -23,7 +23,7 @@ library(starsExtra)
 e <- ext(115.05, 115.558, -33.67, -33.349)
 
 bathy <- rast("data/spatial/rasters/Australian_Bathymetry_and_Topography_2023_250m_MSL_cog.tif") %>%
-  clamp(upper = 0, values = F) %>%
+  clamp(upper = -5, values = F) %>%
   crop(e)
 plot(bathy)
 
