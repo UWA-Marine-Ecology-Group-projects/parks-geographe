@@ -33,7 +33,7 @@ plot(preds)
 # Using detrended bathymetry
 
 hist(preds$detrended)
-detrended_qs <- c(0, 0.55, 0.9, 1)
+detrended_qs <- c(0, 0.4, 0.75, 1)
 detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
 cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
 plot(cat_detrended)
@@ -55,7 +55,8 @@ plot(inp_rasts)
 
 # Load state and commonwealth zones
 zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_Areas_Database_(CAPAD)_2022_-_Marine.shp") %>%
-  dplyr::filter(NAME %in% c("Geographe", "Ngari Capes")) %>%
+  st_make_valid() %>%
+  dplyr::filter(NAME %in% c("Geographe", "Ngari Capes", "East Geographe Outside")) %>%
   dplyr::select(geometry, NAME, ZONE_TYPE) %>%
   st_transform(crs(cat_detrended)) %>%
   st_crop(cat_detrended) %>%
@@ -68,6 +69,7 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
                                       ZONE_TYPE %in% "Habitat Protection Zone" ~ 2,
                                       ZONE_TYPE %in% "National Park Zone" ~ 3,
                                       ZONE_TYPE %in% "Sanctuary Zone" ~ 4,
+                                      .default = 1
   )) %>%
   group_by(park.code) %>%
   dplyr::summarise(geometry = st_union(geometry)) %>%
@@ -97,7 +99,6 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                       park.code == 3 ~ 15,                      # AMP NPZ
                                       park.code == 4 ~ 30),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%
-  
   dplyr::mutate(nsamps = round(prop * zonesamps, digits = 0)) %>%               # Number of samples * proportion
   dplyr::mutate(area = st_area(.)) %>%
   st_transform(9473) %>%
