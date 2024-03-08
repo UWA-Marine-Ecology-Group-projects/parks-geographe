@@ -143,7 +143,28 @@ ggplot() +
                                "General Use Zone" = "#bddde1"),
                     name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
-  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.3))+
+  coord_sf(crs = 4326, xlim = c(115, 115.55), ylim = c(-33.67, -33.3))+
+  theme_minimal()
+dev.off()
+
+png("plots/sampling-design/bruv-ga250_inclusion-probs.png",
+    height = 4.5, width = 8, units = "in", res = 300)
+ggplot() +
+  geom_spatraster(data = inp_rasts, aes(fill = strata)) +
+  scale_fill_viridis_c(na.value = NA, option = "D") +
+  labs(fill = "Inclusion probability \n(detrended)", title = "Coarse 250m bathymetry") +
+  new_scale_fill() +
+  geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.35) +
+  scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
+                               "Habitat Protection Zone" = "#fff8a3",
+                               "National Park Zone" = "#7bbc63",
+                               "Special Purpose Zone" = "#368ac1",
+                               "Recreation Zone" = "#f4e952",
+                               "Sanctuary Zone" = "#bfd054",
+                               "General Use Zone" = "#bddde1"),
+                    name = "Marine Parks") +
+  # geom_sf(data = sample.design$sites_base, colour = "red") +
+  coord_sf(crs = 4326, xlim = c(115, 115.55), ylim = c(-33.67, -33.3))+
   theme_minimal()
 dev.off()
 
@@ -161,3 +182,57 @@ samples <- sample.design$sites_base %>%
 write.csv(samples, file = paste0("output/mbh-design/bruv_sampling-design_", 
                                  Sys.Date(), ".csv"),
           row.names = F)
+
+# Make detrended bathymetry plot
+lidar <- readRDS("output/mbh-design/lidar-derivatives.rds")
+plot(lidar)
+
+hist(lidar$detrended)
+detrended_qs <- c(0, 0.4, 0.75, 1)
+detrended_cuts   <- global(lidar$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
+cat_detrended <- classify(lidar$detrended, rcl = as.numeric(detrended_cuts[1,]))
+plot(cat_detrended)
+
+inp_rasts <- as.data.frame(cat_detrended, xy = TRUE, na.rm = T) %>%
+  dplyr::mutate(detrended = as.factor(detrended)) %>%
+  dplyr::mutate(strata = as.integer(detrended)) %>%                             # NO idea how that works haha
+  dplyr::select(x, y, strata) %>%
+  rast(type = "xyz", crs = crs(cat_detrended)) %>%
+  resample(cat_detrended)
+plot(inp_rasts)
+
+png("plots/sampling-design/lidar_inclusion-probs.png",
+    height = 4.5, width = 8, units = "in", res = 300)
+ggplot() +
+  geom_spatraster(data = inp_rasts, aes(fill = strata)) +
+  scale_fill_viridis_c(na.value = NA, option = "D") +
+  labs(fill = "Inclusion probability \n(detrended)", title = "Fine 10m LiDAR bathymetry") +
+  new_scale_fill() +
+  geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.35) +
+  scale_linewidth_manual(values = c("Multiple Use Zone" = 0.25,
+                                    "Habitat Protection Zone" = 0.65,
+                                    "National Park Zone" = 0.65,
+                                    "Special Purpose Zone" = 0.25,
+                                    "Recreation Zone" = 0.25,
+                                    "Sanctuary Zone" = 0.65,
+                                    "General Use Zone" = 0.25)) +
+  scale_colour_manual(values = c("Multiple Use Zone" = "#b9e6fb",
+                               "Habitat Protection Zone" = "#fff8a3",
+                               "National Park Zone" = "#7bbc63",
+                               "Special Purpose Zone" = "#368ac1",
+                               "Recreation Zone" = "#f4e952",
+                               "Sanctuary Zone" = "#bfd054",
+                               "General Use Zone" = "#bddde1"),
+                    name = "Marine Parks") +
+  guides(linewidth = "none") +
+  scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
+                                 "Habitat Protection Zone" = "#fff8a3",
+                                 "National Park Zone" = "#7bbc63",
+                                 "Special Purpose Zone" = "#368ac1",
+                                 "Recreation Zone" = "#f4e952",
+                                 "Sanctuary Zone" = "#bfd054",
+                                 "General Use Zone" = "#bddde1"),
+                      name = "Marine Parks") +
+  coord_sf(crs = 4326, xlim = c(115, 115.55), ylim = c(-33.67, -33.3))+
+  theme_minimal()
+dev.off()

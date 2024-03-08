@@ -145,7 +145,7 @@ ggplot() +
                                "General Use Zone" = "#bddde1"),
                     name = "Marine Parks") +
   geom_sf(data = sample.design$sites_base, colour = "red") +
-  coord_sf(crs = 4326, xlim = c(115, 115.47), ylim = c(-33.67, -33.3))+
+  coord_sf(crs = 4326, xlim = c(115, 115.55), ylim = c(-33.67, -33.3))+
   theme_minimal()
 dev.off()
 
