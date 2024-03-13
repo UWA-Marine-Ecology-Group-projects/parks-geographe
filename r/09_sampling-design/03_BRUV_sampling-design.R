@@ -21,6 +21,7 @@ library(stars)
 library(starsExtra)
 library(tidyterra)
 library(ggnewscale)
+library(ggrepel)
 
 # Set the seed for reproducible plans
 set.seed(15)
@@ -168,6 +169,36 @@ ggplot() +
   theme_minimal()
 dev.off()
 
+png("plots/sampling-design/bruv-vessel-sample-map.png",
+    height = 4.5, width = 7, units = "in", res = 300)
+ggplot() +
+  # geom_spatraster(data = preds, aes(fill = depth), show.legend = F) +
+  # scale_fill_viridis_c(na.value = NA, option = "D") +
+  # new_scale_fill() +
+  geom_spatraster_contour_filled(data = preds, aes(z = depth), breaks = seq(-50, 0, 5),
+                                 show.legend = F) +
+  scale_fill_hypso_d(palette = "colombia_bathy") +
+  new_scale_fill() +
+  geom_spatraster_contour(data = preds, aes(z = depth), breaks = seq(-50, 0, 1),
+                                 show.legend = F, colour = "black") +
+  labs(title = "BRUVs") +
+  geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.35,
+          show.legend = F) +
+  scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
+                               "Habitat Protection Zone" = "#fff8a3",
+                               "National Park Zone" = "#7bbc63",
+                               "Special Purpose Zone" = "#368ac1",
+                               "Recreation Zone" = "#f4e952",
+                               "Sanctuary Zone" = "#bfd054",
+                               "General Use Zone" = "#bddde1"),
+                    name = "Marine Parks") +
+  geom_sf(data = sample.design$sites_base, colour = "red") +
+  geom_text(data = samples, aes(x = lon_WGS84, y = lat_WGS84, label = str_remove_all(siteID, "GB-BV-")),
+            size = 1) +
+  coord_sf(crs = 4326, xlim = c(115.0507, 115.5365), ylim = c(-33.63973, -33.35049))+
+  theme_void()
+dev.off()
+
 # Select useful columns and export the design ----
 zones_vect <- vect(zones)
 plot(zones_vect)
@@ -179,8 +210,7 @@ samples <- sample.design$sites_base %>%
   dplyr::select(-geometry) %>%
   glimpse()
 
-write.csv(samples, file = paste0("output/mbh-design/bruv_sampling-design_", 
-                                 Sys.Date(), ".csv"),
+write.csv(samples, file = "output/mbh-design/bruv_sampling-design_geographe-march.csv",
           row.names = F)
 
 # Make detrended bathymetry plot
