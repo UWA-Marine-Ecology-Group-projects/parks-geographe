@@ -45,7 +45,7 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
   st_transform(9473) %>%
   dplyr::mutate(ZONE_TYPE = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone" ~ 1,   # Recode to numeric to use as a categorical raster
-                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 1,
+                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 5,
                                       ZONE_TYPE %in% "General Use Zone" ~ 1,
                                       ZONE_TYPE %in% "Recreation Zone" ~ 1,
                                       ZONE_TYPE %in% "Special Purpose Zone" ~ 1,
@@ -61,7 +61,7 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
 
 # Using detrended bathymetry
 hist(preds$detrended)
-detrended_qs <- c(0, 0.55, 0.9, 1)
+detrended_qs <- c(0, 0.4, 0.75, 1)
 detrended_cuts   <- global(preds$detrended, probs = detrended_qs, fun = quantile, na.rm = T)
 cat_detrended <- classify(preds$detrended, rcl = as.numeric(detrended_cuts[1,]))
 plot(cat_detrended)
@@ -97,7 +97,7 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                  strata %in% 2 ~ 0.4, 
                                  strata %in% 3 ~ 0.4),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
-                  park.code == 1 ~ 140,                     # AMPS + NGARI - MUZ, SPZ, GUZ
+                  park.code == 1 ~ 80,                     # AMPS + NGARI - MUZ, SPZ, GUZ
                   park.code == 2 ~ 20,                      # AMP HPZ
                   park.code == 3 ~ 20),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%

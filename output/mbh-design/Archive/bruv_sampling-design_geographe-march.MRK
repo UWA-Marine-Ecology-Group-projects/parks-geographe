@@ -1,3 +1,13 @@
+TMQ CPlot Chart Type 2
+Description: Geographe BRUV
+Bounds: "33.21.0291S,115.03.0411E,33.38.3836S,115.32.1919E"
+Format: NM3
+Rev. Date: 071122/133554
+Scale: 1:00
+Mag. Variation: 0
+Cautions:
+
+<EOH>
 mark PXYCSLM 115.13.2085E 33.28.8893S Green Star BRUV-001 0
 mark PXYCSLM 115.25.7452E 33.24.2123S Green Star BRUV-002 0
 mark PXYCSLM 115.17.2776E 33.24.5016S Green Star BRUV-003 0

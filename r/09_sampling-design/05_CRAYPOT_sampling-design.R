@@ -72,7 +72,7 @@ zone_sf <- st_read("data/spatial/shapefiles/Collaborative_Australian_Protected_A
   st_crop(cat_detrended) %>%
   dplyr::mutate(ZONE_TYPE = str_replace_all(ZONE_TYPE, "\\s*\\([^\\)]+\\)", "")) %>%
   dplyr::mutate(park.code = case_when(ZONE_TYPE %in% "Multiple Use Zone" ~ 1,   # Recode to numeric to use as a categorical raster
-                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 1,
+                                      ZONE_TYPE %in% "Special Purpose Zone" ~ 5,
                                       ZONE_TYPE %in% "General Use Zone" ~ 1,
                                       ZONE_TYPE %in% "Recreation Zone" ~ 1,
                                       ZONE_TYPE %in% "Special Purpose Zone" ~ 1,
@@ -97,10 +97,11 @@ inp_sf <- st_as_sf(inp_stars) %>%
                                  strata %in% 2 ~ 0.3, 
                                  strata %in% 3 ~ 0.6),
                 zonesamps = case_when(                                          # Number of samples in each zone - total 150
-                  park.code == 1 ~ 100,                      # AMPS + NGARI - MUZ, SPZ, GUZ
-                  park.code == 2 ~ 25,                      # AMP HPZ
-                  park.code == 3 ~ 25,
-                  park.code == 4 ~ 0),                     # NGARI SZ
+                  park.code == 1 ~ 64,                      # AMPS + NGARI - MUZ, SPZ, GUZ
+                  park.code == 2 ~ 18,                      # AMP HPZ
+                  park.code == 3 ~ 18,
+                  park.code == 4 ~ 0,
+                  park.code == 5 ~ 0),                     # NGARI SZ
                 strata.new = paste0("strata.", row.names(.))) %>%
   
   dplyr::mutate(nsamps = round(prop * zonesamps, digits = 0)) %>%               # Number of samples * proportion
