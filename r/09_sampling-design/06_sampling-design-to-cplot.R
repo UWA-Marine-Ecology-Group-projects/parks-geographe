@@ -28,8 +28,8 @@ pot <- read.csv("output/mbh-design/craypot_sampling-design_geographe-march.csv")
   dplyr::mutate(siteID = str_replace_all(siteID, "GB-CP-", "POT-")) %>%
   glimpse()
 
-bruv2 <- read.csv("output/sampling-design/bruv_in-out_sampling-design_geographe-april.csv") %>%
-  dplyr::mutate(siteID = str_replace_all(siteID, "GB-BV-", "BRUV-P")) %>%
+bruv2 <- read.csv("output/sampling-design/geographe-bay_sampling-design_NPZ-in-out.csv") %>%
+  dplyr::mutate(siteID = str_replace_all(sample, "GB-BV-", "BRUV-")) %>%
   glimpse()
 
 # BRUVs
@@ -68,10 +68,10 @@ paste(min(cplot.bruv$lat), min(cplot.bruv$lon),
 
 cplot.bruv2 <- data.frame("mark" = c("mark"),
                          "PXYCSLM" = c("PXYCSLM"),
-                         lon = measurements::conv_unit(bruv2$lon_WGS84, 
+                         lon = measurements::conv_unit(bruv2$x, 
                                                        from = "dec_deg", 
                                                        to = "deg_dec_min"),
-                         lat = measurements::conv_unit(bruv2$lat_WGS84, 
+                         lat = measurements::conv_unit(bruv2$y, 
                                                        from = "dec_deg", 
                                                        to = "deg_dec_min"),
                          "symbol" = c("Green Star"),
