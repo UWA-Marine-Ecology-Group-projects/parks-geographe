@@ -254,8 +254,7 @@ p3 <- ggplot() +
            y = c(-33.3270,-33.65, -33.6177, -33.9535, -34.3110), 
            label = c("Bunbury", "Busselton", "Dunsborough", "Margaret River", "Augusta"), size = 2.8) +
   annotate("rect", xmin = 114.88, xmax = 115.67, ymin = -33.67, ymax = -33.3,
-           fill = "white", colour = "gray20", alpha = 0.2, size = 0.4) + 
-  # coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+           fill = "white", colour = "gray20", alpha = 0.2, size = 0.4) +
   coord_sf(xlim = c(114.4, 115.67), ylim = c(-33.3, -34.6)) + 
   theme_minimal() +
   theme(legend.justification = "top")
