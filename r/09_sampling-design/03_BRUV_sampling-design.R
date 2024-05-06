@@ -27,7 +27,7 @@ library(ggrepel)
 set.seed(15)
 
 # Load the bathymetry data and crop ----
-preds <- readRDS("output/mbh-design/ga250-derivatives.rds")
+preds <- readRDS("output/sampling-design/ga250-derivatives.rds")
 plot(preds)
 
 # Make inclusion probabilities ----
