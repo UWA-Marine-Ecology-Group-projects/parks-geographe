@@ -12,6 +12,7 @@ library(RColorBrewer)
 library(scales)
 library(colorspace)
 library(tidyterra)
+library(stringr)
 
 # Export lidar depth
 # lidar <- readRDS("data/spatial/rasters/10m_lidar_depth.rds") %>%
@@ -36,9 +37,15 @@ gmp <- aumpa %>%
 
 aus <- st_read("data/spatial/shapefiles/aus-shapefile-w-investigator-stokes.shp")
 
-lidar <- readRDS("data/spatial/rasters/10m_lidar_depth.rds")
+wampa <- st_read("data/spatial/shapefiles/WA_MPA_2020.shp", crs = 4283) %>%
+  dplyr::filter(NAME %in% "Ngari Capes") %>%
+  dplyr::mutate(ZONE_TYPE = str_remove_all(ZONE_TYPE, " *\\(.*")) %>%
+  glimpse()
+unique(wampa$ZONE_TYPE)
+
+# lidar <- readRDS("data/spatial/rasters/10m_lidar_depth.rds")
 # lidar_hill <- rast("data/spatial/rasters/geographe-lidar-hillshade.tif")
-lidar_hill <- rast("data/spatial/rasters/10m_lidar_hillshading.tif")
+# lidar_hill <- rast("data/spatial/rasters/10m_lidar_hillshading.tif")
 
 # Set colours
 # state terrestrial parks colours
@@ -53,6 +60,13 @@ nmpa_fills <- scale_fill_manual(values = c("National Park Zone" = "#7bbc63",
                                            "Special Purpose Zone (Mining Exclusion)" = "#368ac1",
                                            "Special Purpose Zone" = "#368ac1"),
                                 name = "Commonwealth Marine Parks")
+
+# Assign State MP colours
+wamp_fills <- scale_fill_manual(values = c("Sanctuary Zone" = "#bfd054",
+                                           "Special Purpose Zone" = "#c5bcc9",
+                                           "General Use Zone" = "#bddde1",
+                                           "Recreation Zone" = "#f4e952"),
+                                name = "State Marine Parks")
 
 # Map of AU + AMP’s
 p1 <- ggplot() +
@@ -95,6 +109,9 @@ p2 <- ggplot() +
   scale_fill_gradientn(colours = c("#062f6b", "#2b63b5","#9dc9e1"),
                        values = rescale(c(-529, -80, 0))) +
   new_scale_fill() +
+  geom_sf(data = wampa, aes(fill = ZONE_TYPE), alpha = 0.4, color = NA, show.legend = F) +
+  wamp_fills +
+  new_scale_fill() +
   geom_sf(data = aumpa, aes(fill = ZoneName), alpha = 0.4, color = NA, show.legend = F) +
   nmpa_fills +
   new_scale_fill() +
@@ -114,26 +131,26 @@ p2
 dev.off()
 
 # Map of NPZ inset, with location of video
-lidar_c <- crop(lidar, ext(344686, 354270, 6282780, 6291239))
-lidarhill_c <- crop(lidar_hill, ext(344686, 354270, 6282780, 6291239))
-
-p3 <- ggplot() +
-  geom_spatraster(data = lidarhill_c, show.legend = F) +
-  scale_fill_gradient(low = "black", high = "white", na.value = "transparent") +
-  new_scale_fill() +
-  geom_spatraster(data = lidar_c, alpha = 0.5, show.legend = F) +
-  # scale_fill_hypso_c(na.value = "transparent", palette = "gmt_globe_bathy", limits = c(-40, 0)) +
-  scale_fill_gradientn(colours = c("#062f6b", "#2b63b5","#9dc9e1"),
-                       values = rescale(c(-40, -10, 0)), na.value = "transparent") +
-  new_scale_fill() +
-  geom_sf(data = aus) +
-  geom_sf(data = gmp, fill = "#7bbc63", colour = NA, alpha = 0.4) +
-  annotate(geom = "point", x = 115.37344, y = -33.53599, shape = 13, size = 10, stroke = 5) +          # Moved point away from the edge of the NPZ 
-  theme_void() +
-  labs(x = "", y = "") +
-  coord_sf(xlim = c(115.3470, 115.4253), ylim = c(-33.58, -33.52), 
-           crs = 4326)
-png(filename = "plots/film/npz-zoom.png", units = "in", res = 300,
-    height = 9, width = 16)
-p3
-dev.off()
+# lidar_c <- crop(lidar, ext(344686, 354270, 6282780, 6291239))
+# lidarhill_c <- crop(lidar_hill, ext(344686, 354270, 6282780, 6291239))
+# 
+# p3 <- ggplot() +
+#   geom_spatraster(data = lidarhill_c, show.legend = F) +
+#   scale_fill_gradient(low = "black", high = "white", na.value = "transparent") +
+#   new_scale_fill() +
+#   geom_spatraster(data = lidar_c, alpha = 0.5, show.legend = F) +
+#   # scale_fill_hypso_c(na.value = "transparent", palette = "gmt_globe_bathy", limits = c(-40, 0)) +
+#   scale_fill_gradientn(colours = c("#062f6b", "#2b63b5","#9dc9e1"),
+#                        values = rescale(c(-40, -10, 0)), na.value = "transparent") +
+#   new_scale_fill() +
+#   geom_sf(data = aus) +
+#   geom_sf(data = gmp, fill = "#7bbc63", colour = NA, alpha = 0.4) +
+#   annotate(geom = "point", x = 115.37344, y = -33.53599, shape = 13, size = 10, stroke = 5) +          # Moved point away from the edge of the NPZ 
+#   theme_void() +
+#   labs(x = "", y = "") +
+#   coord_sf(xlim = c(115.3470, 115.4253), ylim = c(-33.58, -33.52), 
+#            crs = 4326)
+# png(filename = "plots/film/npz-zoom.png", units = "in", res = 300,
+#     height = 9, width = 16)
+# p3
+# dev.off()
