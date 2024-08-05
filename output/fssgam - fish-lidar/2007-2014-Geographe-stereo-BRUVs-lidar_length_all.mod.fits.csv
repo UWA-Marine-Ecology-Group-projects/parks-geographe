@@ -1,7 +1,18 @@
-"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
-"greater than legal size.seagrass+Z","seagrass+Z",541.283896754552,560.381818997964,0.07777,NA,4.64,0,0,0,0.334,0.331,1,0,0,1,0,0,0,0,0.334
-"greater than legal size.mean.relief+seagrass+Z","mean.relief+seagrass+Z",541.535216570713,563.169005308888,0.08271,NA,5.59,0,0.251,2.787,0.294,0.082,1,0,0,1,1,0,0,0,0.628
-"greater than legal size.detrended+seagrass+Z","detrended+seagrass+Z",543.012594015832,564.78536533335,0.08432,NA,5.66,0,1.729,4.404,0.141,0.037,1,0,0,1,0,0,1,0,0.769
-"smaller than legal size.detrended+inverts","detrended+inverts",659.49397581585,678.262517116726,0.16193,NA,4.43,0,0,2.182,0.338,0.148,0,0,1,0,0,0,1,0,0.338
-"smaller than legal size.detrended+inverts+mean.relief","detrended+inverts+mean.relief",661.073229718504,682.54893594531,0.16221,NA,5.47,0,1.579,6.469,0.153,0.017,0,0,1,0,1,0,1,0,0.491
-"smaller than legal size.detrended+inverts+Z","detrended+inverts+Z",661.441802439375,683.227362600079,0.16702,NA,5.56,0,1.948,7.147,0.128,0.012,1,0,1,0,0,0,1,0,0.619
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean_relief","slope","detrended","roughness","cumsum.wi"
+"greater than Lm carnivores.detrended","detrended",239.455494298326,252.82477707463,0.01768,NA,2.53,0,0,2.225,0.114,0.134,0,0,0,0,0,0,1,0,0.114
+"greater than Lm carnivores.Z","Z",239.780005413174,253.688036199958,0.01357,NA,2.84,0,0.325,3.088,0.097,0.087,1,0,0,0,0,0,0,0,0.211
+"greater than Lm carnivores.detrended+inverts","detrended+inverts",240.48407715264,256.412279699601,0.01769,NA,3.47,0,1.029,5.812,0.068,0.022,0,0,1,0,0,0,1,0,0.279
+"greater than Lm carnivores.detrended+Z","detrended+Z",240.966756288708,259.284207802795,0.02509,NA,4.15,0,1.511,8.684,0.053,0.005,1,0,0,0,0,0,1,0,0.332
+"greater than Lm carnivores.slope+Z","slope+Z",240.966958445235,259.296299878178,0.02008,NA,4.25,0,1.511,8.696,0.053,0.005,1,0,0,0,0,1,0,0,0.385
+"greater than Lm carnivores.inverts+Z","inverts+Z",241.390981129967,257.987763834879,0.01361,NA,3.83,0,1.935,7.388,0.043,0.01,1,0,1,0,0,0,0,0,0.428
+"smaller than Lm carnivores.seagrass","seagrass",364.099331366111,377.753071540543,0.02874,NA,2.65,0,0,2.703,0.083,0.078,0,0,0,1,0,0,0,0,0.083
+"smaller than Lm carnivores.inverts+seagrass","inverts+seagrass",364.10061342094,380.284984771929,0.04502,NA,3.57,0,0.001,5.235,0.083,0.022,0,0,1,1,0,0,0,0,0.166
+"smaller than Lm carnivores.inverts+macroalgae","inverts+macroalgae",364.222752372591,379.532589290074,0.04401,NA,3.29,0,0.123,4.482,0.078,0.032,0,1,1,0,0,0,0,0,0.244
+"smaller than Lm carnivores.mean_relief+seagrass","mean_relief+seagrass",365.08492931816,381.399482635961,0.03557,NA,3.63,0,0.986,6.349,0.051,0.013,0,0,0,1,1,0,0,0,0.295
+"smaller than Lm carnivores.inverts+macroalgae+Z","inverts+macroalgae+Z",365.199389602563,382.8285863585,0.04927,NA,4.2,0,1.1,7.778,0.048,0.006,1,1,1,0,0,0,0,0,0.343
+"smaller than Lm carnivores.inverts+mean_relief+seagrass","inverts+mean_relief+seagrass",365.527055512439,384.346175455409,0.04994,NA,4.56,0,1.428,9.296,0.041,0.003,0,0,1,1,1,0,0,0,0.384
+"smaller than Lm carnivores.inverts","inverts",365.540203996044,376.789665050271,0.02715,NA,2,0,1.441,1.74,0.04,0.126,0,0,1,0,0,0,0,0,0.424
+"smaller than Lm carnivores.macroalgae","macroalgae",365.731662384915,378.671072594044,0.02223,NA,2.38,0,1.632,3.621,0.037,0.049,0,1,0,0,0,0,0,0,0.461
+"smaller than Lm carnivores.macroalgae+Z","macroalgae+Z",365.768311199356,379.75105270728,0.02555,NA,3,0,1.669,4.701,0.036,0.029,1,1,0,0,0,0,0,0,0.497
+"smaller than Lm carnivores.seagrass+Z","seagrass+Z",365.842928790022,381.940717542368,0.03084,NA,3.54,0,1.744,6.891,0.035,0.01,1,0,0,1,0,0,0,0,0.532
+"smaller than Lm carnivores.inverts+roughness","inverts+roughness",366.047894620869,380.027889491575,0.03381,NA,3,0,1.949,4.978,0.031,0.025,0,0,1,0,0,0,0,1,0.563

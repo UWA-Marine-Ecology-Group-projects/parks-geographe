@@ -12,6 +12,11 @@ library(raster)
 library(sf)
 library(viridis)
 library(ggnewscale)
+library(ggpattern)
+
+parks <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp") %>%
+  dplyr::filter(ResName %in% "Geographe") %>%
+  glimpse()
 
 wgscrs <- CRS("+proj=longlat +datum=WGS84")
 sppcrs <- CRS("+proj=utm +zone=50 +south +datum=WGS84 +units=m +no_defs")     # crs for sp objects
@@ -21,12 +26,8 @@ aus    <- st_read("data/spatial/shapefiles/cstauscd_r.mif") %>%          # geoda
   dplyr::filter(FEAT_CODE %in% c("mainland"))
 
 # Load Commonwealth marine parks
-aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")           # all aus mpas
-st_crs(aus) <- st_crs(aumpa) # Both are now in GDA94
-
-# Load State marine parks
-wampa <- st_read("data/spatial/shapefiles/test1.shp") # Should really stop using this
-st_crs(wampa) <- wgscrs # WGS84
+# aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")           # all aus mpas
+# st_crs(aus) <- st_crs(aumpa) # Both are now in GDA94
 
 # Load the LIDAR raster
 lidar1 <- raster("data/spatial/rasters/GBlidar1.tif")
@@ -42,14 +43,15 @@ plot(lidar3)
 crs(lidar3) <- crs(lidar1) # Set crs to match
 lidar3
 lidar <- merge(lidar1, lidar2, lidar3)
+lidar <- lidar * -1
 crs(lidar) <- sppcrs
 lidar <- raster::projectRaster(lidar, crs = wgscrs) 
 
 # lidar <- aggregate(lidar, 10, fun = mean) # Aggregate it down, too slow to plot
 
 # Hillshade the bathy
-slope <- terrain(lidar,opt='slope',unit='degrees') # Calculate slope
-aspect <- terrain(lidar,opt='aspect',unit='degrees') # calculate aspect
+slope <- terrain(lidar, opt = 'slope', unit = 'degrees') # Calculate slope
+aspect <- terrain(lidar, opt = 'aspect', unit = 'degrees') # calculate aspect
 hill <- hillShade(slope, aspect, angle = 65, direction = 270) # Hillshade derived from slope and aspect of bathy - change angle and direction
 
 # Convert both hillshade and lidar to dataframes
@@ -77,7 +79,7 @@ dev.off()
 # Inset on a cool bit of rivermouth ground
 #115.4 - 115.5 -33.5 -33.4
 
-e <- extent(115.4, 115.5, -33.5, -33.4)
+e <- extent(115.2, 115.6, -33.6, -33.3)
 lidarc <- crop(lidar, e)
 plot(lidarc)
 lidardf_c <- as.data.frame(lidarc, xy = T, na.rm = T)
@@ -88,20 +90,42 @@ hillc <- hillShade(slopec, aspectc, angle = 65, direction = 270) # Hillshade der
 
 hilldf_c <- as.data.frame(hillc, xy = T, na.rm = T)
 
+# assign mpa colours - full levels are saved at end of script for future ref
+nmpa_cols <- scale_colour_manual(values = c("Habitat Protection Zone" = "#fff8a3",
+                                          "National Park Zone" = "#7bbc63",
+                                          "Multiple Use Zone" = "#b9e6fb",
+                                          "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
+                               name = "Australian Marine Parks")
+nmpa_fills <- scale_fill_manual(values = c("Habitat Protection Zone" = "#fff8a3",
+                                           "National Park Zone" = "#7bbc63",
+                                           "Multiple Use Zone" = "#b9e6fb",
+                                           "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
+                                name = "Australian Marine Parks")
+
 p2 <- ggplot() +
   geom_tile(data = hilldf_c, aes(x = x, y = y, fill = layer), alpha = 1) +
   scale_fill_gradient(low = "black", high = "white", guide = "none") +
   new_scale_fill() +
   geom_tile(data = lidardf_c, aes(x = x, y = y, fill = layer), alpha = 0.7) +
-  scale_fill_gradientn(colours = terrain.colors(10)) +
-  geom_sf(data = aus, fill = "seashell2", colour = "grey80", size = 0.1) +
-  coord_sf(xlim = c(115.4, 115.5), ylim = c(-33.5, -33.4)) +
-  labs(y = "Latitude", x = "Longitude", fill = "Depth")+
+  scale_fill_gradientn(colours = terrain.colors(10), name = "Depth") +
+  new_scale_fill() +
+  # geom_sf(data = parks, aes(color = ZoneName), fill = NA, 
+  #                 show.legend = F, linewidth = 0.8) +
+  # nmpa_cols +
+  geom_sf(data = parks, aes(fill = ZoneName, colour = ZoneName), alpha = 0.28, 
+          show.legend = F, linewidth = 0.8) +
+  nmpa_cols +
+  nmpa_fills + 
+  # geom_sf(data = aus, fill = "seashell2", colour = "grey80", linewidth = 2) +
+  # coord_sf(xlim = c(115.4, 115.5), ylim = c(-33.5, -33.4)) +
+  coord_sf(xlim = c(115.39, 115.51), ylim = c(-33.51, -33.39)) +
+  labs(y = "Latitude", x = "Longitude", fill = "Depth") +
   theme_minimal()
-
-png(filename = "plots/spatial/lidar-map-inset.png", width = 5, height = 4, units = "in", res = 600)
-p2
-dev.off()
+ggsave(filename = "plots/spatial/lidar-map-inset.png", plot = p2, width = 6, height = 6, units = "in", dpi = 600,
+       bg = "white")
+# png(filename = "plots/spatial/lidar-map-inset.png", width = 5, height = 4, units = "in", res = 600)
+# p2
+# dev.off()
 
 # Another inset
 #115.5 - 115.6 -33.4 -33.3

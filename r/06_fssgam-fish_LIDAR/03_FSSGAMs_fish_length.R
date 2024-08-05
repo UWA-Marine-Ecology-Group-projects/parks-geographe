@@ -24,30 +24,30 @@ library(doSNOW)
 library(gamm4)
 library(RCurl) #needed to download data from GitHub
 library(FSSgam)
-library(GlobalArchive)
+library(CheckEM)
 library(ggplot2)
 
 name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name
 
 dat <- readRDS("data/tidy/fssgam_length_lidar.rds")%>%
-  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
-                rock = rock/broad.total.points.annotated,
-                inverts = inverts/broad.total.points.annotated,
-                seagrass = seagrass/broad.total.points.annotated) %>%
+  dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
+                rock = rock/broad_total_points_annotated,
+                inverts = inverts/broad_total_points_annotated,
+                seagrass = seagrass/broad_total_points_annotated) %>%
   glimpse()
 
 # # Re-set the predictors for modeling----
 pred.vars <- c("Z", "macroalgae", "inverts",
-               "seagrass", "mean.relief","slope","detrended", "roughness") 
+               "seagrass", "mean_relief","slope","detrended", "roughness") 
 
 # Check to make sure Response vector has not more than 80% zeros----
-unique.vars=unique(as.character(dat$scientific))
+unique.vars = unique(as.character(dat$response))
 
-unique.vars.use=character()
+unique.vars.use = character()
 for(i in 1:length(unique.vars)){
-  temp.dat=dat[which(dat$scientific==unique.vars[i]),]
-  if(length(which(temp.dat$number==0))/nrow(temp.dat)<0.9){
-    unique.vars.use=c(unique.vars.use,unique.vars[i])}
+  temp.dat = dat[which(dat$response == unique.vars[i]),]
+  if(length(which(temp.dat$number == 0))/nrow(temp.dat)<0.8){
+    unique.vars.use = c(unique.vars.use, unique.vars[i])}
 }
 
 unique.vars.use   
@@ -58,29 +58,28 @@ resp.vars = unique.vars.use
 use.dat = as.data.frame(dat)
 str(use.dat)
 
-name<- paste(name,"length",sep="_")
+name <- paste(name,"length",sep="_")
 
 # factor.vars=c("status")# Status as a Factor with two levels
-out.all=list()
-var.imp=list()
+out.all = list()
+var.imp = list()
 
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
-  use.dat=as.data.frame(dat[which(dat$scientific==resp.vars[i]),])
-  Model1=gam(number~s(Z,k=3,bs='cr')
-             ,
-             family=tw(),  data=use.dat)
+  use.dat = as.data.frame(dat[which(dat$response == resp.vars[i]),])
+  Model1 = gam(number~s(Z, k = 3, bs = 'cr'),
+             family = tw(),  data = use.dat)
   
-  model.set=generate.model.set(use.dat=use.dat,
-                               test.fit=Model1,
-                               pred.vars.cont=pred.vars,
+  model.set=generate.model.set(use.dat = use.dat,
+                               test.fit = Model1,
+                               pred.vars.cont = pred.vars,
                                # pred.vars.fact=factor.vars,
                                # factor.smooth.interactions = NA,
                               # smooth.smooth.interactions = c("depth", "biog"),
-                               k=3)
+                               k = 3)
   out.list=fit.model.set(model.set,
-                         max.models=600,
-                         parallel=T)
+                         max.models = 600,
+                         parallel = T)
   names(out.list)
   
   out.list$failed.models # examine the list of failed models

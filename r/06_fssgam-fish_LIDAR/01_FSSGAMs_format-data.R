@@ -22,10 +22,10 @@ library(doSNOW)
 library(gamm4)
 library(RCurl) # needed to download data from GitHub
 library(FSSgam)
-library(GlobalArchive)
 library(ggplot2)
 library(sp)
 library(corrr)
+library(CheckEM)
 # devtools::install_github("beckyfisher/FSSgam_package")
 
 name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name 
@@ -41,15 +41,15 @@ length <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.length.c
 
 # Load in the habitat data
 allhab1 <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs_broad.habitat.csv") %>%
-  ga.clean.names() %>%
-  dplyr::select(sample, latitude, longitude, starts_with("broad"), mean.relief) %>%
+  clean_names() %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad"), mean_relief) %>%
   dplyr::mutate(method = "BRUV",
                 sample = as.character(sample)) %>%
   glimpse()
 
 allhab2 <- read.csv("data/tidy/2021-03_Geographe_BOSS_broad.habitat.csv") %>%
-  ga.clean.names() %>%
-  dplyr::select(sample, latitude, longitude, starts_with("broad"), mean.relief) %>%
+  clean_names() %>%
+  dplyr::select(sample, latitude, longitude, starts_with("broad")) %>%
   dplyr::mutate(method = "BOSS",
                 sample = as.character(sample)) %>%
   glimpse()
@@ -65,7 +65,8 @@ coordinates(allhab) <- ~longitude + latitude
 crs(allhab) <- wgscrs
 allhab <- spTransform(allhab, sppcrs)                                           # Reproject data to match source raster
 
-depth <- readRDS("data/spatial/rasters/10m_lidar_depth.rds")
+depth <- readRDS("data/spatial/rasters/10m_lidar_depth.rds") %>%
+  raster()
 detrended <- readRDS("data/spatial/rasters/10m_lidar_detrended.rds")
 slope <- readRDS("data/spatial/rasters/10m_lidar_slope.rds")
 roughness <- readRDS("data/spatial/rasters/10m_lidar_roughness.rds")
@@ -84,20 +85,20 @@ saveRDS(allhab, file = "data/tidy/10m_lidar-habitat-bathymetry-derivatives.rds")
 
 allhab <- allhab %>%
   dplyr::filter(method %in% "BRUV") %>%
-  dplyr::mutate(broad.ascidians = ifelse(is.na(broad.ascidians), 0, broad.ascidians),
-                broad.invertebrate.complex = ifelse(is.na(broad.invertebrate.complex), 0, broad.invertebrate.complex)) %>%
-  dplyr::mutate("inverts" = broad.sponges + broad.stony.corals + 
-                  broad.ascidians + broad.invertebrate.complex) %>%
-  dplyr::rename("sand" = broad.unconsolidated,
-                "rock" = broad.consolidated,
-                "macroalgae" = broad.macroalgae,
-                "seagrass" = broad.seagrasses) %>%
+  dplyr::mutate(broad_ascidians = ifelse(is.na(broad_ascidians), 0, broad_ascidians),
+                broad_invertebrate_complex = ifelse(is.na(broad_invertebrate_complex), 0, broad_invertebrate_complex)) %>%
+  dplyr::mutate("inverts" = broad_sponges + broad_stony_corals + 
+                  broad_ascidians + broad_invertebrate_complex) %>%
+  dplyr::rename("sand" = broad_unconsolidated,
+                "rock" = broad_consolidated,
+                "macroalgae" = broad_macroalgae,
+                "seagrass" = broad_seagrasses) %>%
   glimpse()
 
 names(maxn)
 
 metadata <- maxn %>% 
-  distinct(sample,latitude, longitude, date, time, location, status, site,
+  distinct(campaignid, sample,latitude, longitude, date, time, location, status, site,
            observer, successful.count, successful.length)
 
 # look at top species ----
@@ -154,7 +155,7 @@ pred.vars = c("Z",
               "rock",
               "seagrass",
               "inverts",
-              "mean.relief",
+              "mean_relief",
               "slope",
               "detrended",
               "roughness")
@@ -186,87 +187,82 @@ round(cor(dat.maxn[,pred.vars]), 2)
 saveRDS(dat.maxn, "data/tidy/fss-gam-data-ta.sr-lidar.rds")
 
 #lengths
-# Create abundance of all recreational fished species ----
-url <- "https://docs.google.com/spreadsheets/d/1SMLvR9t8_F-gXapR2EemQMEPSw_bUbPLcXd3lJ5g5Bo/edit?ts=5e6f36e2#gid=825736197"
-
-master <- googlesheets4::read_sheet(url)%>%
-  ga.clean.names()%>%
-  filter(grepl('Australia', global.region))%>% # Change country here
-  dplyr::filter(grepl('SW', marine.region))%>% # Select marine region (currently this is only for Australia)
-  dplyr::select(family,genus,species,fishing.type,australian.common.name,minlegal.wa)%>%
-  distinct()%>%
+# Maturity data from WA sheet - should this just get included in the life history?
+maturity_mean <- CheckEM::maturity %>%
+  dplyr::filter(!marine_region %in% c("NW", "N")) %>% # Change here for each marine park
+  dplyr::group_by(family, genus, species, sex) %>%
+  dplyr::slice(which.min(l50_mm)) %>%
+  ungroup() %>%
+  dplyr::group_by(family, genus, species) %>%
+  dplyr::summarise(l50 = mean(l50_mm)) %>%
+  ungroup() %>%
   glimpse()
 
-spp.species <- length %>%
-  dplyr::mutate(scientific = paste(genus, species, sep = " ")) %>%
-  dplyr::filter(species %in% c("spp", "sp", "sp1", "sp10")) %>%
-  distinct(scientific) %>%
+large_bodied_carnivores <- CheckEM::australia_life_history %>%
+  dplyr::filter(fb_trophic_level > 2.8) %>%
+  dplyr::filter(length_max_cm > 40) %>%
+  dplyr::filter(class %in% "Actinopterygii") %>%
+  dplyr::filter(!order %in% c("Anguilliformes", "Ophidiiformes", "Notacanthiformes","Tetraodontiformes","Syngnathiformes",
+                              "Synbranchiformes", "Stomiiformes", "Siluriformes", "Saccopharyngiformes", "Osmeriformes",
+                              "Osteoglossiformes", "Lophiiformes", "Lampriformes", "Beloniformes", "Zeiformes")) %>%
+  left_join(maturity_mean) %>%
+  dplyr::mutate(fb_length_at_maturity_mm = fb_length_at_maturity_cm * 10) %>%
+  dplyr::mutate(l50 = if_else(is.na(l50), fb_length_at_maturity_mm, l50)) %>%
+  dplyr::filter(!is.na(l50)) %>%
+  dplyr::select(family, genus, species, l50) %>%
   glimpse()
 
-unique(master$fishing.type)
+# length
 
-fished.species <- length %>%
-  dplyr::mutate(scientific = paste(genus, species, sep = " ")) %>%
-  dplyr::left_join(master) %>%
-  dplyr::mutate(fishing.type = ifelse(scientific %in% c("Pseudocaranx spp", "Pseudorhombus spp", 
-                                                        "Platycephalus spp", "Sillaginodes spp",
-                                                        "Sillago spp"), "R", fishing.type)) %>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Pseudocaranx spp", "Pseudorhombus spp"), 250, minlegal.wa)) %>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Platycephalus spp"), 300, minlegal.wa)) %>%
-  dplyr::mutate(minlegal.wa = ifelse(scientific %in% c("Sillaginodes spp"), 280, minlegal.wa)) %>%
-  dplyr::filter(fishing.type %in% c("B/R","B/C/R","R","C/R","C")) %>%
-  dplyr::filter(!scientific %in% c("Latropiscis purpurissatus", "Dactylophora nigricans", "Ophthalmolepis lineolatus",
-                                   "Acanthaluteres brownii", "Acanthaluteres vittiger", "Eubalichthys mosaicus",
-                                   "Meuschenia flavolineata", "Meuschenia freycineti", "Meuschenia galii",
-                                   "Meuschenia hippocrepis", "Mueschenia australis", "Mueschenia venusta" ,
-                                   "Upeneichthys vlamingii", "Hypoplectrodes nigroruber", "Girella zebra", 
-                                   "Scorpis georgiana", "Sphyrna zygaena")) %>%
+length_all <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.length.csv") %>%
+  dplyr::filter(successful.length %in% 'Yes') %>%
   glimpse()
 
-unique(fished.species$scientific)
+length <- length_all %>%
+  left_join(large_bodied_carnivores) %>%
+  dplyr::filter(number > 0) %>%
+  dplyr::filter(!is.na(l50)) %>%
+  glimpse()
 
-without.min.length <- fished.species %>%
-  filter(is.na(minlegal.wa))%>%
-  distinct(scientific) 
+test <- length %>%
+  distinct(genus, species) %>%
+  glimpse()
 
-unique(without.min.length$scientific)
+metadata_length <- length_all %>%
+  distinct(campaignid, sample) %>%
+  glimpse()
 
-legal <- fished.species %>%
-  tidyr::replace_na(list(minlegal.wa=0)) %>%
-  dplyr::filter(length>minlegal.wa) %>%
-  dplyr::group_by(sample) %>%
+big_carn <- length %>%
+  dplyr::filter(length > l50) %>%
+  dplyr::group_by(campaignid, sample) %>%
   dplyr::summarise(number = sum(number)) %>%
-  dplyr::mutate(scientific = "greater than legal size") %>%
+  ungroup() %>%
+  right_join(metadata_length) %>%
+  dplyr::mutate(number = ifelse(is.na(number), 0, number)) %>%
+  dplyr::mutate(response = "greater than Lm carnivores") %>%
+  left_join(allhab) %>%
+  dplyr::filter(!is.na(inverts)) %>%
   dplyr::glimpse()
+# Check number of samples that are > 0
+nrow(filter(big_carn, number > 0))/nrow(big_carn)
 
-sublegal <- fished.species %>%
-  dplyr::filter(length<minlegal.wa) %>%
-  dplyr::group_by(sample) %>%
+small_carn <- length %>%
+  dplyr::filter(length < l50) %>%
+  dplyr::group_by(campaignid, sample) %>%
   dplyr::summarise(number = sum(number)) %>%
-  dplyr::mutate(scientific = "smaller than legal size") %>%
+  ungroup() %>%
+  right_join(metadata_length) %>%
+  dplyr::mutate(number = ifelse(is.na(number), 0, number)) %>%
+  dplyr::mutate(response = "smaller than Lm carnivores") %>%
+  left_join(allhab) %>%
+  dplyr::filter(!is.na(inverts)) %>%
   dplyr::glimpse()
+# Check number of samples that are > 0
+nrow(filter(small_carn, number > 0))/nrow(small_carn)
 
-combined.length <- bind_rows(legal, sublegal) 
-
-unique(combined.length$scientific)
-
-complete.length <- combined.length %>%
-  dplyr::right_join(metadata, by = c("sample")) %>% # add in all samples
-  dplyr::select(sample,scientific,number) %>%
-  tidyr::complete(nesting(sample), scientific) %>%
-  replace_na(list(number = 0)) %>% #we add in zeros - in case we want to calculate abundance of species based on a length rule (e.g. greater than legal size)
-  dplyr::ungroup()%>%
-  dplyr::filter(!is.na(scientific)) %>% # this should not do anything
-  dplyr::left_join(metadata) %>%
-  dplyr::left_join(allhab, by = c("sample")) %>%
-  dplyr::select(-c(latitude.x, longitude.x)) %>%
-  dplyr::rename(longitude = longitude.y,
-                latitude = latitude.y) %>%
-  dplyr::filter(successful.length%in%c("Yes", "Y", "yes"),
-                !is.na(macroalgae),
-                !is.na(Z)) %>%
-  dplyr::mutate(scientific=as.character(scientific)) %>%
-  dplyr::glimpse()
+complete.length <- bind_rows(big_carn, small_carn) %>%
+  dplyr::rename(longitude = coords.x1, latitude = coords.x2) %>%
+  glimpse()
 
 # write data to load in to next script
 saveRDS(complete.length, "data/tidy/fssgam_length_lidar.rds")

@@ -75,9 +75,9 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")        
 cwatr <- st_crop(cwatr, e)
 
 # Bathymetry data
-cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
-cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
-bath_r <- rast(cbathy)
+# cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
+# cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
+bath_r <- rast("data/spatial/rasters/Australian_Bathymetry_and_Topography_2023_250m_MSL_cog.tif")
 crs(bath_r) <- wgscrs
 bath_r <- terra::crop(bath_r, e)
 bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
@@ -135,7 +135,7 @@ p11 <- ggplot() +
 
 p11
 
-#species richness
+# species richness
 p21 <- ggplot() +
   geom_tile(data = spreddf, aes(x, y, fill = p_richness)) +
   scale_fill_viridis(direction = -1) +
@@ -160,7 +160,7 @@ p21
 
 # greater than legal size
 p31 <- ggplot() +
-  geom_tile(data = spreddf, aes(x, y, fill = p_legal)) +
+  geom_tile(data = spreddf, aes(x, y, fill = p_large)) +
   scale_fill_viridis(direction = -1) +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
@@ -176,14 +176,14 @@ p31 <- ggplot() +
   theme_minimal() +
   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
-  labs(x = NULL, y = NULL, fill = "Legal", title = "Targeted assemblage") + 
+  labs(x = NULL, y = NULL, fill = ">Lm", title = "Large-bodied carnivores") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
 p31
 
 #smaller than legal size
 p41 <- ggplot() +
-  geom_tile(data = spreddf, aes(x, y, fill = p_sublegal)) +
+  geom_tile(data = spreddf, aes(x, y, fill = p_small)) +
   scale_fill_viridis(direction = -1) +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
@@ -199,7 +199,7 @@ p41 <- ggplot() +
   theme_minimal() +
   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
-  labs(x = NULL, y = NULL, fill = "Sublegal") + 
+  labs(x = NULL, y = NULL, fill = "<Lm") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
 p41

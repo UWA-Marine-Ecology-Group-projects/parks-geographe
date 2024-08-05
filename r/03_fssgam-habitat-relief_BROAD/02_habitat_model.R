@@ -98,11 +98,11 @@ gam.check(m_rock)
 
 # predict, rasterise and plot
 preddf <- cbind(preddf, 
-                "pseagrass" = predict(m_seagrass, preddf, type = "response"),
-                "pmacroalg" = predict(m_macro, preddf, type = "response"),
-                "psand" = predict(m_sand, preddf, type = "response"),
-                "prock" = predict(m_rock, preddf, type = "response"),
-                "pinverts" = predict(m_inverts, preddf, type = "response"))
+                "pseagrass" = predict(m_seagrass, preddf, type = "response", se.fit = T),
+                "pmacroalg" = predict(m_macro, preddf, type = "response", se.fit = T),
+                "psand" = predict(m_sand, preddf, type = "response", se.fit = T),
+                "prock" = predict(m_rock, preddf, type = "response", se.fit = T),
+                "pinverts" = predict(m_inverts, preddf, type = "response", se.fit = T))
 
 prasts <- rasterFromXYZ(preddf)
 # prasts$dom_tag <- which.max(prasts[[11:15]])
@@ -114,10 +114,10 @@ plot(prasts_m)
 preddf <- as.data.frame(prasts_m, xy = T, na.rm = T)
 
 # categorise by dominant tag
-preddf$dom_tag <- apply(preddf[7:11], 1,
-                        FUN = function(x){names(which.max(x))})
-preddf$dom_tag <- sub('.', '', preddf$dom_tag)
-head(preddf)
+# preddf$dom_tag <- apply(preddf[7:11], 1,
+#                         FUN = function(x){names(which.max(x))})
+# preddf$dom_tag <- sub('.', '', preddf$dom_tag)
+# head(preddf)
 
 saveRDS(preddf, "output/fssgam - habitat-broad/broad_habitat_predictions.rds")
 

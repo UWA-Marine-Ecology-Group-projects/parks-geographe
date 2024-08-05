@@ -38,13 +38,17 @@ ausc <- st_crop(aus, e)
 
 # Commonwealth parks
 aumpa  <- st_read("data/spatial/shapefiles/AustraliaNetworkMarineParks.shp")    # All aus mpas
-mpa <- st_crop(aumpa, e)                                                        # Crop to the study area
+mpa <- st_crop(aumpa, e) %>%                                                    # Crop to the study area
+  arrange(factor(ZoneName, levels = c("Multiple Use Zone", 
+                                          "Special Purpose Zone (Mining Exclusion)",
+                                          "Habitat Protection Zone",
+                                          "National Park Zone")))
 # Reorder levels so everything plots nicely
-unique(mpa$ZoneName)
-mpa$ZoneName <- factor(mpa$ZoneName, levels = c("Multiple Use Zone", 
-                                                "Special Purpose Zone (Mining Exclusion)",
-                                                "Habitat Protection Zone",
-                                                "National Park Zone"))
+# unique(mpa$ZoneName)
+# mpa$ZoneName <- factor(mpa$ZoneName, levels = c("Multiple Use Zone", 
+#                                                 "Special Purpose Zone (Mining Exclusion)",
+#                                                 "Habitat Protection Zone",
+#                                                 "National Park Zone"))
 npz <- mpa[mpa$ZoneName %in% "National Park Zone", ]                            # Just National Park Zones
 
 # State parks
@@ -75,10 +79,8 @@ terrnp <- st_crop(terrnp, e)       # Crop to the study area - using a different 
 cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")        # Coastal waters limit
 cwatr <- st_crop(cwatr, e)
 
-# Bathymetry data
-cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
-cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
-bath_r <- rast(cbathy)
+# Bathymetry data                    # All bathy in tiles as a dataframe
+bath_r <- rast("data/spatial/rasters/Australian_Bathymetry_and_Topography_2023_250m_MSL_cog.tif")
 crs(bath_r) <- wgscrs
 bath_r <- terra::crop(bath_r, e)
 bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
@@ -110,46 +112,106 @@ name = "State Marine Parks")
 spreddf <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
   glimpse()
 
-unique(spreddf$dom_tag)
+pred_plot <- readRDS("output/fssgam - habitat-broad/broad_habitat_predictions.rds") %>%
+  dplyr::mutate(p_sand.alpha     = 1 - (psand.se.fit - min(psand.se.fit, na.rm = T))/(max(psand.se.fit, na.rm = T) - min(psand.se.fit, na.rm = T)),
+                p_rock.alpha     = 1 - (prock.se.fit - min(prock.se.fit))/(max(prock.se.fit) - min(prock.se.fit)),
+                p_macroalg.alpha    = 1 - (pmacroalg.se.fit - min(pmacroalg.se.fit, na.rm = T))/(max(pmacroalg.se.fit, na.rm = T) - min(pmacroalg.se.fit, na.rm = T)),
+                p_seagrass.alpha = 1 - (pseagrass.se.fit - min(pseagrass.se.fit, na.rm = T))/(max(pseagrass.se.fit, na.rm = T) - min(pseagrass.se.fit, na.rm = T)),
+                p_inverts.alpha  = 1 - (pinverts.se.fit - min(pinverts.se.fit, na.rm = T))/(max(pinverts.se.fit, na.rm = T) - min(pinverts.se.fit, na.rm = T))) %>%
+  glimpse()
 
-spreddf$dom_tag <- dplyr::recode(spreddf$dom_tag,
-                                 sand = "Sand",
-                                 inverts = "Sessile invertebrates",
-                                 seagrass = "Seagrass",
-                                 macroalg = "Macroalgae")
+# unique(spreddf$dom_tag)
+# 
+# spreddf$dom_tag <- dplyr::recode(spreddf$dom_tag,
+#                                  sand = "Sand",
+#                                  inverts = "Sessile invertebrates",
+#                                  seagrass = "Seagrass",
+#                                  macroalg = "Macroalgae")
+# 
+# hab_fills <- scale_fill_manual(values = c("Sand" = "wheat",
+#                                           "Sessile invertebrates" = "plum",
+#                                           # "Rock" = "grey40",
+#                                           "Macroalgae" = "darkgoldenrod4",
+#                                           "Seagrass" = "forestgreen"
+# ))
 
-hab_fills <- scale_fill_manual(values = c("Sand" = "wheat",
-                                          "Sessile invertebrates" = "plum",
-                                          # "Rock" = "grey40",
-                                          "Macroalgae" = "darkgoldenrod4",
-                                          "Seagrass" = "forestgreen"
-))
+# p1 <- ggplot() +
+#   geom_tile(data = spreddf,
+#             aes(x, y, fill = dom_tag)) +
+#   hab_fills +
+#   labs(x = NULL, y = NULL, fill = NULL) +
+#   new_scale_fill() +
+#   geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
+#                breaks = c(-30, -70, -200), size = 0.2) +
+#   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
+#   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
+#   nmpa_cols +
+#   new_scale_color() +
+#   geom_sf(data = wasanc,
+#           fill = NA, aes(color = waname), size = 0.7, show.legend = F) +
+#   wampa_cols +
+#   new_scale_color() +
+#   geom_sf(data = cwatr, colour = "red", size = 0.9) +
+#   wampa_cols +
+#   guides(colour = "none") +
+#   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +   
+#   theme_minimal()
+# png(filename = paste0("plots/habitat/", name, "_site_dominant_habitat.png"), width = 10, height = 6,
+#     res = 300, units = "in")
+# p1
+# dev.off()
 
-p1 <- ggplot() +
-  geom_tile(data = spreddf,
-            aes(x, y, fill = dom_tag)) +
-  hab_fills +
-  labs(x = NULL, y = NULL, fill = NULL) +
+# Plot with transparency
+p1.5 <- ggplot() +
+  geom_tile(data = pred_plot, aes(x = x, y = y, fill = p_inverts.alpha, alpha = pinverts.fit)) +
+  scale_alpha_continuous(range = c(0, 1), guide = "none", name = "Sessile invertebrates") +
+  scale_fill_gradient(low = "white", high = "deeppink3", name = "Sessile invertebrates", na.value = "transparent") +
   new_scale_fill() +
-  geom_contour(data = bath_df, aes(x, y, z = Z), color = "black",
+  new_scale("alpha") +
+  geom_tile(data = pred_plot, aes(x = x, y = y, fill = p_sand.alpha, alpha = psand.fit)) +
+  scale_alpha_continuous(range = c(0, 1), guide = "none", name = "Sand") +
+  scale_fill_gradient(low = "white", high = "wheat", name = "Sand", na.value = "transparent") +
+  new_scale_fill() +
+  new_scale("alpha") +
+  geom_tile(data = pred_plot, aes(x = x, y = y, fill = p_rock.alpha, alpha = prock.fit)) +
+  scale_alpha_continuous(range = c(0, 1), guide = "none", name = "Rock") +
+  scale_fill_gradient(low = "white", high = "grey40", name = "Rock", na.value = "transparent") +
+  new_scale_fill() +
+  new_scale("alpha") +
+  geom_tile(data = pred_plot, aes(x = x, y = y, fill = p_macroalg.alpha, alpha = pmacroalg.fit)) +
+  scale_alpha_continuous(range = c(0, 1), guide = "none", name = "Macroalgae") +
+  scale_fill_gradient(low = "white", high = "darkorange4", name = "Macroalgae", na.value = "transparent") +
+  new_scale_fill() +
+  new_scale("alpha") +
+  geom_tile(data = pred_plot, aes(x = x, y = y, fill = p_seagrass.alpha, alpha = pseagrass.fit)) +
+  scale_alpha_continuous(range = c(0, 1), guide = "none", name = "Seagrass") +
+  scale_fill_gradient(low = "white", high = "forestgreen", name = "Seagrass", na.value = "transparent") +
+  new_scale_fill() +
+  new_scale("alpha") +
+  new_scale_fill() +
+  geom_contour(data = bath_df, aes(x, y, z = Australian_Bathymetry_and_Topography_2023_250m_MSL_cog), color = "black",
                breaks = c(-30, -70, -200), size = 0.2) +
-  geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
-  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey80", linewidth = 0.5) +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), linewidth = 1.2, show.legend = F) +
   nmpa_cols +
   new_scale_color() +
   geom_sf(data = wasanc,
-          fill = NA, aes(color = waname), size = 0.7, show.legend = F) +
+          fill = NA, aes(color = waname), linewidth = 0.7, show.legend = F) +
   wampa_cols +
   new_scale_color() +
-  geom_sf(data = cwatr, colour = "red", size = 0.9) +
+  geom_sf(data = cwatr, colour = "red", linewidth = 0.9, lineend = "round") +
   wampa_cols +
   guides(colour = "none") +
+  labs(x = "", y = "") +
   coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) +   
-  theme_minimal()
-png(filename = paste0("plots/habitat/", name, "_site_dominant_habitat.png"), width = 10, height = 6,
-    res = 300, units = "in")
-p1
-dev.off()
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.key.size = unit(0.35, "cm"),
+        legend.text = element_text(size = 5),
+        legend.title = element_text(size = 8))
+
+ggsave(filename = paste0("plots/habitat/", name, "_site_dominant_habitat-transparency.png"), width = 10, height = 6,
+       dpi = 300, units = "in", bg = "white")
 
 # fig 2: habitat multiplot
 # melt classes for faceting

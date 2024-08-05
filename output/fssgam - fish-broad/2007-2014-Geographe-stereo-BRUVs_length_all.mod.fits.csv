@@ -1,8 +1,8 @@
-"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
-"greater than legal size.detrended+mean.relief+seagrass","detrended+mean.relief+seagrass",979.841657891129,1002.76393729725,0.03522,NA,4.8,0,0,5.132,0.197,0.021,0,0,0,1,1,0,1,0,0.197
-"greater than legal size.detrended+seagrass","detrended+seagrass",980.958412223825,1000.62466661267,0.02638,NA,3.78,0,1.117,2.992,0.112,0.062,0,0,0,1,0,0,1,0,0.309
-"greater than legal size.detrended+inverts+seagrass","detrended+inverts+seagrass",981.319595731541,1004.23315197514,0.02992,NA,4.79,0,1.478,6.601,0.094,0.01,0,0,1,1,0,0,1,0,0.403
-"greater than legal size.mean.relief+seagrass","mean.relief+seagrass",981.586554060265,1001.28845130071,0.02519,NA,3.81,0,1.745,3.656,0.082,0.045,0,0,0,1,1,0,0,0,0.485
-"smaller than legal size.detrended+Z","detrended+Z",1237.75335557456,1254.32140164623,0.07768,NA,3,0,0,0,0.382,0.443,1,0,0,0,0,0,1,0,0.382
-"smaller than legal size.detrended+roughness+Z","detrended+roughness+Z",1239.57710513342,1259.39924729163,0.07748,NA,4,0,1.824,5.078,0.154,0.035,1,0,0,0,0,0,1,1,0.536
-"smaller than legal size.detrended+slope+Z","detrended+slope+Z",1239.63341387685,1259.45684490537,0.07763,NA,4,0,1.88,5.135,0.149,0.034,1,0,0,0,0,1,1,0,0.685
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean_relief","slope","detrended","roughness","cumsum.wi"
+"greater than Lm carnivores.detrended+macroalgae+slope","detrended+macroalgae+slope",291.000749195882,319.020494164411,0.02451,NA,5.98,0,0,3.032,0.344,0.072,0,1,0,0,0,1,1,0,0.344
+"greater than Lm carnivores.inverts+macroalgae+slope","inverts+macroalgae+slope",291.349762796443,317.311590975451,0.02316,NA,5.44,0,0.349,1.323,0.289,0.169,0,1,1,0,0,1,0,0,0.633
+"greater than Lm carnivores.inverts+mean_relief+slope","inverts+mean_relief+slope",292.898808321219,318.573650914602,0.02039,NA,5.5,0,1.898,2.585,0.133,0.09,0,0,1,0,1,1,0,0,0.766
+"smaller than Lm carnivores.inverts+roughness+seagrass","inverts+roughness+seagrass",567.415739182942,593.533048395681,0.10717,NA,5.7,0,0,4.813,0.275,0.029,0,0,1,1,0,0,0,1,0.275
+"smaller than Lm carnivores.inverts+seagrass+slope","inverts+seagrass+slope",568.796114813392,594.965763747883,0.10107,NA,5.73,0,1.38,6.246,0.138,0.014,0,0,1,1,0,1,0,0,0.413
+"smaller than Lm carnivores.roughness+seagrass","roughness+seagrass",568.927123763142,588.720056783917,0.07717,NA,3.91,0,1.511,0,0.129,0.316,0,0,0,1,0,0,0,1,0.542
+"smaller than Lm carnivores.detrended+roughness+seagrass","detrended+roughness+seagrass",569.032114143973,592.059832508483,0.08808,NA,4.91,0,1.616,3.34,0.123,0.06,0,0,0,1,0,0,1,1,0.665

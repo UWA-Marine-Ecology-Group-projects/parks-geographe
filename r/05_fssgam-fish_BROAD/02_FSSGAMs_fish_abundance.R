@@ -29,10 +29,10 @@ library(ggplot2)
 name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
 dat <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
-  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
-                rock = rock/broad.total.points.annotated,
-                inverts = inverts/broad.total.points.annotated,
-                seagrass = seagrass/broad.total.points.annotated) %>%
+  dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
+                rock = rock/broad_total_points_annotated,
+                inverts = inverts/broad_total_points_annotated,
+                seagrass = seagrass/broad_total_points_annotated) %>%
   glimpse()
 
 # Re-set the predictors for modeling----
