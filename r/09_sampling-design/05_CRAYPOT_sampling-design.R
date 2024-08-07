@@ -32,7 +32,7 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp") %>%
   summarise(geometry = st_union(geometry)) %>%
   st_cast("POLYGON")
 
-preds <- readRDS("output/mbh-design/ga250-derivatives.rds") %>%
+preds <- readRDS("output/sampling-design/ga250-derivatives.rds") %>%
   mask(cwatr, inverse = T) %>%
   project("EPSG:9473")
 plot(preds)
@@ -134,7 +134,7 @@ png("plots/sampling-design/craypot-design.png",
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
-  labs(fill = "Inclusion probability \n(detrended)", title = "Craypot design") +
+  labs(fill = "Topographic variability \n(detrended)", title = "Trap design") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",
@@ -158,7 +158,7 @@ samples <- sample.design$sites_base %>%
   dplyr::select(-geometry) %>%
   glimpse()
 
-write.csv(samples, file = "output/mbh-design/craypot_sampling-design_geographe-march.csv",
+write.csv(samples, file = "output/sampling-design/craypot_sampling-design_geographe-march.csv",
           row.names = F)
 
 png("plots/sampling-design/craypot-vessel-sample-map.png",

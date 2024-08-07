@@ -76,9 +76,9 @@ cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")        
 cwatr <- st_crop(cwatr, e)
 
 # Bathymetry data
-cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
-cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
-bath_r <- rast(cbathy)
+# cbathy <- lapply("data/spatial/rasters/tile6c.txt", function(x){read.table(file = x, header = TRUE, sep = ",")})
+# cbathy <- do.call("rbind", lapply(cbathy, as.data.frame))                       # All bathy in tiles as a dataframe
+bath_r <- rast("data/spatial/rasters/Australian_Bathymetry_and_Topography_2023_250m_MSL_cog.tif")
 crs(bath_r) <- wgscrs
 bath_r <- terra::crop(bath_r, e)
 bath_df <- as.data.frame(bath_r, xy = T, na.rm = T)                             # Dataframe - cropped and above 0 use for bath cross section
@@ -159,9 +159,9 @@ p21 <- ggplot() +
 
 # p21
 
-# greater than legal size
+# large carnivores >Lm
 p31 <- ggplot() +
-  geom_tile(data = spreddf, aes(x, y, fill = p_legal)) +
+  geom_tile(data = spreddf, aes(x, y, fill = p_large)) +
   scale_fill_viridis(direction = -1) +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
@@ -178,14 +178,14 @@ p31 <- ggplot() +
   coord_sf(xlim = c(313788.041, 376671.635),
            ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
-  labs(x = NULL, y = NULL, fill = "Legal", title = "Targeted assemblage") + 
+  labs(x = NULL, y = NULL, fill = ">Lm", title = "Large-bodied carnivores") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
 # p31
 
-#smaller than legal size
+# Large carnivores <Lm
 p41 <- ggplot() +
-  geom_tile(data = spreddf, aes(x, y, fill = p_sublegal)) +
+  geom_tile(data = spreddf, aes(x, y, fill = p_small)) +
   scale_fill_viridis(direction = -1) +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
   geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
@@ -202,7 +202,7 @@ p41 <- ggplot() +
   coord_sf(xlim = c(313788.041, 376671.635),
            ylim = c(6313669.457, 6275856.972), crs = sppcrs) +
   scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
-  labs(x = NULL, y = NULL, fill = "Sublegal") + 
+  labs(x = NULL, y = NULL, fill = "<Lm") + 
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
 # p41

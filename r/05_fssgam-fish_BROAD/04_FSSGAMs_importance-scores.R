@@ -28,25 +28,29 @@ dat1 <- read.csv(paste("output/fssgam - fish-broad", paste(name, "all.var.imp.cs
 dat2 <- read.csv(paste("output/fssgam - fish-broad", paste(name, "length_all.var.imp.csv", sep = "_"), sep = "/")) %>% 
   dplyr::rename(resp.var=X)%>%
   gather(key=predictor,value=importance,2:ncol(.))%>%
-  dplyr::mutate(importance = ifelse(predictor %in% c("mean.relief", "seagrass", "inverts") & resp.var == "greater than legal size", 
+  dplyr::mutate(importance = ifelse(predictor %in% c("mean_relief", "seagrass", "inverts") & resp.var == "greater than legal size", 
                                     importance * -1, importance)) %>%
   dplyr::mutate(importance = ifelse(predictor %in% c("detrended", "Z", "roughness", "slope") & resp.var == "smaller than legal size", 
                                     importance * -1, importance)) %>%
   glimpse()
 
 dat <- bind_rows(dat1,dat2) %>%
+  dplyr::mutate(importance = if_else(importance>1, 1, importance)) %>%
   glimpse()
 
 dat.taxa <- dat %>%
-  mutate(label=NA)%>%
-  mutate(resp.var=factor(resp.var, levels = c("smaller than legal size","greater than legal size","species.richness","total.abundance")))%>%
-  mutate(label=ifelse(predictor=="macroalgae"&resp.var=="total.abundance","X",label))%>%
-  mutate(label=ifelse(predictor=="inverts"&resp.var=="species.richness","X",label))%>%
-  mutate(label=ifelse(predictor=="macroalgae"&resp.var=="species.richness","X",label))%>%
-  mutate(label=ifelse(predictor=="detrended"&resp.var=="greater than legal size","X",label))%>%
-  mutate(label=ifelse(predictor=="seagrass"&resp.var=="greater than legal size","X",label))%>%
-  mutate(label=ifelse(predictor=="detrended"&resp.var=="smaller than legal size","X",label))%>%
-  mutate(label=ifelse(predictor=="Z"&resp.var=="smaller than legal size","X",label))%>%
+  mutate(label = NA) %>%
+  mutate(resp.var = factor(resp.var, levels = c("smaller than Lm carnivores", "greater than Lm carnivores",
+                                                "species.richness", "cti")) )%>%
+  mutate(label = ifelse(predictor == "inverts" & resp.var == "cti", "X", label)) %>%
+  mutate(label = ifelse(predictor == "macroalgae" & resp.var == "cti", "X", label)) %>%
+  mutate(label = ifelse(predictor == "inverts" & resp.var == "species.richness", "X", label)) %>%
+  mutate(label = ifelse(predictor == "macroalgae" & resp.var == "species.richness", "X", label)) %>%
+  mutate(label = ifelse(predictor == "detrended" & resp.var == "greater than Lm carnivores", "X", label)) %>%
+  mutate(label = ifelse(predictor == "macroalgae" & resp.var == "greater than Lm carnivores", "X", label)) %>%
+  mutate(label = ifelse(predictor == "slope" & resp.var == "greater than Lm carnivores", "X", label)) %>%
+  mutate(label = ifelse(predictor == "roughness" & resp.var == "smaller than Lm carnivores", "X", label)) %>%
+  mutate(label = ifelse(predictor == "seagrass" & resp.var == "smaller than Lm carnivores", "X", label)) %>%
   glimpse()
 
 # Theme-
@@ -76,12 +80,12 @@ re <- colorRampPalette(c("blue3", "white","red2"))(200)
 # Labels-
 legend_title<-"Importance"
 
-imp.full <- ggplot(dat.taxa %>% dplyr::filter(resp.var%in%c("total.abundance", "species.richness")), 
-                   aes(x=predictor,y=resp.var,fill=importance)) +
+imp.full <- ggplot(dat.taxa %>% dplyr::filter(resp.var%in%c("cti", "species.richness")), 
+                   aes(x=predictor, y=resp.var, fill=importance)) +
   geom_tile(show.legend=T) +
   scale_fill_gradientn(legend_title, colours=c(re), na.value = "grey98",
                        limits = c(-1, 1))+
-  scale_y_discrete(labels=c("Species richness","Total abundance"))+
+  scale_y_discrete(labels=c("Species richness", "CTI"))+
   labs(x = NULL, y = NULL, title = "Whole assemblage") +
   theme_classic()+
   Theme1+
@@ -90,22 +94,22 @@ imp.full <- ggplot(dat.taxa %>% dplyr::filter(resp.var%in%c("total.abundance", "
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(), 
         axis.line.x = element_blank(),
-        plot.title = element_text(hjust = -0.45, vjust = -15)) # Looks crap here but title comes back in exported version
+        plot.title = element_text(hjust = -0.25, vjust = -15)) # Looks crap here but title comes back in exported version
 imp.full
 
-imp.trgt <- ggplot(dat.taxa %>% dplyr::filter(resp.var%in%c("greater than legal size", "smaller than legal size")), 
+imp.trgt <- ggplot(dat.taxa %>% dplyr::filter(resp.var%in%c("greater than Lm carnivores", "smaller than Lm carnivores")), 
                    aes(x=predictor,y=resp.var,fill=importance)) +
   geom_tile(show.legend=F) +
   scale_fill_gradientn(legend_title, colours=c(re), na.value = "grey98",
                        limits = c(-1, 1))+
-  scale_y_discrete(labels=c("Smaller than legal size","Greater than legal size"))+
+  scale_y_discrete(labels=c("<Lm",">Lm"))+
   scale_x_discrete(labels = c("Detrended", "Invertebrates", "Macroalgae", "Mean relief", "Roughness",
                               "Seagrass", "Slope", "Depth"))+
-  labs(x = NULL, y = NULL, title = "Targeted assemblage") +
+  labs(x = NULL, y = NULL, title = "Large-bodied carnivores") +
   theme_classic()+
   Theme1+
   geom_text(aes(label=label)) +
-  theme(plot.title = element_text(hjust = -0.45)) # Looks crap here but title comes back in exported version
+  theme(plot.title = element_text(hjust = -0.35)) # Looks crap here but title comes back in exported version
 imp.trgt
 
 gg.importance <- imp.full / imp.trgt

@@ -1,15 +1,12 @@
-Response,modname,delta.AICc,wi.AICc,r2.vals,edf
-Total abundance,inverts+macroalgae,0,0.237,0.07143,3.92
-,macroalgae,0.913,0.15,0.06644,2.9
-,inverts+macroalgae+roughness,1.22,0.129,0.07372,4.91
-,detrended+macroalgae,1.674,0.103,0.07245,4.62
-Species richness,inverts+macroalgae,0,0.472,0.32607,3
-,inverts+macroalgae+slope,1.908,0.182,0.32937,4.4
-,detrended+inverts+macroalgae,1.989,0.174,0.32674,4
-Greater than legal size,detrended+mean.relief+seagrass,0,0.197,0.03522,4.8
-,detrended+seagrass,1.117,0.112,0.02638,3.78
-,detrended+inverts+seagrass,1.478,0.094,0.02992,4.79
-,mean.relief+seagrass,1.745,0.082,0.02519,3.81
-Smaller than legal size,detrended+Z,0,0.382,0.07768,3
-,detrended+roughness+Z,1.824,0.154,0.07748,4
-,detrended+slope+Z,1.88,0.149,0.07763,4
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean_relief","slope","detrended","roughness","cumsum.wi"
+"total.abundance.inverts+macroalgae","inverts+macroalgae",2878.80250901691,2900.53670276209,0.07143,NA,3.92,0,0,2.706,0.237,0.177,0,1,1,0,0,0,0,0,0.237
+"total.abundance.macroalgae","macroalgae",2879.70836420236,2897.83027114788,0.06644,NA,2.9,0,0.906,0,0.15,0.684,0,1,0,0,0,0,0,0,0.387
+"total.abundance.inverts+macroalgae+roughness","inverts+macroalgae+roughness",2880.01823467851,2905.31685319858,0.07372,NA,4.91,0,1.216,7.487,0.129,0.016,0,1,1,0,0,0,0,1,0.516
+"total.abundance.detrended+macroalgae","detrended+macroalgae",2880.46949328679,2905.47569359983,0.07245,NA,4.62,0,1.667,7.645,0.103,0.015,0,1,0,0,0,0,1,0,0.619
+"species.richness.inverts+macroalgae","inverts+macroalgae",1653.8786597113,1672.03580926049,0.32607,NA,3,0,0,0,0.472,0.874,0,1,1,0,0,0,0,0,0.472
+"species.richness.inverts+macroalgae+slope","inverts+macroalgae+slope",1655.78620157088,1679.82452292287,0.32937,NA,4.4,0,1.908,7.789,0.182,0.018,0,1,1,0,0,1,0,0,0.654
+"species.richness.detrended+inverts+macroalgae","detrended+inverts+macroalgae",1655.86750439854,1677.61348099744,0.32674,NA,4,0,1.989,5.578,0.174,0.054,0,1,1,0,0,0,1,0,0.828
+"cti.inverts+macroalgae","inverts+macroalgae",785.838127189194,807.637344833473,0.12945,NA,3.79,0,0,0,0.326,0.5,0,1,1,0,0,0,0,0,0.326
+"cti.inverts+macroalgae+roughness","inverts+macroalgae+roughness",786.353282626135,812.116461325099,0.13505,NA,4.85,0,0.515,4.479,0.252,0.053,0,1,1,0,0,0,0,1,0.578
+"cti.detrended+inverts+macroalgae","detrended+inverts+macroalgae",786.37897035423,812.426641835388,0.13539,NA,4.91,0,0.541,4.789,0.249,0.046,0,1,1,0,0,0,1,0,0.827
+"cti.inverts+macroalgae+slope","inverts+macroalgae+slope",787.452000574974,812.961738578015,0.13124,NA,4.82,0,1.614,5.324,0.145,0.035,0,1,1,0,0,1,0,0,0.972

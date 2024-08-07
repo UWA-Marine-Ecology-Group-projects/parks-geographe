@@ -1,4 +1,4 @@
-"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness","cumsum.wi"
-"total.abundance.inverts+macroalgae+Z","inverts+macroalgae+Z",1716.45607754838,1741.15386014727,0.15618,NA,5.89,0,0,2.638,0.56,0.211,1,1,1,0,0,0,0,0,0.56
-"total.abundance.macroalgae+Z","macroalgae+Z",1716.93660235219,1738.51626284019,0.14992,NA,4.85,0,0.481,0,0.44,0.789,1,1,0,0,0,0,0,0,1
-"species.richness","inverts+macroalgae+Z",998.865603932763,1025.60905392258,0.45969,NA,6.23,0,0,0,0.992,0.855,1,1,1,0,0,0,0,0,0.992
+"","modname","AICc","BIC","r2.vals","r2.vals.unique","edf","edf.less.1","delta.AICc","delta.BIC","wi.AICc","wi.BIC","Z","macroalgae","inverts","seagrass","mean_relief","slope","detrended","roughness","cumsum.wi"
+"total.abundance.inverts+macroalgae+Z","inverts+macroalgae+Z",1716.49096020431,1741.26685637,0.15626,NA,5.9,0,0,2.751,0.555,0.202,1,1,1,0,0,0,0,0,0.555
+"total.abundance.macroalgae+Z","macroalgae+Z",1716.93650316715,1738.51616050722,0.14992,NA,4.85,0,0.446,0,0.444,0.798,1,1,0,0,0,0,0,0,0.999
+"species.richness","inverts+macroalgae+Z",998.865593914597,1025.60904024477,0.45969,NA,6.23,0,0,0,0.994,0.877,1,1,1,0,0,0,0,0,0.994

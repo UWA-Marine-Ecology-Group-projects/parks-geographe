@@ -16,6 +16,7 @@ library(raster)
 library(dplyr)
 library(stringr)
 library(dismo)
+library(sf)
 
 # read in
 dat1 <- readRDS("data/tidy/fss-gam-data-ta.sr-lidar.rds")%>%
@@ -35,16 +36,22 @@ dat2 <- readRDS("data/tidy/fssgam_length_lidar.rds") %>%
 
 fabund <- bind_rows(dat1,dat2)                        # merged fish data used for fssgam script
 
+fabund_sf <- st_as_sf(fabund, coords = c("longitude", "latitude"), remove = F, crs = 4326) %>%
+  st_transform(32750)
+
 preddf  <- readRDS("output/fssgam - habitat-lidar/lidar_habitat_predictions.rds") %>%
   dplyr::rename(seagrass = pseagrass.fit,
                 macroalgae = pmacroalg.fit,
                 inverts = pinverts.fit) %>%
   glimpse()
 
-preds <- rasterFromXYZ(preddf %>% dplyr::select(x, y, Z, detrended, slope, roughness, seagrass, macroalgae, inverts))
+preds <- rasterFromXYZ(preddf %>% dplyr::select(x, y, Z, detrended, seagrass, macroalgae, inverts),
+                       crs = "epsg:32750")
 plot(preds)
 
-xy <- fabund %>%
+xy <- fabund_sf %>%
+  dplyr::mutate(longitude = st_coordinates(.)[1],
+                latitude = st_coordinates(.)[2]) %>%
   dplyr::filter(response %in% "total.abundance") %>%
   dplyr::select(longitude , latitude) %>%
   glimpse()
@@ -70,12 +77,12 @@ m_richness <- gam(number ~ s(inverts, k = 3, bs = "cr") + s(macroalgae, k = 3, b
 summary(m_richness)
 # gam.check(m_targetabund)
 # vis.gam(m_targetabund)
-m_large <- gam(number ~ s(seagrass, k = 3, bs = "cr") + s(Z, k = 3, bs = "cr"),  
+m_large <- gam(number ~ s(Z, k = 3, bs = "cr"),  
                   data = fabund %>% dplyr::filter(response %in% "greater than Lm carnivores"), 
                   method = "REML", family = tw())
 summary(m_large)
 
-m_small <- gam(number ~ s(detrended, k = 3, bs = "cr") + s(inverts, k = 3, bs = "cr"),  # not necessarily the top model
+m_small <- gam(number ~ s(seagrass, k = 3, bs = "cr"),  # not necessarily the top model
                data = fabund %>% dplyr::filter(response %in% "smaller than Lm carnivores"), 
                method = "REML", family = tw())
 summary(m_small)
@@ -89,7 +96,7 @@ preddf <- cbind(preddf,
                 "p_small" = predict(m_small, preddf, type = "response")) 
 
 # Visualise
-prasts <- rasterFromXYZ(preddf %>% dplyr::select(x, y, p_totabund, p_richness, p_legal, p_sublegal)) 
+prasts <- rasterFromXYZ(preddf %>% dplyr::select(x, y, p_totabund, p_richness, p_large, p_small)) 
 prasts_m <- mask(prasts, messrast)
 plot(prasts_m)
 

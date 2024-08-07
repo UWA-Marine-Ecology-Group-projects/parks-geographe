@@ -45,4 +45,4 @@ names(preds)[1] <- "depth"
 plot(preds)
 
 # Save out
-saveRDS(preds, "output/mbh-design/ga250-derivatives.rds")
+saveRDS(preds, "output/sampling-design/ga250-derivatives.rds")

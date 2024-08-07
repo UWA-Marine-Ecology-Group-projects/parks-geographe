@@ -132,7 +132,7 @@ png("plots/sampling-design/bruv-design.png",
 ggplot() +
   geom_spatraster(data = inp_rasts, aes(fill = strata)) +
   scale_fill_viridis_c(na.value = NA, option = "D") +
-  labs(fill = "Inclusion probability \n(detrended)", title = "BRUV design") +
+  labs(fill = "Topographic variability \n(detrended)", title = "BRUV design") +
   new_scale_fill() +
   geom_sf(data = zones, colour = "black", aes(fill = tidy_name), alpha = 0.5) +
   scale_fill_manual(values = c("Multiple Use Zone" = "#b9e6fb",

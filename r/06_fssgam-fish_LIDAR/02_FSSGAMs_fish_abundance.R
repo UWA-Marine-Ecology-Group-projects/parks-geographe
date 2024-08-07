@@ -22,23 +22,23 @@ library(doSNOW)
 library(gamm4)
 library(RCurl) #needed to download data from GitHub
 library(FSSgam)
-library(GlobalArchive)
+# library(GlobalArchive)
 library(ggplot2)
 
 name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name
 
 dat <- readRDS("data/tidy/fss-gam-data-ta.sr-lidar.rds")%>%
-  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
-                rock = rock/broad.total.points.annotated,
-                inverts = inverts/broad.total.points.annotated,
-                seagrass = seagrass/broad.total.points.annotated) %>%
+  dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
+                rock = rock/broad_total_points_annotated,
+                inverts = inverts/broad_total_points_annotated,
+                seagrass = seagrass/broad_total_points_annotated) %>%
   glimpse()
 
 # Re-set the predictors for modeling----
 names(dat)
 
 pred.vars <- c("Z", "macroalgae", "inverts",
-               "seagrass", "mean.relief","slope","detrended", "roughness") 
+               "seagrass", "mean_relief","slope","detrended", "roughness") 
 
 # Check to make sure Response vector has not more than 90% zeros----
 unique.vars <- unique(as.character(dat$scientific))

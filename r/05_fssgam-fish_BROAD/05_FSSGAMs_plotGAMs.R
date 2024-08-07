@@ -12,12 +12,11 @@ library(dplyr)
 library(tidyr)
 library(gridExtra)
 library(grid)
-library(GlobalArchive)
+# library(GlobalArchive)
 library(stringr)
 library(ggplot2)
 library(gamm4)
-library(ggmap)
-library(rgdal)
+# library(rgdal)
 library(raster)
 library(png)
 library(cowplot)
@@ -49,28 +48,28 @@ name <- "Parks-Geographe-synthesis" # for the study
 
 # Bring in and format the  data----
 dat.maxn <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
-  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
-                rock = rock/broad.total.points.annotated,
-                inverts = inverts/broad.total.points.annotated,
-                seagrass = seagrass/broad.total.points.annotated) %>%
-  dplyr::rename(number = maxn)%>%
+  dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
+                rock = rock/broad_total_points_annotated,
+                inverts = inverts/broad_total_points_annotated,
+                seagrass = seagrass/broad_total_points_annotated) %>%
+  dplyr::rename(number = maxn) %>%
   glimpse()
 
 dat.length <- readRDS("data/tidy/fssgam_length_broad.rds")%>%
-  dplyr::mutate(macroalgae = macroalgae/broad.total.points.annotated,
-                rock = rock/broad.total.points.annotated,
-                inverts = inverts/broad.total.points.annotated,
-                seagrass = seagrass/broad.total.points.annotated) %>%
+  dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
+                rock = rock/broad_total_points_annotated,
+                inverts = inverts/broad_total_points_annotated,
+                seagrass = seagrass/broad_total_points_annotated) %>%
   glimpse()
 
 dat <- bind_rows(dat.maxn,dat.length)
 
 # Manually make the most parsimonious GAM models for each taxa ----
 #### MaxN ####
-unique(dat$scientific)
+unique(dat$response)
 
 # MODEL Total abundance (macroalgae) ----
-dat.total <- dat %>% filter(scientific=="total.abundance")
+dat.total <- dat %>% filter(response=="total.abundance")
 
 mod <- gam(number ~ s(macroalgae, k = 3, bs = 'cr'), family = tw,data = dat.total)
 
@@ -102,7 +101,7 @@ ggmod.total.macroalgae <- ggplot() +
 ggmod.total.macroalgae
 
 # MODEL Species richness (inverts + macroalgae) ----
-dat.species <- dat %>% filter(scientific=="species.richness")
+dat.species <- dat %>% filter(response=="species.richness")
 
 mod = gam(number~s(inverts,k=3,bs='cr') + s(macroalgae, k=3,bs='cr'), family=tw,data=dat.species)
 
@@ -160,7 +159,7 @@ ggmod.species.macroalgae<- ggplot() +
 ggmod.species.macroalgae
 
 # MODEL Greater than legal size (detrended + seagrass) ----
-dat.legal <- dat %>% filter(scientific=="greater than legal size")
+dat.legal <- dat %>% filter(response == "greater than Lm carnivores")
 
 mod=gam(number~s(detrended,k=3,bs='cr') + s(seagrass,k=3,bs='cr') , family=tw,data=dat.legal)
 
@@ -201,7 +200,7 @@ ggmod.legal.detrended<- ggplot() +
   geom_line(data=predicts.legal.detrended,aes(x=detrended,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
-  ggtitle("Greater than legal size") +
+  ggtitle("Large-bodied carnivores >Lm") +
   theme(plot.title = element_text(hjust = 0))
 ggmod.legal.detrended
 
@@ -218,7 +217,7 @@ ggmod.legal.seagrass<- ggplot() +
 ggmod.legal.seagrass
 
 # MODEL Smaller than legal size (detrended + Z) ----
-dat.sublegal <- dat %>% filter(scientific=="smaller than legal size")
+dat.sublegal <- dat %>% filter(response=="smaller than Lm carnivores")
 
 mod=gam(number~s(detrended,k=3,bs='cr') + s(Z,k=3,bs='cr'), family=tw,data=dat.sublegal)
 
@@ -259,7 +258,7 @@ ggmod.sublegal.detrended<- ggplot() +
   geom_line(data=predicts.sublegal.detrended,aes(x=detrended,y=number + se.fit),linetype="dashed",alpha=0.5)+
   theme_classic()+
   Theme1+
-  ggtitle("Smaller than legal size") +
+  ggtitle("Large-bodied carnivores <Lm") +
   theme(plot.title = element_text(hjust = 0))
 ggmod.sublegal.detrended
 

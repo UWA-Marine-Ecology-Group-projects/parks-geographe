@@ -158,7 +158,7 @@ p21 <- ggplot() +
 
 p21
 
-# greater than legal size
+# > Lm carnivores
 p31 <- ggplot() +
   geom_tile(data = spreddf, aes(x, y, fill = p_large)) +
   scale_fill_viridis(direction = -1) +
@@ -181,7 +181,7 @@ p31 <- ggplot() +
 
 p31
 
-#smaller than legal size
+# < Lm carnivores
 p41 <- ggplot() +
   geom_tile(data = spreddf, aes(x, y, fill = p_small)) +
   scale_fill_viridis(direction = -1) +
@@ -204,8 +204,30 @@ p41 <- ggplot() +
 
 p41
 
+p51 <- ggplot() +
+  geom_tile(data = spreddf, aes(x, y, fill = p_cti)) +
+  scale_fill_viridis(direction = -1) +
+  geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.5) +
+  geom_sf(data = mpa, fill = NA, aes(colour = ZoneName), size = 1.2, show.legend = F) +
+  nmpa_cols +
+  new_scale_color() +
+  geom_sf(data = wasanc,
+          fill = NA, aes(color = waname), size = 0.7, show.legend = F) +
+  wampa_cols +
+  new_scale_color() +
+  geom_sf(data = cwatr, colour = "red", size = 0.9) +
+  wampa_cols +
+  guides(colour = "none") +
+  theme_minimal() +
+  coord_sf(xlim = c(115.0, 115.67), ylim = c(-33.3, -33.65)) + 
+  scale_x_continuous(breaks = seq(115.0, 115.7, by = 0.2)) +
+  labs(x = NULL, y = NULL, fill = "CTI", title = "Whole assemblage") + 
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
-gg.predictions.npz <- p11 + p21 + p31 + p41 & theme(legend.justification = "left")    #, aspect.ratio=1
+p51
+
+
+gg.predictions.npz <- p51 + p21 + p31 + p41 & theme(legend.justification = "left")    #, aspect.ratio=1
 gg.predictions.npz
 
 ggsave(paste0("plots/fish/", name, "_site_fish_predictions.png"), gg.predictions.npz, width = 10, height = 5, dpi = 300)

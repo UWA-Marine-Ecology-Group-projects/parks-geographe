@@ -19,8 +19,7 @@ library(dismo)
 
 # read in
 dat1 <- readRDS("data/tidy/fssgam_ta.sr_broad.rds") %>%
-  dplyr::rename(number = maxn,
-                response = scientific) %>%
+  dplyr::rename(number = maxn) %>%
   dplyr::mutate(macroalgae = macroalgae/broad_total_points_annotated,
                 rock = rock/broad_total_points_annotated,
                 inverts = inverts/broad_total_points_annotated,
@@ -75,8 +74,12 @@ m_richness <- gam(number ~ s(inverts, k = 3, bs = "cr") + s(macroalgae, k = 3, b
                      data = fabund %>% dplyr::filter(response %in% "species.richness"), 
                      method = "REML", family = tw())
 summary(m_richness)
-# gam.check(m_targetabund)
-# vis.gam(m_targetabund)
+
+m_cti <- gam(number ~ s(inverts, k = 3, bs = "cr") + s(macroalgae, k = 3, bs = "cr"),  
+                  data = fabund %>% dplyr::filter(response %in% "cti"), 
+                  method = "REML", family = tw())
+summary(m_cti)
+
 m_large <- gam(number ~ s(detrended, k = 3, bs = "cr") + s(macroalgae, k = 3, bs = "cr") + s(slope, k = 3, bs = "cr"),  
                   data = fabund %>% dplyr::filter(response %in% "greater than Lm carnivores"), 
                   method = "REML", family = tw())
@@ -92,6 +95,7 @@ summary(m_small)
 preddf <- cbind(preddf, 
                 "p_totabund" = predict(m_totabund, preddf, type = "response"),
                 "p_richness" = predict(m_richness, preddf, type = "response"),
+                "p_cti" = predict(m_cti, preddf, type = "response"),
                 "p_large" = predict(m_large, preddf, type = "response"),
                 "p_small" = predict(m_small, preddf, type = "response")) 
 

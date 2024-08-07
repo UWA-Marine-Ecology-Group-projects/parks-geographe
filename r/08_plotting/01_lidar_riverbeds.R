@@ -91,13 +91,11 @@ hillc <- hillShade(slopec, aspectc, angle = 65, direction = 270) # Hillshade der
 hilldf_c <- as.data.frame(hillc, xy = T, na.rm = T)
 
 # assign mpa colours - full levels are saved at end of script for future ref
-nmpa_cols <- scale_colour_manual(values = c("Habitat Protection Zone" = "#fff8a3",
-                                          "National Park Zone" = "#7bbc63",
+nmpa_cols <- scale_colour_manual(values = c(
                                           "Multiple Use Zone" = "#b9e6fb",
                                           "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
                                name = "Australian Marine Parks")
-nmpa_fills <- scale_fill_manual(values = c("Habitat Protection Zone" = "#fff8a3",
-                                           "National Park Zone" = "#7bbc63",
+nmpa_fills <- scale_fill_manual(values = c(
                                            "Multiple Use Zone" = "#b9e6fb",
                                            "Special Purpose Zone (Mining Exclusion)" = "#c5bcc9"),
                                 name = "Australian Marine Parks")
@@ -113,15 +111,19 @@ p2 <- ggplot() +
   #                 show.legend = F, linewidth = 0.8) +
   # nmpa_cols +
   geom_sf(data = parks, aes(fill = ZoneName, colour = ZoneName), alpha = 0.28, 
-          show.legend = F, linewidth = 0.8) +
+          show.legend = T, linewidth = 0.8) +
   nmpa_cols +
   nmpa_fills + 
   # geom_sf(data = aus, fill = "seashell2", colour = "grey80", linewidth = 2) +
   # coord_sf(xlim = c(115.4, 115.5), ylim = c(-33.5, -33.4)) +
   coord_sf(xlim = c(115.39, 115.51), ylim = c(-33.51, -33.39)) +
   labs(y = "Latitude", x = "Longitude", fill = "Depth") +
-  theme_minimal()
-ggsave(filename = "plots/spatial/lidar-map-inset.png", plot = p2, width = 6, height = 6, units = "in", dpi = 600,
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.box = "vertical",
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 9.5))
+ggsave(filename = "plots/spatial/lidar-map-inset.png", plot = p2, width = 6, height = 8, units = "in", dpi = 600,
        bg = "white")
 # png(filename = "plots/spatial/lidar-map-inset.png", width = 5, height = 4, units = "in", res = 600)
 # p2

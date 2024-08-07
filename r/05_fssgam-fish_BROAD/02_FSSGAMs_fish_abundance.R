@@ -23,8 +23,8 @@ library(doSNOW)
 library(gamm4)
 library(RCurl) #needed to download data from GitHub
 library(FSSgam)
-library(GlobalArchive)
 library(ggplot2)
+library(CheckEM)
 
 name <- "2007-2014-Geographe-stereo-BRUVs"  # set study name
 
@@ -39,14 +39,14 @@ dat <- readRDS("data/tidy/fssgam_ta.sr_broad.rds")%>%
 names(dat)
 
 pred.vars <- c("Z", "macroalgae", "inverts",
-               "seagrass", "mean.relief","slope","detrended", "roughness") 
+               "seagrass", "mean_relief","slope","detrended", "roughness") 
 
 # Check to make sure Response vector has not more than 90% zeros----
-unique.vars <- unique(as.character(dat$scientific))
+unique.vars <- unique(as.character(dat$response))
 
 resp.vars <- character()
 for(i in 1:length(unique.vars)){
-  temp.dat <- dat[which(dat$scientific == unique.vars[i]), ]
+  temp.dat <- dat[which(dat$response == unique.vars[i]), ]
   if(length(which(temp.dat$maxn == 0)) / nrow(temp.dat) < 0.9){
     resp.vars <- c(resp.vars, unique.vars[i])}
 }
@@ -54,7 +54,7 @@ resp.vars
 
 # Run the full subset model selection----
 savedir <- "output/fssgam - fish-broad"
-use.dat <- as.data.frame(dat) # Seems a bit pointless this line innit
+use.dat <- as.data.frame(dat)
 str(use.dat)
 
 # factor.vars <- c("status") # Status as a factors with 2 levels - I think we shouldn't have this in here
@@ -64,7 +64,8 @@ str(use.dat)
 
 # Loop through the FSS function for each Taxa----
 for(i in 1:length(resp.vars)){
-  use.dat <- as.data.frame(dat[which(dat$scientific == resp.vars[i]), ])
+  print(resp.vars[i])
+  use.dat <- as.data.frame(dat[which(dat$response == resp.vars[i]), ])
   Model1  <- gam(maxn ~ s(Z, k = 3, bs='cr'),
                  family = tw(),  data = use.dat)
   

@@ -1,3 +1,4 @@
-"","Z","macroalgae","inverts","seagrass","mean.relief","slope","detrended","roughness"
+"","Z","macroalgae","inverts","seagrass","mean_relief","slope","detrended","roughness"
 "total.abundance",0,0.998,0.531,0.001,0.001,0.172,0.28,0.254
 "species.richness",0,1,1,0,0,0.182,0.174,0.172
+"cti",0,1.001,0.972,0,0,0.151,0.266,0.266
