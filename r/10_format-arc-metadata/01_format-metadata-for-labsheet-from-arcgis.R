@@ -31,6 +31,12 @@ marine_parks <- st_read(here::here("data/spatial/shapefiles/Collaborative_Austra
   st_transform(4326) %>%
   st_make_valid()
 
+cwatr <- st_read("data/spatial/shapefiles/Coastal_Waters_AMB2020_Areas.shp") %>%
+  dplyr::mutate(jurisdiction = "state") %>%
+  st_transform(4326) %>%
+  dplyr::group_by(jurisdiction) %>%
+  summarise()
+
 # Set metadata names for BRUVs ----
 metadata_names <- c(system.number = NA_real_,
                     opcode = NA_real_,
@@ -88,8 +94,8 @@ unique(bruv_cameras$date)
 
 # Read in metadata
 bruv_metadata <- read.csv("data/metadata/BRUV_metadata_template_0.csv") %>%
-  ga.clean.names() %>%
-  dplyr::rename(system_number = system., depth_m = depth.m., longitude_dd = x, latitude_dd = y, video_notes = notes, opcode = sample) %>% 
+  clean_names() %>%
+  dplyr::rename(system_number = system, longitude_dd = x, latitude_dd = y, video_notes = notes, opcode = sample) %>% 
   dplyr::mutate(time = mdy_hms(creationdate, tz = "UTC")) %>%
   glimpse()
 
@@ -141,6 +147,7 @@ metadata_marine_parks <- st_as_sf(bruv_metadata_tz, coords = c("longitude_dd", "
 
 final_bruv_metadata <- metadata_marine_parks %>%
   st_intersection(marine_parks) %>%
+  dplyr::mutate(commonwealth = !st_intersects(., cwatr, sparse = F)) %>%
   bind_cols(st_coordinates(.)) %>%
   as.data.frame() %>%
   dplyr::select(-c(geometry)) %>%
@@ -176,7 +183,8 @@ final_bruv_metadata <- metadata_marine_parks %>%
                 maxn_complete_date,
                 maxn_checker,
                 length_complete_date,
-                comment) %>%
+                comment,
+                commonwealth) %>%
   dplyr::mutate(location = "Geographe Bay") %>%
   as.data.frame() %>%
   glimpse()
@@ -185,6 +193,7 @@ write.csv(final_bruv_metadata, "data/staging/2024-04_Geographe_stereo-BRUVs_arcg
 
 # add to labsheet on google drive
 # write_sheet(url, data = final_bruv_metadata, sheet = "2024-04_Geographe_stereo-BRUVs")
+# write_sheet(url, data = final_bruv_metadata, sheet = "geographe test")
 
 # BOSS METADATA ----
 boss_metadata_names <- c(system_number = NA_real_,
