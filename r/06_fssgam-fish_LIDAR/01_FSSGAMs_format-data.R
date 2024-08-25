@@ -26,6 +26,7 @@ library(ggplot2)
 library(sp)
 library(corrr)
 library(CheckEM)
+library(raster)
 # devtools::install_github("beckyfisher/FSSgam_package")
 
 name <- "2007-2014-Geographe-stereo-BRUVs-lidar"  # set study name 
@@ -130,12 +131,30 @@ ta.sr <- maxn %>%
   dplyr::mutate(total.abundance = rowSums(.[, 2:(ncol(.))], na.rm = TRUE )) %>% #Add in Totals
   dplyr::mutate(species.richness = rowSums(.[, 2:(ncol(.))] > 0)) %>% # double check these
   dplyr::select(sample, total.abundance, species.richness) %>%
-  tidyr::gather(., "scientific", "maxn", 2:3) %>%
+  tidyr::gather(., "response", "maxn", 2:3) %>%
   dplyr::glimpse()
+
+cti <- read.csv("data/tidy/2007-2014-Geographe-stereo-BRUVs.complete.maxn.csv") %>%
+  dplyr::ungroup() %>%
+  dplyr::filter(maxn > 0) %>%
+  left_join(CheckEM::australia_life_history) %>%
+  uncount(., maxn) %>%
+  dplyr::mutate(maxn = 1) %>%
+  dplyr::filter(!is.na(rls_thermal_niche)) %>%
+  dplyr::mutate(log_maxn = log10(maxn + 1),
+                weightedsti = log_maxn*rls_thermal_niche) %>%  
+  dplyr::group_by(campaignid, sample) %>%
+  dplyr::summarise(log_maxn = sum(log_maxn, na.rm = T), 
+                   w_sti = sum(weightedsti, na.rm = T), 
+                   maxn = w_sti/log_maxn) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(response = "cti") %>%                                           # Call it maxn - so it binds with other data
+  dplyr::select(campaignid, sample, maxn, response) %>% 
+  glimpse()
 
 # nrow = 654/2 = 327
 
-dat.maxn <- bind_rows(ta.sr) %>%
+dat.maxn <- bind_rows(ta.sr, cti) %>%
   left_join(allhab) %>%
   left_join(metadata) %>%
   dplyr::filter(!is.na(macroalgae),                                             # Remove no habitat
@@ -144,7 +163,7 @@ dat.maxn <- bind_rows(ta.sr) %>%
 
 length(unique(dat.maxn$sample)) # 178 - excluding some that don't have habitat
 
-unique(dat.maxn$scientific) # 2 responses, total abundance and species richness
+unique(dat.maxn$response) # 2 responses, total abundance and species richness
 
 # Set predictor variables---
 names(dat.maxn)

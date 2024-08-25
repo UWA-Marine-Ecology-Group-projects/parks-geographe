@@ -221,7 +221,7 @@ gg_inverts <- ggplot(data = temporal_dat, aes(x = year, y = inverts_mean, fill =
                                 "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
-  labs(title = "e)", x = "Year", y = "Inverts")
+  labs(title = "e)", x = "Year", y = "Sessile invertebrates")
 gg_inverts
 
 plot_grid <- gg_seagrass / gg_macroalgae / gg_rock / gg_sand / gg_inverts + plot_layout(guides = 'collect') +
@@ -389,7 +389,7 @@ gg_inverts <- ggplot(data = temporal_dat, aes(x = year, y = inverts_mean, fill =
                                 "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
-  labs(title = "e)", x = "Year", y = "Inverts")
+  labs(title = "e)", x = "Year", y = "Sessile invertebrates")
 gg_inverts
 
 plot_grid <- gg_seagrass / gg_macroalgae / gg_rock / gg_sand / gg_inverts + plot_layout(guides = 'collect') +
