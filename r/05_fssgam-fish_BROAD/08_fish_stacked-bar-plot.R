@@ -18,11 +18,9 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(stringr)
-library(ggmap)
-library(rgdal)
-library(raster)
 library(png)
 library(cowplot)
+library(CheckEM)
 
 ## Set your working directory ----
 theme_collapse<-theme(      
@@ -126,6 +124,46 @@ ggsave("plots/fish/abundant.fish.bar.png",bar.top.10, dpi = 600, width = 6.0, he
 
 #targeted species top 10 abundance
 # Read in life history
+maturity_mean <- CheckEM::maturity %>%
+  dplyr::filter(!marine_region %in% c("NW", "N")) %>% # Change here for each marine park
+  dplyr::group_by(family, genus, species, sex) %>%
+  dplyr::slice(which.min(l50_mm)) %>%
+  ungroup() %>%
+  dplyr::group_by(family, genus, species) %>%
+  dplyr::summarise(l50 = mean(l50_mm)) %>%
+  ungroup() %>%
+  glimpse()
+
+large_bodied_carnivores <- CheckEM::australia_life_history %>%
+  dplyr::filter(fb_trophic_level > 2.8) %>%
+  dplyr::filter(length_max_cm > 40) %>%
+  dplyr::filter(class %in% "Actinopterygii") %>%
+  dplyr::filter(!order %in% c("Anguilliformes", "Ophidiiformes", "Notacanthiformes","Tetraodontiformes","Syngnathiformes",
+                              "Synbranchiformes", "Stomiiformes", "Siluriformes", "Saccopharyngiformes", "Osmeriformes",
+                              "Osteoglossiformes", "Lophiiformes", "Lampriformes", "Beloniformes", "Zeiformes")) %>%
+  left_join(maturity_mean) %>%
+  dplyr::mutate(fb_length_at_maturity_mm = fb_length_at_maturity_cm * 10) %>%
+  dplyr::mutate(l50 = if_else(is.na(l50), fb_length_at_maturity_mm, l50)) %>%
+  dplyr::filter(!is.na(l50)) %>%
+  dplyr::select(family, genus, species, l50) %>%
+  glimpse()
+
+fished.species <- maxn %>%
+  dplyr::mutate(scientific = paste(genus, species, sep = " ")) %>%
+  dplyr::left_join(large_bodied_carnivores) %>%
+  dplyr::filter(!is.na(l50)) %>%
+  glimpse()
+
+maxn.fished.10 <- fished.species %>%
+  group_by(scientific) %>%
+  dplyr::summarise(maxn=sum(maxn)) %>%
+  ungroup() %>%
+  top_n(10) %>%
+  glimpse()
+
+
+
+
 url <- "https://docs.google.com/spreadsheets/d/1SMLvR9t8_F-gXapR2EemQMEPSw_bUbPLcXd3lJ5g5Bo/edit?ts=5e6f36e2#gid=825736197"
 
 master <- googlesheets4::read_sheet(url)%>%

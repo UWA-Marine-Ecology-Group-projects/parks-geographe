@@ -22,7 +22,7 @@ rm(list = ls())
 # Load libraries
 library(dplyr)
 library(sf)
-library(rgeos)
+# library(rgeos)
 library(rnaturalearth)
 library(ggplot2)
 library(metR)
@@ -91,13 +91,15 @@ terrnp <- st_crop(terrnp, e)       # Crop to the study area - using a different 
 
 # Key Ecological Features
 kef <- st_read("data/spatial/shapefiles/AU_DOEE_KEF_2015.shp")
-kef <- st_crop(kef, e)                                                          # Crop
+kef <- st_crop(kef, e) %>%
+  dplyr::filter(!NAME %in% c("Ancient coastline at 90-120m depth", "Cape Mentelle upwelling")) %>%
+  arrange(desc(NAME))
 unique(kef$NAME)
 # Simplify names for plot legend
 unique(kef$NAME)
 kef$NAME <- dplyr::recode(kef$NAME,
-                          "Commonwealth marine environment within and adjacent to Geographe Bay" = "Marine environment adjacent to Geographe Bay")
-
+                          "Commonwealth marine environment within and adjacent to Geographe Bay" = "Marine environment adjacent to Geographe Bay",
+                          "Western rock lobster" = "Western Rock Lobster")
 
 # Coastal waters limit
 cwatr <- st_read("data/spatial/shapefiles/amb_coastal_waters_limit.shp")       # Coastal waters limit
@@ -343,9 +345,8 @@ dev.off()
 
 # 5. Key Ecological Features (p5)
 unique(kef$NAME)
-kef$NAME <- factor(kef$NAME, levels = c("Western rock lobster", "Marine environment adjacent to Geographe Bay"))
 kef_fills <- scale_fill_manual(values = c("Marine environment adjacent to Geographe Bay" = "#004949",
-                                          "Western rock lobster" = "#6db6ff"))
+                                          "Western Rock Lobster" = "#6db6ff"))
 
 p5 <- ggplot() +
   geom_sf(data = ausc, fill = "seashell2", colour = "grey80", size = 0.1) +

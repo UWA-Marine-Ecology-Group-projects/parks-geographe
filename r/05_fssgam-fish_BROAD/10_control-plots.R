@@ -4,6 +4,7 @@ library(terra)
 library(tidyverse)
 library(sf)
 library(patchwork)
+library(raster)
 
 name       <- "Parks-Geographe-synthesis"
 
@@ -283,6 +284,7 @@ temporal_dat <- data.frame(year = rep(c(2013:2024), 5)) %>% # Change rep here fo
                            (nrow(.))/5)) %>% # Change here too
   left_join(park_dat.meso) %>%
   left_join(sst) %>%
+  dplyr::filter(!zone %in% 'NCMP SZ (IUCN II)') %>%
   glimpse()
 
 # plot year by species richness - plus a line for MPA gazetting time ---
@@ -297,11 +299,11 @@ gg_sr <- ggplot(data = temporal_dat, aes(x = year, y = richness_mean, fill = zon
                      breaks = c(2013, 2015, 2017, 2019, 2021, 2023)) +
   geom_vline(xintercept = 2018, linetype = "dashed", color = "black", linewidth = 0.5, alpha = 0.5) +
   scale_fill_manual(values = c("GMP other zones" = "#b9e6fb",
-                               "NCMP SZ (IUCN II)" = "#bfd054",
+                               # "NCMP SZ (IUCN II)" = "#bfd054",
                                "NCMP other zones" = "#bddde1"),
                     name = "Marine Parks") +
   scale_shape_manual(values = c("GMP other zones" = 21,
-                                "NCMP SZ (IUCN II)" = 25,
+                                # "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
   labs(title = "a)", x = "Year", y = "Species richness")
@@ -321,11 +323,11 @@ gg_lm <- ggplot(data = temporal_dat,
   geom_vline(xintercept = 2018, linetype = "dashed",color = "black",
              linewidth = 0.5,alpha = 0.5)+
   scale_fill_manual(values = c("GMP other zones" = "#b9e6fb",
-                               "NCMP SZ (IUCN II)" = "#bfd054",
+                               # "NCMP SZ (IUCN II)" = "#bfd054",
                                "NCMP other zones" = "#bddde1"),
                     name = "Marine Parks") +
   scale_shape_manual(values = c("GMP other zones" = 21,
-                                "NCMP SZ (IUCN II)" = 25,
+                                # "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
   labs(title = "b)", x = "Year", y = ">Lm large bodied carnivores")
@@ -345,11 +347,11 @@ gg_small <- ggplot(data = temporal_dat,
   geom_vline(xintercept = 2018, linetype = "dashed",color = "black",
              linewidth = 0.5,alpha = 0.5)+
   scale_fill_manual(values = c("GMP other zones" = "#b9e6fb",
-                               "NCMP SZ (IUCN II)" = "#bfd054",
+                               # "NCMP SZ (IUCN II)" = "#bfd054",
                                "NCMP other zones" = "#bddde1"),
                     name = "Marine Parks") +
   scale_shape_manual(values = c("GMP other zones" = 21,
-                                "NCMP SZ (IUCN II)" = 25,
+                                # "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
   labs(title = "c)", x = "Year", y = "<Lm large bodied carnivores")
@@ -374,11 +376,11 @@ gg_cti <- ggplot() +
   geom_vline(xintercept = 2018, linetype = "dashed", color = "black",
              size = 0.5, alpha = 0.5) +
   scale_fill_manual(values = c("GMP other zones" = "#b9e6fb",
-                               "NCMP SZ (IUCN II)" = "#bfd054",
+                               # "NCMP SZ (IUCN II)" = "#bfd054",
                                "NCMP other zones" = "#bddde1"),
                     name = "Marine Parks") +
   scale_shape_manual(values = c("GMP other zones" = 21,
-                                "NCMP SZ (IUCN II)" = 25,
+                                # "NCMP SZ (IUCN II)" = 25,
                                 "NCMP other zones" = 25),
                      name = "Marine Parks") +
   labs(title = "d)", x = "Year", y = "Community Temperature Index")
